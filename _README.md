@@ -1,12 +1,12 @@
 # Project Name
 
-> Pithy project description
+> Florish 
 
 ## Team
 
-  - __Product Owner__: teamMember
-  - __Scrum Master__: teamMember
-  - __Development Team Members__: teamMember, teamMember
+  - __Product Owner__: Olivia Salbo
+  - __Scrum Master__: Michael Bazile
+  - __Development Team Members__: Harley Padua, Nico Paulino, James Easter, Michael Bazile, Chris Nguyen
 
 ## Table of Contents
 
@@ -25,10 +25,7 @@
 ## Requirements
 
 - Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
+- MariaDB 10.4
 
 ## Development
 
@@ -37,10 +34,9 @@
 From within the root directory:
 
 ```sh
-sudo npm install -g bower
 npm install
-bower install
 ```
+Make sure you have MariaDB installed and have a password set for your root user.
 
 ### Roadmap
 
