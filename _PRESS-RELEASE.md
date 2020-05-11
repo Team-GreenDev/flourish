@@ -18,18 +18,23 @@ Once the project moves into development, the press release can be used as a touc
 
 ## Heading
   > Name the product in a way the reader (i.e. your target customers) will understand.
+  > Flourish
 
 ## Sub-Heading
   > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  > Building community between plant owners to share knowledge and experience.
 
 ## Summary
-  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.   > Flourish allows you to connect in meaningful ways with other plant owners. Follow those people who seem to have green thumbs and learn from them as they share their experience. Use augmented reality to see how a plant might look in your own house. Need to know more about a plant, look it up in our app to learn all of the details you need to know to get started. Connect, message, watch, and share with plant owners from all over the world.
 
 ## Problem
   > Describe the problem your product solves.
+  > The knowledge for caring for plants can be hard to find. You might have the same question your neighbor does, but you both need to be connected to a community that shares this common interest.
 
 ## Solution
   > Describe how your product elegantly solves the problem.
+  > Connect with other plant owners to build a common community of shared knowledge and reference plant facts to better your plant caring capabilities.
+  
 
 ## Quote from You
   > A quote from a spokesperson in your company.
