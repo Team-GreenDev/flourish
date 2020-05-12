@@ -20,15 +20,16 @@ DROP TABLE IF EXISTS post_tags;
 
 
 CREATE TABLE users (
-  id int PRIMARY KEY NOT NULL,
+  id INT NOT NULL AUTO_INCREMENT,
   username varchar(50),
   name_first varchar(50),
   name_last varchar(50),
-  total_like int
+  total_like int,
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE comments (
-  id int PRIMARY KEY NOT NULL,
+  id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   user_id int,
   post_id int,
   comment_text varchar(255),
@@ -36,19 +37,19 @@ CREATE TABLE comments (
 );
 
 CREATE TABLE likes (
-  id int PRIMARY KEY NOT NULL,
+  id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   post_id int,
   user_id int
 );
 
 CREATE TABLE media (
-  id int PRIMARY KEY NOT NULL,
+  id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   type varchar(255),
   url varchar(255)
 );
 
 CREATE TABLE messages (
-  id int PRIMARY KEY NOT NULL,
+  id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   user_id int,
   recipient_id int,
   created_at datetime,
@@ -56,7 +57,7 @@ CREATE TABLE messages (
 );
 
 CREATE TABLE posts (
-  id int PRIMARY KEY NOT NULL,
+  id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   user_id int,
   like_count int,
   picture_id int,
@@ -64,18 +65,18 @@ CREATE TABLE posts (
 );
 
 CREATE TABLE followers (
-  id int PRIMARY KEY NOT NULL,
+  id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   user_id int,
   follower_id int
 );
 
 CREATE TABLE tags (
-  id int PRIMARY KEY NOT NULL,
+  id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   text varchar(40)
 );
 
 CREATE TABLE post_tags (
-  id int PRIMARY KEY NOT NULL,
+  id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   id_post int NOT NULL,
   id_tag int NOT NULL
 );
