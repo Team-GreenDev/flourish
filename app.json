@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "flourish",
-    "slug": "flourish",
+    "name": "myNewProject",
+    "slug": "myNewProject",
     "platforms": [
       "ios",
       "android",
@@ -9,10 +9,10 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "scheme": "flourish",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
