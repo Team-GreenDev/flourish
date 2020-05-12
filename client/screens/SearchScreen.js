@@ -1,10 +1,12 @@
+import { Ionicons } from '@expo/vector-icons';
+import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function HomeScreen() {
+export default function SearchScreen() {
   return (
     <View styles={styles.container}>
-      <Text style={styles.Text}>This is the Home Screen :)</Text>
+      <Text style={styles.Text}>This is the Search Screen :)</Text>
     </View>
   
   );
@@ -13,7 +15,9 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#000000'
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   Text: {
     fontSize: 25,
