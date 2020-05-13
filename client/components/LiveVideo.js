@@ -1,9 +1,16 @@
 import React, { useState, check, useEffect } from 'react';
 import { NodeCameraView } from 'react-native-nodemediaclient';
 import axios from 'axios';
-import { PERMISSIONS, check, request } from 'react-native-permissions';
+import { Text, View, TouchableOpacity } from 'react-native';
+
+//import { PERMISSIONS, check, request } from 'react-native-permissions';
 
 const LiveVideo = () => {
+  state = {
+    streamID: '',
+    isPublish: true,
+    publishBtnTitle: '',
+  }
   createLive = async () => {
   const auth = {
     username: process.env.MUX_ACCESS_TOKEN,
@@ -11,9 +18,9 @@ const LiveVideo = () => {
   };
   const param = { "reduced_latency": true, "playback_policy": "public", "new_asset_settings": { "playback_policy": "public" } }
   const res = await axios.post('https://api.mux.com/video/v1/live-streams', param, { auth: auth }).catch((error) => {
-    throw error;
+    console.error(error);
   });
-  console.log(res.data.data);
+  console.log("API call response: ", res.data.data);
   const data = res.data.data;
   this.setState({
     streamId: data.stream_key
@@ -36,7 +43,6 @@ const LiveVideo = () => {
 //   handleCameraPermission();
 //   }, []);
 
-
   return (
     <div>
       {/* // {cameraGranted */}
@@ -44,7 +50,7 @@ const LiveVideo = () => {
       //   : <Text>Camera Disallowed</Text>
       // } */}
     <NodeCameraView
-      style={styles.nodeCameraView}
+      style={{height: 400}}
       ref={(vb) => { this.vb = vb; }}
       outputUrl={`rtmp://global-live.mux.com:5222/app/${this.state.streamId}`}
       camera={{ cameraId: 1, cameraFrontMirror: true }}
@@ -52,7 +58,7 @@ const LiveVideo = () => {
       video={{
         preset: 12, bitrate: 400000, profile: 1, fps: 15, videoFrontMirror: false,
       }}
-      autopreview
+      autopreview={true}
     />
     <Button title="request permissions" onPress={requestCameraPermission} />
   <Button
