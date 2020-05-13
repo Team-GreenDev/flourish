@@ -48,6 +48,14 @@ CREATE TABLE media (
   url varchar(255)
 );
 
+CREATE TABLE posts (
+  id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  user_id int,
+  like_count int,
+  media_id int,
+  created_at datetime
+);
+
 CREATE TABLE messages (
   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   user_id int,
@@ -56,13 +64,6 @@ CREATE TABLE messages (
   text varchar(255)
 );
 
-CREATE TABLE posts (
-  id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  user_id int,
-  like_count int,
-  picture_id int,
-  created_at datetime
-);
 
 CREATE TABLE followers (
   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,

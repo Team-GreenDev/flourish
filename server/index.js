@@ -2,32 +2,65 @@
 const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
 const socketio = require('@feathersjs/socketio');
+const path = require('path');
 const db = require('./db');
+
 // Creates an ExpressJS compatible Feathers application
 const app = express(feathers());
+
 // Parse HTTP JSON bodies
 app.use(express.json());
+
 // Parse URL-encoded params
 app.use(express.urlencoded({ extended: true }));
+
 // Host static files from the current folder
 app.use(express.static(__dirname));
+
 // Add REST API support
 app.configure(express.rest());
+
 // Configure Socket.io real-time APIs
 app.configure(socketio());
-// // Register an in-memory messages service
+
+// Register an in-memory messages service
 // app.use('/messages', new MessageService());
-// Register a nicer error handler than the default Express one
+
+// Register an error handler
 app.use(express.errorHandler());
 
-app.listen(8080).on('listening', () => console.log('Feathers server listening on localhost:8080'));
+
+// landing page route
+app.get('/api', (req, res) => {
+  res.status(200).send('Welcome to Flourish!');
+});
 
 // get request to get a user based off of id
-app.get('/api/users/:id', (req, res) => {
+app.get('/api/user/:id', (req, res) => {
   db.getUsersById(req, res)
     .then((user) => {
       res.status(200).send(user[0]);
     })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send();
+    });
+});
+
+// post request to add user to database
+app.post('/api/user/', (req, res) => {
+  db.createUser(req, res)
+    .then(() => res.status(200).send())
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send();
+    });
+});
+
+// save a new post to the database
+app.post('/api/post', (req, res) => {
+  db.addPost(req, res)
+    .then(() => res.status(200).send())
     .catch((error) => {
       console.error(error);
       res.status(500).send();
@@ -46,12 +79,16 @@ app.get('/api/post/:id', (req, res) => {
     });
 });
 
-// post request to add user to database 
-app.post('/api/user/:username/:name_first/:name_last', (req, res) => {
-  db.createUser(req, res)
-    .then(() => res.status(200).send())
+// save a new comment to the database
+app.post('/api/comment/', (req, res) => {
+  db.addComment(req, res)
+    .then((result) => {
+      console.log(result);
+      res.status(200).send();
+    })
     .catch((error) => {
       console.error(error);
       res.status(500).send();
     });
 });
+app.listen(8080).on('listening', () => console.log('Feathers server listening on localhost:8080'));
