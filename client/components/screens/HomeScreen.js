@@ -47,7 +47,7 @@ export default function HomeScreen() {
   return (
     <ScrollView styles={styles.container}>
       {dummy.map(post => (
-        <View style={styles.post}>
+        <View style={styles.post} key={post.username}>
           <Image style={styles.image} source={{ uri: post.url }}/>
           <Text style={styles.username}>{post.username}</Text>
           <Text style={styles.message}>{post.message}</Text>
