@@ -2,13 +2,17 @@ import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 
 export default function SearchScreen() {
+  const search = '';
+  const updateSearch = console.log('this will change state of search');
   return (
-    <View styles={styles.container}>
-      <Text style={styles.Text}>This is the Search Screen :)</Text>
-    </View>
-  
+    <SearchBar
+      placeholder="Type Here..."
+      onChangeText={updateSearch}
+      value={search}
+    />
   );
 }
 
