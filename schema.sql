@@ -48,6 +48,14 @@ CREATE TABLE media (
   url varchar(255)
 );
 
+CREATE TABLE posts (
+  id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  user_id int,
+  like_count int,
+  media_id int,
+  created_at datetime
+);
+
 CREATE TABLE messages (
   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   user_id int,
@@ -56,13 +64,6 @@ CREATE TABLE messages (
   text varchar(255)
 );
 
-CREATE TABLE posts (
-  id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  user_id int,
-  like_count int,
-  picture_id int,
-  created_at datetime
-);
 
 CREATE TABLE followers (
   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -80,3 +81,10 @@ CREATE TABLE post_tags (
   id_post int NOT NULL,
   id_tag int NOT NULL
 );
+
+
+insert into users set username = 'flourishUser1', name_first = 'James', name_last = 'Easter', total_like = 5;
+insert into users set username = 'flourishUser2', name_first = 'Mike', name_last = 'Bazile', total_like = 10;
+insert into users set username = 'flourishUser3', name_first = 'Ed', name_last = 'Foster', total_like = 0;
+insert into users set username = 'flourishUser4', name_first = 'Bames', name_last = 'Woodson', total_like = 16;
+insert into users set username = 'flourishUser5', name_first = 'Harley', name_last = 'Saketson', total_like = 9;
