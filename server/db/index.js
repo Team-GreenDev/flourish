@@ -73,6 +73,21 @@ const getUserPosts = (req) => {
   return pool.query(`select * from posts where user_id = ${user_id} order by created_at desc `);
 };
 
+const getUserMessages = (req) => {
+  const { id } = req.params;
+  const user_id = parseInt(id, 10);
+
+  return pool.query(`select text, created_at, recipient_id from messages where user_id = ${user_id} order by created_at desc`);
+  //     .then((message) => {
+  //       const allRecipients = message.map((m) => m.recipient_id);
+  //       console.log(allRecipients);
+
+//       // pool.query(`select username from users where id = ${}`)
+//     });
+};
+
+const getAllPosts = () => pool.query('select * from posts order by created_at desc');
+
 
 module.exports = {
   getAllUsers,
@@ -82,4 +97,6 @@ module.exports = {
   addPost,
   addComment,
   getUserPosts,
+  getUserMessages,
+  getAllPosts,
 };
