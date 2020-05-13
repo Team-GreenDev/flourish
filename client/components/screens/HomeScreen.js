@@ -14,7 +14,7 @@ export default function HomeScreen() {
   return (
     <View styles={styles.container}>
       <Text style={styles.Text}>This is the Home Screen :)</Text>
-      <Text style={styles.Text}>{plantArray[3].employee_salary}</Text>
+      {/* <Text style={styles.Text}>{plantArray[3].employee_salary}</Text> */}
     </View>
   );
 }
