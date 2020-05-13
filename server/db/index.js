@@ -42,11 +42,11 @@ const getUsersById = (req) => {
 // adds new post's information to database
 const addPost = (req) => {
   const user_id = parseInt(req.body.user_id, 10);
-  const { created_at, type, url } = req.body;
+  const { created_at, type, url, text } = req.body;
 
   return pool.query(`INSERT INTO media set type = '${type}', url = '${url}'`)
     .then((media) => {
-      pool.query(`INSERT INTO posts set user_id = ${user_id}, like_count = ${0}, media_id = ${media.insertId}, created_at = NOW()`);
+      pool.query(`INSERT INTO posts set text = '${text}', user_id = ${user_id}, like_count = ${0}, media_id = ${media.insertId}, created_at = NOW()`);
     });
 };
 
