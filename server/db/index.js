@@ -96,6 +96,9 @@ const addComment = (req) => {
 
 // MESSAGES QUERIES //
 
+// Gets all users
+const getAllMessages = () => pool.query('select * from messages');
+
 // Gets all messages for user recipient by recipient id
 const getRecipientMessages = (req) => {
   const id = parseInt(req.params.id, 10);
@@ -165,6 +168,7 @@ module.exports = {
   getCommentsFromPostId,
   getCommentsFromUserId,
   addComment,
+  getAllMessages,
   getRecipientMessages,
   getSentUserMessages,
   addMessage,
