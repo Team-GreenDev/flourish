@@ -53,6 +53,7 @@ CREATE TABLE posts (
   user_id int,
   like_count int,
   media_id int,
+  text varchar(255),
   created_at datetime
 );
 
