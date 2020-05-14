@@ -4,6 +4,13 @@ const db = require('../db');
 // Handles all requests to /api/messages
 const messagesRouter = express.Router();
 
+// Get all messages
+messagesRouter.get('/', (req, res) => {
+  db.getAllMessages(req, res)
+    .then((messages) => res.status(200).send(messages))
+    .catch((error) => res.status(500).send(error));
+});
+
 // Gets all messages for user recipient by recipient id
 messagesRouter.get('/received/:id', (req, res) => {
   db.getRecipientMessages(req, res)
