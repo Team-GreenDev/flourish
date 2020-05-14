@@ -1,14 +1,19 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadPlants } from '../../store/plants';
+import { loadUsers } from '../../store/slices/users';
+import { loadPosts } from '../../store/slices/posts';
+import { loadMessages } from '../../store/slices/messages';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
-  const plantArray = useSelector(state => state.plants.list)
+  const loading = useSelector(state => state.users.loading)
+  const usersList = useSelector(state => state.users.list)
 
   useEffect(()=>{
-    dispatch(loadPlants());
+    dispatch(loadUsers());
+    dispatch(loadPosts());
+    dispatch(loadMessages());
   }, [])
 
   const dummy = [
@@ -46,6 +51,10 @@ export default function HomeScreen() {
 
   return (
     <ScrollView styles={styles.container}>
+      {usersList.length === 0
+        ? (<Text>"still loading..."</Text>)
+          : (<Text style={styles.Text}>{usersList[3].username}</Text>)
+      }
       {dummy.map(post => (
         <View>
           <Text> </Text>
@@ -58,7 +67,6 @@ export default function HomeScreen() {
           <Text> </Text>
         </View>
       ))}
-      {/* <Text style={styles.Text}>{plantArray[3].employee_salary}</Text> */}
     </ScrollView>
   );
 }
