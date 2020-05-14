@@ -47,11 +47,15 @@ export default function HomeScreen() {
   return (
     <ScrollView styles={styles.container}>
       {dummy.map(post => (
-        <View style={styles.post} key={post.username}>
-          <Image style={styles.image} source={{ uri: post.url }}/>
-          <Text style={styles.username}>{post.username}</Text>
-          <Text style={styles.message}>{post.message}</Text>
-          <Text style={styles.tags}>{post.tags}</Text>
+        <View>
+          <Text> </Text>
+          <View style={styles.post} key={post.username}>
+            <Image style={styles.image} source={{ uri: post.url }}/>
+            <Text style={styles.username}>{post.username}</Text>
+            <Text style={styles.message}>{post.message}</Text>
+            <Text style={styles.tags}>{post.tags}</Text>
+          </View>
+          <Text> </Text>
         </View>
       ))}
       {/* <Text style={styles.Text}>{plantArray[3].employee_salary}</Text> */}
@@ -65,25 +69,35 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000',
   },
   image: {
-    height: 200,
-    width: 200,
+    height: 300,
+    width: 300,
     alignSelf: 'center',
+    borderRadius: 10,
+    borderWidth: 1,
   },
   username: {
     fontSize: 25,
     color: 'forestgreen',
-    alignSelf: 'center',
   },
   message: {
-    alignSelf: 'center',
+    
   },
   tags: {
     color: 'blue',
-    alignSelf: 'center',
   },
   post: {
-    borderBottomColor: 'forestgreen',
-    borderBottomWidth: 2,
-    marginBottom: 30,
+    // Setting up image width.
+    width: 300,
+    
+    // Set border width.
+    borderWidth: 1,
+    
+    // Set border Hex Color code here.
+    borderColor: '#C0CDC6',
+    
+    // Set border Radius.
+    borderRadius: 10,
+    alignSelf: 'center',
+    backgroundColor: '#C0CDC6',
   },
 });
