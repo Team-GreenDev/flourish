@@ -1,14 +1,13 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity} from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import TabBarIcon from '../icons/TabBarIcon';
-import ProfileLikesScreen from './ProfileLikesScreen';
-import ProfilePostsScreen from './ProfilePostsScreen';
-
-const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Posts';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function ProfileScreen() {
+ 
+  const [boolean, setBoolean] = useState(true);
+  const postMessage = <Text> You are viewing the posts </Text>;
+  const likeMessage = <Text> You are viewing the likes </Text>;
+
   return (
     <ScrollView styles={styles.container}>
       <View>
@@ -21,23 +20,14 @@ export default function ProfileScreen() {
             <Text style={styles.followText}>50 Followers</Text>
             <Text style={styles.followText}>9001 Seeds</Text>
           </View>
-          <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
-            <BottomTab.Screen
-              name="Posts"
-              component={ProfilePostsScreen}
-              options={{
-               tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-apps" />,
-                }}
-            />
-            <BottomTab.Screen
-              name="Likes"
-              component={ProfileLikesScreen}
-              options={{
-              tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-thumbs-up" />,
-              }}
-            />
-          </BottomTab.Navigator>
         </TouchableOpacity>
+          <View style={styles.iconView}>
+            <Ionicons style={styles.icon} name="md-grid" size={30} onPress={() => setBoolean(true)}/>
+            <Ionicons style={styles.icon} name="md-thumbs-up" size={30} onPress={() => setBoolean(false)}/>
+          </View>
+          <View>
+          {boolean ? (postMessage) : (likeMessage)}
+          </View>
       </View>
     </ScrollView>
   );
@@ -74,5 +64,14 @@ const styles = StyleSheet.create({
   },
   followText: {
    margin: 10,
-  }, 
+  },
+  iconView: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+  },
+  icon: {
+    color: 'forestgreen',
+    marginBottom: 5,
+    marginHorizontal: 75,
+    } 
 });
