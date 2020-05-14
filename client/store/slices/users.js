@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { apiCallBegan } from './api';
+import { apiCallBegan } from '../api';
 
 // This is a easy way to use an id that just increments in the action handler
 // let lastId = 0;
@@ -24,7 +24,7 @@ const slice = createSlice({
     // Reassigns the plant list to the payload received from the axios request
     // loading set to false, ending the loading spinner because request succeeded
     usersReceived: (users, action) => {
-      users.list = action.payload.data;
+      users.list = action.payload;
       users.loading = false;
     },
     // adds a plant from the payload by pushing it to the current list in state
@@ -58,7 +58,7 @@ export const loadUsers = () => apiCallBegan({
 });
 
 export const addUser = (user) => apiCallBegan({
-  url: '/api/user',
+  url,
   method: 'POST',
   data: user,
   // on success this action will update (add to) the store
