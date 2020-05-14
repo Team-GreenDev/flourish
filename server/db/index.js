@@ -21,65 +21,156 @@ pool.getConnection()
     console.log(`not connected due to error: ${error}`);
   });
 
-// gets all users from database
+
+// USERS QUERIES //
+
+// Gets all users
 const getAllUsers = () => pool.query('select * from users');
 
-// adds new user's information to database
+// Adds new user
 const createUser = (req) => {
   const { username, name_first, name_last } = req.body;
-
   return pool.query(`insert into users set username = '${username}', name_first = '${name_first}', name_last = '${name_last}', total_like = ${0}`);
 };
 
-// queries the data base for users based off of user id
+// Gets user by id
 const getUsersById = (req) => {
   const id = parseInt(req.params.id, 10);
-
   return pool.query(`SELECT * FROM users WHERE id = ${id}`);
 };
 
 
-// adds new post's information to database
+// POSTS QUERIES //
+
+// Gets all posts
+const getAllPosts = () => pool.query('select * from posts');
+
+// Get post by id
+const getPostById = (req) => {
+  const id = parseInt(req.params.id, 10);
+  return pool.query(`SELECT * FROM posts WHERE id = ${id}`);
+};
+
+// Gets all posts by user from user id
+const getUserPosts = (req) => {
+  const id = parseInt(req.params.id, 10);
+  return pool.query(`select * from posts where user_id = ${id} order by created_at desc `);
+};
+
+// Adds new post
 const addPost = (req) => {
   const user_id = parseInt(req.body.user_id, 10);
-  const { created_at, type, url } = req.body;
-
+  const { type, url } = req.body;
   return pool.query(`INSERT INTO media set type = '${type}', url = '${url}'`)
     .then((media) => {
       pool.query(`INSERT INTO posts set user_id = ${user_id}, like_count = ${0}, media_id = ${media.insertId}, created_at = NOW()`);
     });
 };
 
-// adds a newly made comment to the database
+
+// COMMENTS QUERIES //
+
+// Gets all comments
+const getAllComments = () => pool.query('select * from comments');
+
+// Gets all comments of a post by post id
+const getCommentsFromPostId = (req) => {
+  const id = parseInt(req.params.id, 10);
+  return pool.query(`select * from comments where post_id = ${id} order by created_at desc `);
+};
+
+// Gets all comments of a user by user id
+const getCommentsFromUserId = (req) => {
+  const id = parseInt(req.params.id, 10);
+  return pool.query(`select * from comments where user_id = ${id} order by created_at desc `);
+};
+
+// Add new comment to database
 const addComment = (req) => {
   const user_id = parseInt(req.body.user_id, 10);
   const post_id = parseInt(req.body.post_id, 10);
   const { comment_text } = req.body;
-
   return pool.query(`insert into comments set user_id = ${user_id}, post_id = ${post_id}, comment_text = '${comment_text}', created_at = NOW()`);
 };
 
-// queries the database for users based off of post id
-const getPostByPostId = (req) => {
-  const id = parseInt(req.params.id, 10);
 
-  return pool.query(`SELECT * FROM posts WHERE id = ${id}`);
+// MESSAGES QUERIES //
+
+// Gets all messages for user recipient by recipient id
+const getRecipientMessages = (req) => {
+  const id = parseInt(req.params.id, 10);
+  return pool.query(`select * from messages where recipient_id = ${id} order by created_at desc `);
 };
 
-// queries the database for posts based off of user id
-const getUserPosts = (req) => {
-  const { user_id } = req.body;
+// Gets all messages sent by user from user id
+const getSentUserMessages = (req) => {
+  const id = parseInt(req.params.id, 10);
+  return pool.query(`select * from messages where user_id = ${id} order by created_at desc `);
+};
 
-  return pool.query(`select * from posts where user_id = ${user_id} order by created_at desc `);
+// Add new message to database
+const addMessage = (req) => {
+  const user_id = parseInt(req.body.user_id, 10);
+  const recipient_id = parseInt(req.body.recipient_id, 10);
+  const { text } = req.body;
+  return pool.query(`insert into messages set user_id = ${user_id}, recipient_id = ${recipient_id}, created_at = NOW(), text = '${text}'`);
+};
+
+
+// FOLLOWERS QUERIES //
+
+// Get all followers_id from user_id
+const getFollowersId = (req) => {
+  const id = parseInt(req.params.id, 10);
+  return pool.query(`select * from followers where user_id = ${id} order by created_at desc `);
+};
+
+
+// TAGS QUERIES //
+
+// Gets all tags
+const getAllTags = () => pool.query('select * from tags');
+
+// Add new tag to database
+const addTag = (req) => {
+  const { text } = req.body;
+  return pool.query(`insert into tags set text = '${text}'`);
+};
+
+
+// POST_TAGS QUERIES //
+
+// Get all post_ids from tag_id
+const getPostsFromTagId = (req) => {
+  const id = parseInt(req.params.id, 10);
+  return pool.query(`select * from post_tags where tag_id = ${id} order by created_at desc `);
+};
+
+// Get all tag_ids from post_id
+const getTagsFromPostId = (req) => {
+  const id = parseInt(req.params.id, 10);
+  return pool.query(`select * from post_tags where post_id = ${id} order by created_at desc `);
 };
 
 
 module.exports = {
   getAllUsers,
   getUsersById,
-  getPostByPostId,
   createUser,
-  addPost,
-  addComment,
+  getAllPosts,
   getUserPosts,
+  getPostById,
+  addPost,
+  getAllComments,
+  getCommentsFromPostId,
+  getCommentsFromUserId,
+  addComment,
+  getRecipientMessages,
+  getSentUserMessages,
+  addMessage,
+  getFollowersId,
+  getAllTags,
+  addTag,
+  getPostsFromTagId,
+  getTagsFromPostId,
 };
