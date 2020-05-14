@@ -38,7 +38,7 @@ const api = (store) => (next) => (action) => {
   // method is get by default but can be set to another type
   // data is the object that the request is sending to the server
   axios.request({
-    baseURL: 'http://dummy.restapiexample.com/api/v1',
+    baseURL: 'http://localhost:8080',
     url,
     method,
     data,
