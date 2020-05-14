@@ -4,6 +4,7 @@ const express = require('@feathersjs/express');
 const socketio = require('@feathersjs/socketio');
 const path = require('path');
 const db = require('./db');
+const { apiRouter } = require('./api/index');
 
 // Creates an ExpressJS compatible Feathers application
 const app = express(feathers());
@@ -13,6 +14,9 @@ app.use(express.json());
 
 // Parse URL-encoded params
 app.use(express.urlencoded({ extended: true }));
+
+// Utilizing api routes
+app.use('/api', apiRouter);
 
 // Host static files from the current folder
 app.use(express.static(__dirname));
@@ -29,66 +33,4 @@ app.configure(socketio());
 // Register an error handler
 app.use(express.errorHandler());
 
-
-// landing page route
-app.get('/api', (req, res) => {
-  res.status(200).send('Welcome to Flourish!');
-});
-
-// get request to get a user based off of id
-app.get('/api/user/:id', (req, res) => {
-  db.getUsersById(req, res)
-    .then((user) => {
-      res.status(200).send(user[0]);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).send();
-    });
-});
-
-// post request to add user to database
-app.post('/api/user/', (req, res) => {
-  db.createUser(req, res)
-    .then(() => res.status(200).send())
-    .catch((error) => {
-      console.error(error);
-      res.status(500).send();
-    });
-});
-
-// save a new post to the database
-app.post('/api/post', (req, res) => {
-  db.addPost(req, res)
-    .then(() => res.status(200).send())
-    .catch((error) => {
-      console.error(error);
-      res.status(500).send();
-    });
-});
-
-// get request to get post based off of id
-app.get('/api/post/:id', (req, res) => {
-  db.getPostByPostId(req, res)
-    .then((post) => {
-      res.status(200).send(post);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).send();
-    });
-});
-
-// save a new comment to the database
-app.post('/api/comment/', (req, res) => {
-  db.addComment(req, res)
-    .then((result) => {
-      console.log(result);
-      res.status(200).send();
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).send();
-    });
-});
 app.listen(8080).on('listening', () => console.log('Feathers server listening on localhost:8080'));
