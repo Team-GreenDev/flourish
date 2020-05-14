@@ -3,56 +3,40 @@ import { NodeCameraView } from 'react-native-nodemediaclient';
 import axios from 'axios';
 import { Text, View, TouchableOpacity } from 'react-native';
 
-//import { PERMISSIONS, check, request } from 'react-native-permissions';
+import { PERMISSIONS, check, request } from 'react-native-permissions';
 
 const LiveVideo = () => {
   state = {
-    streamID: '',
     isPublish: true,
     publishBtnTitle: '',
   }
-  createLive = async () => {
-  const auth = {
-    username: process.env.MUX_ACCESS_TOKEN,
-    password: process.env.MUX_SECRET
-  };
-  const param = { "reduced_latency": true, "playback_policy": "public", "new_asset_settings": { "playback_policy": "public" } }
-  const res = await axios.post('https://api.mux.com/video/v1/live-streams', param, { auth: auth }).catch((error) => {
-    console.error(error);
-  });
-  console.log("API call response: ", res.data.data);
-  const data = res.data.data;
-  this.setState({
-    streamId: data.stream_key
-  });
-  }
 
-//   const [cameraGranted, setCameraGranted] = useState(false);
-//   const handleCameraPermission = async () => {
-//     const res = await check(PERMISSIONS.IOS.CAMERA);
-//     if (res === RESULTS.GRANTED) {
-//       setCameraGranted(true);
-//     } else if (res === RESULTS.DENIED) {
-//       const res2 = await request(PERMISSIONS.IOS.CAMERA);
-//       res2 === RESULTS.GRANTED 
-//         ? setCameraGranted(true) : setCameraGranted(false);
-//     }
-//  };
+  const [cameraGranted, setCameraGranted] = useState(false);
+  const handleCameraPermission = async () => {
+    const res = await check(PERMISSIONS.IOS.CAMERA);
+    if (res === RESULTS.GRANTED) {
+      setCameraGranted(true);
+    } else if (res === RESULTS.DENIED) {
+      const res2 = await request(PERMISSIONS.IOS.CAMERA);
+      res2 === RESULTS.GRANTED 
+        ? setCameraGranted(true) : setCameraGranted(false);
+    }
+ };
 
-//  useEffect(() => {
-//   handleCameraPermission();
-//   }, []);
+ useEffect(() => {
+  handleCameraPermission();
+  }, []);
 
   return (
     <div>
-      {/* // {cameraGranted */}
-      {/* //   ? <Text>Camera Granted! Display in-app camera...</Text> 
-      //   : <Text>Camera Disallowed</Text>
-      // } */}
+      {cameraGranted
+         ? <Text>Camera Granted! Display in-app camera...</Text> 
+        : <Text>Camera Disallowed</Text>
+      }
     <NodeCameraView
       style={{height: 400}}
       ref={(vb) => { this.vb = vb; }}
-      outputUrl={`rtmp://global-live.mux.com:5222/app/${this.state.streamId}`}
+      outputUrl={"rtmp://localhost:8080/live/stream"}
       camera={{ cameraId: 1, cameraFrontMirror: true }}
       audio={{ bitrate: 32000, profile: 1, samplerate: 44100 }}
       video={{
