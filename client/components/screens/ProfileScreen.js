@@ -5,6 +5,15 @@ import { Ionicons } from '@expo/vector-icons';
 export default function ProfileScreen() {
  
   const [boolean, setBoolean] = useState(true);
+  
+  let userInfo = {
+    userName: 'Karen Boomer',
+    bio: 'This is my bio.',
+    profilePic: 'https://randomuser.me/api/portraits/women/2.jpg',
+    followingCount: 10,
+    followerCount: 50,
+    seedCount: 9001
+  };
 
   const likeDummy = [
     {
@@ -100,19 +109,23 @@ const postData = postDummy.map(post => (
   return (
     <ScrollView styles={styles.container}>
       <View>
-        <Image style={styles.profilePic} source={{uri: 'https://randomuser.me/api/portraits/women/2.jpg'}}/>
+        <Image style={styles.profilePic} source={{uri: userInfo.profilePic}}/>
         <TouchableOpacity style={styles.infoContainer}>
-          <Text style={styles.username}>Karen Boomer</Text> 
-          <Text style={styles.bio}>This is my bio.</Text>
+          <Text style={styles.username}>{userInfo.userName}</Text> 
+          <Text style={styles.bio}>{userInfo.bio}</Text>
           <View style={styles.followCount}>
-            <Text style={styles.followText}>10 Following</Text>
-            <Text style={styles.followText}>50 Followers</Text>
-            <Text style={styles.followText}>9001 Seeds</Text>
+            <Text style={styles.followText}>{userInfo.followingCount} Following</Text>
+            <Text style={styles.followText}>{userInfo.followerCount} Followers</Text>
+            <Text style={styles.followText}>{userInfo.seedCount} Seeds</Text>
           </View>
         </TouchableOpacity>
           <View style={styles.iconView}>
-            <Ionicons style={styles.icon} name="md-grid" size={30} onPress={() => setBoolean(true)}/>
-            <Ionicons style={styles.icon} name="md-thumbs-up" size={30} onPress={() => setBoolean(false)}/>
+            <TouchableOpacity>
+              <Ionicons style={styles.icon} name="md-grid" size={30} onPress={() => setBoolean(true)}/>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Ionicons style={styles.icon} name="md-thumbs-up" size={30} onPress={() => setBoolean(false)}/>
+            </TouchableOpacity>
           </View>
           <View>
           {boolean ? (postData) : (likeData)}
