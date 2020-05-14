@@ -60,10 +60,10 @@ const getUserPosts = (req) => {
 // Adds new post
 const addPost = (req) => {
   const user_id = parseInt(req.body.user_id, 10);
-  const { type, url } = req.body;
+  const { text, type, url } = req.body;
   return pool.query(`INSERT INTO media set type = '${type}', url = '${url}'`)
     .then((media) => {
-      pool.query(`INSERT INTO posts set user_id = ${user_id}, like_count = ${0}, media_id = ${media.insertId}, created_at = NOW()`);
+      pool.query(`INSERT INTO posts set user_id = ${user_id}, like_count = ${0}, media_id = ${media.insertId}, text = '${text}', created_at = NOW()`);
     });
 };
 
