@@ -7,8 +7,8 @@ import { loadMessages } from '../../store/slices/messages';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
-  const loading = useSelector(state => state.users.loading)
-  const usersList = useSelector(state => state.users.list)
+  const users = useSelector(state => state.users)
+  const posts = useSelector(state => state.posts)
 
   useEffect(()=>{
     dispatch(loadUsers());
@@ -51,14 +51,23 @@ export default function HomeScreen() {
 
   return (
     <ScrollView styles={styles.container}>
-      {usersList.length === 0
-        ? (<Text>"still loading..."</Text>)
-          : (<Text style={styles.Text}>{usersList[3].username}</Text>)
-      }
-      {dummy.map(post => (
-        <View>
+      {posts.loading
+        ? (<View><Text>loading</Text></View>)
+        : (posts.list.map(post => (
+          <View key={post.id}>
+            <Text> </Text>
+            <View style={styles.post}>
+              <Image style={styles.image} source={{ uri: post.url }}/>
+              <Text style={styles.username}>{post.id}</Text>
+              <Text style={styles.message}>{post.text}</Text>
+            </View>
+            <Text> </Text>
+          </View>
+        )))}
+      {/* {dummy.map(post => (
+        <View key={post.username}>
           <Text> </Text>
-          <View style={styles.post} key={post.username}>
+          <View style={styles.post}>
             <Image style={styles.image} source={{ uri: post.url }}/>
             <Text style={styles.username}>{post.username}</Text>
             <Text style={styles.message}>{post.message}</Text>
@@ -66,7 +75,7 @@ export default function HomeScreen() {
           </View>
           <Text> </Text>
         </View>
-      ))}
+      ))} */}
     </ScrollView>
   );
 }

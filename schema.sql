@@ -84,8 +84,25 @@ CREATE TABLE post_tags (
 );
 
 
+/* add 5 users */
 insert into users set username = 'flourishUser1', name_first = 'James', name_last = 'Easter', total_like = 5;
 insert into users set username = 'flourishUser2', name_first = 'Mike', name_last = 'Bazile', total_like = 10;
 insert into users set username = 'flourishUser3', name_first = 'Ed', name_last = 'Foster', total_like = 0;
 insert into users set username = 'flourishUser4', name_first = 'Bames', name_last = 'Woodson', total_like = 16;
 insert into users set username = 'flourishUser5', name_first = 'Harley', name_last = 'Saketson', total_like = 9;
+
+/* add 5 posts */
+INSERT INTO media set type = 'image', url = 'https://img.pokemondb.net/artwork/large/victreebel.jpg';
+INSERT INTO posts set user_id = 1, like_count = 0, media_id = 1, text = 'here is a post to render', created_at = NOW();
+
+INSERT INTO media set type = 'image', url = 'https://img.pokemondb.net/artwork/large/weepinbell.jpg';
+INSERT INTO posts set user_id = 2, like_count = 3, media_id = 2, text = 'and another post', created_at = NOW();
+
+INSERT INTO media set type = 'image', url = 'https://img.pokemondb.net/artwork/large/victreebel.jpg';
+INSERT INTO posts set user_id = 3, like_count = 2, media_id = 3, text = 'check out this plant', created_at = NOW();
+
+INSERT INTO media set type = 'image', url = 'https://img.pokemondb.net/artwork/large/oddish.jpg';
+INSERT INTO posts set user_id = 4, like_count = 6, media_id = 4, text = 'another new plant i just bought', created_at = NOW();
+
+INSERT INTO media set type = 'image', url = 'https://img.pokemondb.net/artwork/large/bulbasaur.jpg';
+INSERT INTO posts set user_id = 5, like_count = 1, media_id = 5, text = 'wow, just wow. look at this plant', created_at = NOW();

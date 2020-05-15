@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as actions from '../api';
+import { LOCAL_IP } from 'react-native-dotenv';
 
 // This middleware handles all api calls
 
@@ -38,7 +39,7 @@ const api = (store) => (next) => (action) => {
   // method is get by default but can be set to another type
   // data is the object that the request is sending to the server
   axios.request({
-    baseURL: 'http://localhost:8080',
+    baseURL: LOCAL_IP,
     url,
     method,
     data,
