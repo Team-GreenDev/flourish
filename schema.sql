@@ -25,6 +25,8 @@ CREATE TABLE users (
   name_first varchar(50),
   name_last varchar(50),
   total_like int,
+  image_url varchar(255),
+  bio varchar(255),
   PRIMARY KEY (id)
 );
 
@@ -86,11 +88,11 @@ CREATE TABLE post_tags (
 
 
 /* add 5 users */
-insert into users set username = 'flourishUser1', name_first = 'James', name_last = 'Easter', total_like = 5;
-insert into users set username = 'flourishUser2', name_first = 'Mike', name_last = 'Bazile', total_like = 10;
-insert into users set username = 'flourishUser3', name_first = 'Ed', name_last = 'Foster', total_like = 0;
-insert into users set username = 'flourishUser4', name_first = 'Bames', name_last = 'Woodson', total_like = 16;
-insert into users set username = 'flourishUser5', name_first = 'Harley', name_last = 'Saketson', total_like = 9;
+insert into users set username = 'flourishUser1', name_first = 'James', name_last = 'Easter', total_like = 5, image_url = 'https://randomuser.me/api/portraits/men/1.jpg', bio = 'I really like plants';
+insert into users set username = 'flourishUser2', name_first = 'Mike', name_last = 'Bazile', total_like = 10, image_url = 'https://randomuser.me/api/portraits/men/2.jpg', bio = 'I really like plants';
+insert into users set username = 'flourishUser3', name_first = 'Ed', name_last = 'Foster', total_like = 0, image_url = 'https://randomuser.me/api/portraits/men/3.jpg', bio = 'I really like plants';
+insert into users set username = 'flourishUser4', name_first = 'Bames', name_last = 'Woodson', total_like = 16, image_url = 'https://randomuser.me/api/portraits/men/4.jpg', bio = 'I really like plants';
+insert into users set username = 'flourishUser5', name_first = 'Harley', name_last = 'Saketson', total_like = 9, image_url = 'https://randomuser.me/api/portraits/men/5.jpg', bio = 'I really like plants';
 
 /* add 5 posts */
 INSERT INTO posts set user_id = 1, like_count = 0, url = 'https://img.pokemondb.net/artwork/large/victreebel.jpg', text = 'here is a post to render', created_at = NOW();

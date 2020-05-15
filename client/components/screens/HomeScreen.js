@@ -29,6 +29,7 @@ export default function HomeScreen() {
               <Image style={styles.image} source={{ uri: post.url }}/>
               <Text style={styles.username}>{name}</Text>
               <Text style={styles.message}>{post.text}</Text>
+              <Text style={styles.tags}>#plants #cool #pokemon</Text>
             </View>
             <Text> </Text>
           </View>

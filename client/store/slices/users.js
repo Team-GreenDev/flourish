@@ -10,6 +10,7 @@ const slice = createSlice({
   initialState: {
     list: [],
     loading: false,
+    currentUserId: 1,
   },
   // actions => action handlers
   reducers: {
