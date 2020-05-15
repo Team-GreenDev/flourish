@@ -7,6 +7,7 @@ import SearchScreen from '../screens/SearchScreen';
 import UploadScreen from '../screens/UploadScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import MessageRouteScreen from '../screens/Messages/MessageRouteScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -45,6 +46,13 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={NotificationScreen}
         options={{
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-heart" />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Messages"
+        component={MessageRouteScreen}
+        options={{
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-text" />,
         }}
       />
       <BottomTab.Screen
