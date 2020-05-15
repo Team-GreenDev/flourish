@@ -48,15 +48,13 @@ export default function ProfileScreen() {
     },
   ]
 const likeData = likeDummy.map(post => (
-  <View>
-    <Text> </Text>
-    <View style={styles.post} key={post.username}>
+  <View key={post.username}>
+    <View style={styles.post}>
       <Image style={styles.image} source={{ uri: post.url }}/>
       <Text style={styles.postUsername}>{post.username}</Text>
       <Text style={styles.message}>{post.message}</Text>
       <Text style={styles.tags}>{post.tags}</Text>
     </View>
-    <Text> </Text>
   </View>
 ));
 
@@ -94,15 +92,13 @@ const postDummy = [
 ]
 
 const postData = postDummy.map(post => (
-  <View>
-    <Text> </Text>
-    <View style={styles.post} key={post.username}>
+  <View key={post.username}>
+    <View style={styles.post}>
       <Image style={styles.image} source={{ uri: post.url }}/>
       <Text style={styles.postUsername}>{post.username}</Text>
       <Text style={styles.message}>{post.message}</Text>
       <Text style={styles.tags}>{post.tags}</Text>
     </View>
-    <Text> </Text>
   </View>
 ));
 
