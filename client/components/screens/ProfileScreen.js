@@ -1,11 +1,28 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadUsers } from '../../store/slices/users';
+import { loadPosts } from '../../store/slices/posts';
 
 export default function ProfileScreen() {
+  const dispatch = useDispatch();
+  const users = useSelector(state => state.users);
+  const posts = useSelector(state => state.posts);
+  const currentUserId = useSelector(state => state.users.currentUserId);
+
+  const getUserById = (id) => users.list.filter((user) => user.id === id);
+  const getPostById = (id) => posts.list.filter((post) => post.user_id === id);
  
+  useEffect(()=>{
+    dispatch(loadUsers());
+    dispatch(loadPosts());
+  }, [])
+
   const [boolean, setBoolean] = useState(true);
   
+  const currentUser = getUserById(users.currentUserId);
+
   let userInfo = {
     userName: 'Karen Boomer',
     bio: 'This is my bio.',
@@ -96,17 +113,27 @@ const postDummy = [
   },
 ]
 
-const postData = postDummy.map(post => (
-  <View key={post.id}>
-    <View style={styles.post}>
-      <Image style={styles.image} source={{ uri: post.url }}/>
-      <Text style={styles.postUsername}>{post.username}</Text>
-      <Text style={styles.message}>{post.message}</Text>
-      <Text style={styles.tags}>{post.tags}</Text>
-    </View>
-  </View>
-));
+// const postData = postDummy.map(post => (
+//   <View key={post.id}>
+//     <View style={styles.post}>
+//       <Image style={styles.image} source={{ uri: post.url }}/>
+//       <Text style={styles.postUsername}>{post.username}</Text>
+//       <Text style={styles.message}>{post.message}</Text>
+//       <Text style={styles.tags}>{post.tags}</Text>
+//     </View>
+//   </View>
 
+  const postData = getPostById(users.currentUserId).map(post => (
+    <View key={post.id}>
+      <View style={styles.post}>
+        <Image style={styles.image} source={{ uri: post.url }}/>
+        {/* <Text style={styles.postUsername}>{post.username}</Text> */}
+        <Text style={styles.message}>{post.text}</Text>
+        <Text style={styles.tags}>#plants #cool #pokemon</Text>
+      </View>
+    </View>
+));
+  // getFollowers, getFollowing, getUserFirst, getUserLast, allUserPost, allLikedPosts
   return (
     <ScrollView styles={styles.container}>
       <View>
@@ -115,6 +142,7 @@ const postData = postDummy.map(post => (
           <Text style={styles.username}>{userInfo.userName}</Text> 
           <Text style={styles.bio}>{userInfo.bio}</Text>
           <View style={styles.followCount}>
+            {/* All dummy data */}
             <Text style={styles.followText}>{userInfo.followingCount} Following</Text>
             <Text style={styles.followText}>{userInfo.followerCount} Followers</Text>
             <Text style={styles.followText}>{userInfo.seedCount} Seeds</Text>
