@@ -64,35 +64,40 @@ const postDummy = [
     username: 'Karen Boomer',
     message: 'This is my post',
     tags: '#plants #cool #pokemon',
+    id: 1,
   },
   {
     url: 'https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1557258847-chinese-evergreen-houseplant-1557258690.jpg?crop=0.883xw:0.887xh;0.0849xw,0.0821xh&resize=480:*',
     username: 'Karen Boomer',
     message: 'I like plants',
     tags: '#plants #cool #pokemon',
+    id: 2,
   },
   {
     url: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/high-angle-view-of-potted-cactus-royalty-free-image-1568039795.jpg?crop=0.752xw:1.00xh;0.139xw,0&resize=480:*',
     username: 'Karen Boomer',
     message: 'Plants taste good',
     tags: '#plants #cool #pokemon',
+    id: 3,
   },
   {
     url: 'https://hgtvhome.sndimg.com/content/dam/images/hgtv/products/2019/9/19/3/RX_1800Flowers_Money-Plant.jpg.rend.hgtvcom.616.616.suffix/1568931656068.jpeg',
     username: 'Karen Boomer',
     message: 'Hi, Im barbie ',
     tags: '#plants #cool #pokemon',
+    id: 4,
   },
   {
     url: 'https://watchandlearn.scholastic.com/content/dam/classroom-magazines/watchandlearn/videos/animals-and-plants/plants/what-are-plants-/english/wall-2018-whatareplantsmp4.transform/content-tile-large/image.png',
     username: 'Karen Boomer',
     message: '*Your ',
     tags: '#plants #cool #pokemon',
+    id: 5,
   },
 ]
 
 const postData = postDummy.map(post => (
-  <View key={post.username}>
+  <View key={post.id}>
     <View style={styles.post}>
       <Image style={styles.image} source={{ uri: post.url }}/>
       <Text style={styles.postUsername}>{post.username}</Text>
