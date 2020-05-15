@@ -34,7 +34,7 @@ export default function NotificationScreen() {
   return (
     <ScrollView>
       {userInfo.map(user => (
-        <TouchableHighlight>
+        <TouchableHighlight key={user.userName}>
         <View style={styles.notification}>
         <Image style={styles.userImage} source={{uri: user.userImage}}/>
           <Text style={styles.notificationText}>{user.userName} liked your Post</Text>
