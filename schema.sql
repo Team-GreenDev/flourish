@@ -42,17 +42,18 @@ CREATE TABLE likes (
   user_id int
 );
 
-CREATE TABLE media (
-  id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  type varchar(255),
-  url varchar(255)
-);
+-- CREATE TABLE media (
+--   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+--   type varchar(255),
+--   url varchar(255)
+-- );
 
 CREATE TABLE posts (
   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   user_id int,
   like_count int,
-  media_id int,
+  -- media_id int,
+  url varchar(255),
   text varchar(255),
   created_at datetime
 );
@@ -92,17 +93,8 @@ insert into users set username = 'flourishUser4', name_first = 'Bames', name_las
 insert into users set username = 'flourishUser5', name_first = 'Harley', name_last = 'Saketson', total_like = 9;
 
 /* add 5 posts */
-INSERT INTO media set type = 'image', url = 'https://img.pokemondb.net/artwork/large/victreebel.jpg';
-INSERT INTO posts set user_id = 1, like_count = 0, media_id = 1, text = 'here is a post to render', created_at = NOW();
-
-INSERT INTO media set type = 'image', url = 'https://img.pokemondb.net/artwork/large/weepinbell.jpg';
-INSERT INTO posts set user_id = 2, like_count = 3, media_id = 2, text = 'and another post', created_at = NOW();
-
-INSERT INTO media set type = 'image', url = 'https://img.pokemondb.net/artwork/large/victreebel.jpg';
-INSERT INTO posts set user_id = 3, like_count = 2, media_id = 3, text = 'check out this plant', created_at = NOW();
-
-INSERT INTO media set type = 'image', url = 'https://img.pokemondb.net/artwork/large/oddish.jpg';
-INSERT INTO posts set user_id = 4, like_count = 6, media_id = 4, text = 'another new plant i just bought', created_at = NOW();
-
-INSERT INTO media set type = 'image', url = 'https://img.pokemondb.net/artwork/large/bulbasaur.jpg';
-INSERT INTO posts set user_id = 5, like_count = 1, media_id = 5, text = 'wow, just wow. look at this plant', created_at = NOW();
+INSERT INTO posts set user_id = 1, like_count = 0, url = 'https://img.pokemondb.net/artwork/large/victreebel.jpg', text = 'here is a post to render', created_at = NOW();
+INSERT INTO posts set user_id = 2, like_count = 3, url = 'https://img.pokemondb.net/artwork/large/weepinbell.jpg', text = 'and another post', created_at = NOW();
+INSERT INTO posts set user_id = 3, like_count = 2, url = 'https://img.pokemondb.net/artwork/large/victreebel.jpg', text = 'check out this plant', created_at = NOW();
+INSERT INTO posts set user_id = 4, like_count = 6, url = 'https://img.pokemondb.net/artwork/large/oddish.jpg', text = 'another new plant i just bought', created_at = NOW();
+INSERT INTO posts set user_id = 5, like_count = 1, url = 'https://img.pokemondb.net/artwork/large/bulbasaur.jpg', text = 'wow, just wow. look at this plant', created_at = NOW();
