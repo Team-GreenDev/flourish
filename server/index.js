@@ -3,11 +3,15 @@ const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
 const socketio = require('@feathersjs/socketio');
 const path = require('path');
+var cors = require('cors')
 const db = require('./db');
 const { apiRouter } = require('./api/index');
 
 // Creates an ExpressJS compatible Feathers application
 const app = express(feathers());
+
+// Applying cors middleware
+app.use(cors());
 
 // Parse HTTP JSON bodies
 app.use(express.json());
