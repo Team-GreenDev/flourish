@@ -20,7 +20,7 @@ export default function PrivateMessageScreen({ history }){
   {
     username: 'Chad',
     profilePic: 'https://randomuser.me/api/portraits/men/2.jpg',
-    lastMessage: 'I love your fern :)',
+    lastMessage: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium.',
     created_at: '8:27 AM',
     id: 3,
   },
@@ -73,7 +73,7 @@ export default function PrivateMessageScreen({ history }){
             <Text style={styles.messagesUsername}>{user.username}</Text>
             <Text style={styles.messagesText} >{user.lastMessage}</Text>
           </View>
-          <Text>{user.created_at}</Text>
+          <Text style={styles.timeStamp}>{user.created_at}</Text>
         </TouchableOpacity>
       ))}
     <TextInput 
@@ -96,8 +96,9 @@ const styles = StyleSheet.create({
   },
   messagesText: {
     fontSize: 20,
-    alignSelf: 'center',
     marginLeft: 10,
+    marginBottom: 5,
+    maxWidth: 345,
   },
   messagesUsername: {
     fontSize: 15
@@ -109,5 +110,10 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 20,
     backgroundColor: '#E9F1E9',
+  },
+  timeStamp: {
+    color: 'forestgreen',
+    position: 'absolute',
+    left: 340,
   }
 });
