@@ -2,36 +2,34 @@ import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadUsers } from '../../store/slices/users';
 import { loadPosts } from '../../store/slices/posts';
+
+  // MISSING FUNCTIONALITY: Dynamically render Followers, Following, and all posts current user has liked
 
 export default function ProfileScreen() {
   const dispatch = useDispatch();
-  const users = useSelector(state => state.users);
   const posts = useSelector(state => state.posts);
-  const currentUserId = useSelector(state => state.users.currentUserId);
+  const currentUser = useSelector(state => state.auth.currentUser);
 
-  const getUserById = (id) => users.list.filter((user) => user.id === id);
-  const getPostById = (id) => posts.list.filter((post) => post.user_id === id);
- 
   useEffect(()=>{
-    dispatch(loadUsers());
     dispatch(loadPosts());
   }, [])
 
-  const [boolean, setBoolean] = useState(true);
-  
-  const currentUser = getUserById(users.currentUserId);
+  // Used to get the current users posts
+  const getPostById = (id) => posts.list.filter((post) => post.user_id === id);
 
+  // Boolean to view current users posts or current users liked posts (could move to the store eventually)
+  const [boolean, setBoolean] = useState(true);
+
+
+  // Dummy data that needs to be replaced with backend data
   let userInfo = {
-    userName: 'Karen Boomer',
-    bio: 'This is my bio.',
-    profilePic: 'https://randomuser.me/api/portraits/women/2.jpg',
     followingCount: 10,
     followerCount: 50,
     seedCount: 9001
   };
 
+  // Dummy data of 'liked' posts
   const likeDummy = [
     {
       url: 'https://img.pokemondb.net/artwork/large/bellsprout.jpg',
@@ -64,85 +62,41 @@ export default function ProfileScreen() {
       tags: '#plants #cool #pokemon',
     },
   ]
-const likeData = likeDummy.map(post => (
-  <View key={post.username}>
-    <View style={styles.post}>
-      <Image style={styles.image} source={{ uri: post.url }}/>
-      <Text style={styles.postUsername}>{post.username}</Text>
-      <Text style={styles.message}>{post.message}</Text>
-      <Text style={styles.tags}>{post.tags}</Text>
+
+  // Mapping over fake static posts that the user has 'liked'
+  const likeData = likeDummy.map(post => (
+    <View key={post.username}>
+      <View style={styles.post}>
+        <Image style={styles.image} source={{ uri: post.url }}/>
+        <Text style={styles.postUsername}>{post.username}</Text>
+        <Text style={styles.message}>{post.message}</Text>
+        <Text style={styles.tags}>{post.tags}</Text>
+      </View>
     </View>
-  </View>
-));
+  ));
 
-const postDummy = [
-  {
-    url: 'https://images.homedepot-static.com/productImages/790339f3-49a5-49ae-9418-bbd7a015c8e4/svn/pure-beauty-farms-house-plants-dc10sanlaur-64_1000.jpg',
-    username: 'Karen Boomer',
-    message: 'This is my post',
-    tags: '#plants #cool #pokemon',
-    id: 1,
-  },
-  {
-    url: 'https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1557258847-chinese-evergreen-houseplant-1557258690.jpg?crop=0.883xw:0.887xh;0.0849xw,0.0821xh&resize=480:*',
-    username: 'Karen Boomer',
-    message: 'I like plants',
-    tags: '#plants #cool #pokemon',
-    id: 2,
-  },
-  {
-    url: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/high-angle-view-of-potted-cactus-royalty-free-image-1568039795.jpg?crop=0.752xw:1.00xh;0.139xw,0&resize=480:*',
-    username: 'Karen Boomer',
-    message: 'Plants taste good',
-    tags: '#plants #cool #pokemon',
-    id: 3,
-  },
-  {
-    url: 'https://hgtvhome.sndimg.com/content/dam/images/hgtv/products/2019/9/19/3/RX_1800Flowers_Money-Plant.jpg.rend.hgtvcom.616.616.suffix/1568931656068.jpeg',
-    username: 'Karen Boomer',
-    message: 'Hi, Im barbie ',
-    tags: '#plants #cool #pokemon',
-    id: 4,
-  },
-  {
-    url: 'https://watchandlearn.scholastic.com/content/dam/classroom-magazines/watchandlearn/videos/animals-and-plants/plants/what-are-plants-/english/wall-2018-whatareplantsmp4.transform/content-tile-large/image.png',
-    username: 'Karen Boomer',
-    message: '*Your ',
-    tags: '#plants #cool #pokemon',
-    id: 5,
-  },
-]
-
-// const postData = postDummy.map(post => (
-//   <View key={post.id}>
-//     <View style={styles.post}>
-//       <Image style={styles.image} source={{ uri: post.url }}/>
-//       <Text style={styles.postUsername}>{post.username}</Text>
-//       <Text style={styles.message}>{post.message}</Text>
-//       <Text style={styles.tags}>{post.tags}</Text>
-//     </View>
-//   </View>
-
-  const postData = getPostById(users.currentUserId).map(post => (
+  // Maps over the current users posts to list them on profile feed
+  const postData = getPostById(currentUser.id).map(post => (
     <View key={post.id}>
       <View style={styles.post}>
         <Image style={styles.image} source={{ uri: post.url }}/>
-        {/* <Text style={styles.postUsername}>{post.username}</Text> */}
+        <Text style={styles.postUsername}>{currentUser.username}</Text>
         <Text style={styles.message}>{post.text}</Text>
         <Text style={styles.tags}>#plants #cool #pokemon</Text>
       </View>
     </View>
-));
-  // getFollowers, getFollowing, getUserFirst, getUserLast, allUserPost, allLikedPosts
+  ));
+
   return (
     <ScrollView styles={styles.container}>
       <View>
-        <Image style={styles.profilePic} source={{uri: userInfo.profilePic}}/>
+        <Image style={styles.profilePic} source={{uri: currentUser.image_url}}/>
         <TouchableOpacity style={styles.infoContainer}>
-          <Text style={styles.username}>{userInfo.userName}</Text> 
-          <Text style={styles.bio}>{userInfo.bio}</Text>
+          <Text style={styles.username}>{currentUser.name_first} {currentUser.name_last}</Text>
+          <Text style={styles.bio}>{currentUser.username}</Text>
+          <Text style={styles.bio}>{currentUser.bio}</Text>
+            {/* All static "following/follower" dummy data */}
           <View style={styles.followCount}>
-            {/* All dummy data */}
             <Text style={styles.followText}>{userInfo.followingCount} Following</Text>
             <Text style={styles.followText}>{userInfo.followerCount} Followers</Text>
             <Text style={styles.followText}>{userInfo.seedCount} Seeds</Text>
@@ -238,5 +192,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignSelf: 'center',
     backgroundColor: '#C0CDC6',
-    }, 
+    },
 });

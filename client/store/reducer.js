@@ -3,6 +3,7 @@ import plantsReducer from './slices/plants';
 import usersReducer from './slices/users';
 import postsReducer from './slices/posts';
 import messagesReducer from './slices/messages';
+import authReducer from './slices/auth';
 
 // Future reducers can be imported above like plantsReducer
 // then added as a key value to the combineReducers
@@ -12,4 +13,5 @@ export default combineReducers({
   users: usersReducer,
   posts: postsReducer,
   messages: messagesReducer,
+  auth: authReducer,
 });

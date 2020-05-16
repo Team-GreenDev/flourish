@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUsers } from '../../store/slices/users';
 import { loadPosts } from '../../store/slices/posts';
+import { login } from '../../store/slices/auth';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ export default function HomeScreen() {
   useEffect(()=>{
     dispatch(loadUsers());
     dispatch(loadPosts());
+    dispatch(login(1));
   }, [])
 
   return (
