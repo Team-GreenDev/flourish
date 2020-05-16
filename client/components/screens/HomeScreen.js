@@ -20,7 +20,7 @@ export default function HomeScreen() {
 
   return (
     <ScrollView styles={styles.container}>
-      {posts.loading && users.loading
+      {posts.lists
         ? (<View><Text>loading</Text></View>)
         : (posts.list.map(post => {
           const name = getUserById(post.id)[0].username;
