@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ history }) {
 
   let messageDummy = [{
     username: 'Chad',
@@ -35,13 +35,15 @@ export default function ProfileScreen() {
       placeholder="Search Messages..."
     />
       {messageDummy.map(user => (
-        <TouchableOpacity style={styles.messagesContainer}>
+        <TouchableOpacity key={user.username} style={styles.messagesContainer} onPress={() => {
+          console.log(user.username);
+          history.push("/privatemessages")}}>
           <Image style={styles.messagesImage} source={{uri: user.profilePic}}/>
-          <View style={styles.vertText}>
+          <View style={styles.vertText} >
             <Text style={styles.messagesUsername}>{user.username}</Text>
             <Text style={styles.messagesText} >{user.lastMessage}</Text>
           </View>
-          <Text>{user.created_at}</Text>
+          <Text style={styles.timeStamp}>{user.created_at}</Text>
         </TouchableOpacity>
       ))}
     </ScrollView> 
@@ -71,5 +73,10 @@ const styles = StyleSheet.create({
   },
   vertText: {
     flexDirection: 'column'
+  },
+  timeStamp: {
+    color: 'forestgreen',
+    position: 'absolute',
+    left: 340,
   }
 });
