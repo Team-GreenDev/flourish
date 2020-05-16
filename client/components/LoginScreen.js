@@ -4,8 +4,14 @@ import { View, StyleSheet, Button, Text } from 'react-native';
 import * as Google from 'expo-google-app-auth'
 import * as Facebook from 'expo-facebook';
 import { IOS_CLIENT_ID, FACEBOOK_ID } from 'react-native-dotenv';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '.././store/slices/auth';
 
-export default function LoginPage () {
+
+
+export default function LoginScreen ({itWorked}) {
+  const dispatch = useDispatch();
+
   async function signInWithGoogleAsync() {
     try {
       const result = await Google.logInAsync({
@@ -13,8 +19,10 @@ export default function LoginPage () {
         iosClientId: IOS_CLIENT_ID,
         scopes: ['profile', 'email'],
       });
-      
+
       if (result.type === 'success') {
+        dispatch(login(1));
+        itWorked();
         return result.accessToken;
       } else {
         return { cancelled: true };
@@ -53,6 +61,7 @@ export default function LoginPage () {
     const signInWithFacebook = () => {
       signInWithFacebookAsync()
     }
+
     return (
       <View style={styles.container}>
         <Button onPress={() => signInWithGoogle()} title="Sign in with Google" />
