@@ -35,13 +35,15 @@ export default function ProfileScreen({ history }) {
       placeholder="Search Messages..."
     />
       {messageDummy.map(user => (
-        <TouchableOpacity style={styles.messagesContainer} onPress={() => history.push("/privatemessages")}>
+        <TouchableOpacity key={user.username} style={styles.messagesContainer} onPress={() => {
+          console.log(user.username);
+          history.push("/privatemessages")}}>
           <Image style={styles.messagesImage} source={{uri: user.profilePic}}/>
           <View style={styles.vertText} >
             <Text style={styles.messagesUsername}>{user.username}</Text>
             <Text style={styles.messagesText} >{user.lastMessage}</Text>
           </View>
-          <Text>{user.created_at}</Text>
+          <Text style={styles.timeStamp}>{user.created_at}</Text>
         </TouchableOpacity>
       ))}
     </ScrollView> 
@@ -71,5 +73,10 @@ const styles = StyleSheet.create({
   },
   vertText: {
     flexDirection: 'column'
+  },
+  timeStamp: {
+    color: 'forestgreen',
+    position: 'absolute',
+    left: 340,
   }
 });
