@@ -1,4 +1,5 @@
 const express = require('@feathersjs/express');
+const { authRouter } = require('./auth');
 const { commentsRouter } = require('./comments');
 const { followersRouter } = require('./followers');
 const { messagesRouter } = require('./messages');
@@ -9,6 +10,7 @@ const { usersRouter } = require('./users');
 
 const apiRouter = express.Router();
 
+apiRouter.use('/auth', authRouter);
 apiRouter.use('/comments', commentsRouter);
 apiRouter.use('/followers', followersRouter);
 apiRouter.use('/messages', messagesRouter);
