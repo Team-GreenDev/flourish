@@ -5,7 +5,6 @@ import TabBarIcon from '../icons/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
 import UploadScreen from '../screens/UploadScreen';
-import NotificationScreen from '../screens/NotificationScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MessageRouteScreen from '../screens/Messages/MessageRouteScreen';
 
@@ -39,13 +38,6 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={UploadScreen}
         options={{
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-add-circle" />,
-        }}
-      />
-      <BottomTab.Screen
-        name="Notifications"
-        component={NotificationScreen}
-        options={{
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-heart" />,
         }}
       />
       <BottomTab.Screen
