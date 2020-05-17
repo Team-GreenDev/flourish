@@ -26,39 +26,27 @@ export default function ProfileScreen() {
   let userInfo = {
     followingCount: 10,
     followerCount: 50,
-    seedCount: 9001
+    seedCount: 343
   };
 
   // Dummy data of 'liked' posts
   const likeDummy = [
     {
-      url: 'https://img.pokemondb.net/artwork/large/bellsprout.jpg',
-      username: 'Bellsprout',
-      message: 'This is dummy message blah blah blah',
+      url: 'https://media.architecturaldigest.com/photos/5a94846e4692126e06f34f67/master/w_1600%2Cc_limit/popular-houseplants-pilea-peperomioides.jpg',
+      username: 'Rachel Davis',
+      message: 'Army of five, might even go pick up some more!',
       tags: '#plants #cool #pokemon',
     },
     {
-      url: 'https://img.pokemondb.net/artwork/large/weepinbell.jpg',
-      username: 'Weepinbell',
-      message: 'This is dummy message blah blah blah weep weep etc etc etc',
+      url: 'https://secure.img1-fg.wfcdn.com/im/42349074/resize-h600%5Ecompr-r85/8506/85069027/Tejeda+5+Tier+Self-Watering+Wood+Vertical+Garden.jpg',
+      username: 'Jaime Vazquez',
+      message: 'Five tier wall garden is looking healthy this month',
       tags: '#plants #cool #pokemon',
     },
     {
-      url: 'https://img.pokemondb.net/artwork/large/victreebel.jpg',
-      username: 'Victreebel',
-      message: 'This is dummy message blah blah blah one two three four five six seven eight nine',
-      tags: '#plants #cool #pokemon',
-    },
-    {
-      url: 'https://img.pokemondb.net/artwork/large/oddish.jpg',
-      username: 'Oddish',
-      message: 'This is dummy message blah blah blah useless pokemon ',
-      tags: '#plants #cool #pokemon',
-    },
-    {
-      url: 'https://img.pokemondb.net/artwork/large/bulbasaur.jpg',
-      username: 'Bulbasaur',
-      message: 'This is dummy message blah blah blahkfldsfj aslkdf  sadlfj lk sad flkfdsjfl kdsjf lsajf laj ldaksfjl slajf las laj flasd ',
+      url: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/high-angle-view-of-potted-cactus-royalty-free-image-1568039795.jpg?crop=0.752xw:1.00xh;0.139xw,0&resize=480:*',
+      username: 'Brenden Malone',
+      message: 'Check out this succulent collection',
       tags: '#plants #cool #pokemon',
     },
   ]
@@ -93,7 +81,7 @@ export default function ProfileScreen() {
         <Image style={styles.profilePic} source={{uri: currentUser.image_url}}/>
         <TouchableOpacity style={styles.infoContainer}>
           <Text style={styles.username}>{currentUser.username}</Text>
-          <Text style={styles.bio}>I love plants, people, and puppies!</Text>
+          <Text style={styles.bio}>{currentUser.bio}</Text>
             {/* All static "following/follower" dummy data */}
           <View style={styles.followCount}>
             <Text style={styles.followText}>{userInfo.followingCount} Following</Text>
@@ -173,21 +161,24 @@ const styles = StyleSheet.create({
     color: 'forestgreen',
     },
   message: {
-      
+
     },
   tags: {
     color: 'blue',
     },
   post: {
+    // adding space between posts
+    marginBottom: 30,
+
     // Setting up image width.
     width: 300,
-      
+
     // Set border width.
     borderWidth: 1,
-      
+
     // Set border Hex Color code here.
     borderColor: '#C0CDC6',
-      
+
     // Set border Radius.
     borderRadius: 10,
     alignSelf: 'center',
