@@ -57,6 +57,7 @@ CREATE TABLE posts (
   like_count int,
   -- media_id int,
   url varchar(255),
+  media_id int,
   text varchar(255),
   created_at datetime
 );
