@@ -21,7 +21,7 @@ usersRouter.get('/:id', (req, res) => {
 // Add user to database => { username, name_first, name_last }
 usersRouter.post('/', (req, res) => {
   db.createUser(req, res)
-    .then(() => res.status(201).send('User created!'))
+    .then(() => res.status(201).send(req.body))
     .catch((error) => res.status(500).send(error));
 });
 
