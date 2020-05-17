@@ -7,15 +7,21 @@ import configureStore from './client/store/configureStore';
 
 import BottomTabNavigator from './client/components/navigation/BottomTabNavigator';
 import LoginScreen from './client/components/LoginScreen';
+import { loadUsers } from './client/store/slices/users';
+import { loadPosts } from './client/store/slices/posts';
+
+// disables yellow flag for
+console.disableYellowBox = true;
 
 const Stack = createStackNavigator();
 const store = configureStore();
-import { login } from './client/store/slices/auth';
 
+store.dispatch(loadUsers());
+store.dispatch(loadPosts());
 
 export default function App() {
   const [ loggedIn, setLoggedIn ] = useState(false)
-  const itWorked = () => setLoggedIn(true);
+  const logInSuccessful = () => setLoggedIn(true);
   let state = store.getState()
   return (
     <Provider store={store}>
@@ -27,7 +33,7 @@ export default function App() {
             <Stack.Screen name="Root" component={BottomTabNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
-        : <LoginScreen itWorked={itWorked} />}
+        : <LoginScreen logInSuccessful={logInSuccessful} />}
       </View>
     </Provider>
   );
