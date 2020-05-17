@@ -29,8 +29,8 @@ const getAllUsers = () => pool.query('select * from users');
 
 // Adds new user
 const createUser = (req) => {
-  const { username, name_first, name_last } = req.body;
-  return pool.query(`insert into users set username = '${username}', name_first = '${name_first}', name_last = '${name_last}', total_like = ${0}`);
+  const { username, name_first, name_last, id, image_url } = req.body;
+  return pool.query(`insert into users set id = ${id}, image_url = '${image_url}', username = '${username}', name_first = '${name_first}', name_last = '${name_last}', total_like = ${0}`);
 };
 
 // Gets user by id

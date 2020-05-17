@@ -10,7 +10,7 @@ const slice = createSlice({
   initialState: {
     currentUser: {},
     loading: true,
-    loggedIn: null,
+    loggedIn: false,
   },
   // actions => action handlers
   reducers: {
@@ -36,6 +36,11 @@ const slice = createSlice({
       auth.loading = false;
       auth.loggedIn = false;
     },
+    // sets current user
+    setCurrentUser: (auth, action) => {
+      auth.currentUser = action.payload;
+      auth.loggedIn = true;
+    },
   },
 });
 
@@ -45,6 +50,8 @@ const {
   userLoggedIn,
   userLoggedOut,
 } = slice.actions;
+
+export const { setCurrentUser } = slice.actions;
 
 export default slice.reducer;
 
@@ -56,7 +63,8 @@ const url = '/api/auth';
 // The action object should be serializable (should be able to store it)
 // so we must pass the action.type which is a string
 export const login = (userInfo) => apiCallBegan({
-  url: `api/auth/${userInfo}`,
+  url: 'api/users/',
+  method: 'POST',
   data: userInfo,
   onStart: authRequested.type,
   onSuccess: userLoggedIn.type,

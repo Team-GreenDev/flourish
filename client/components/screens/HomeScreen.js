@@ -1,28 +1,19 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { loadUsers } from '../../store/slices/users';
-import { loadPosts } from '../../store/slices/posts';
-import { login } from '../../store/slices/auth';
+import { useSelector } from 'react-redux';
 
 export default function HomeScreen() {
-  const dispatch = useDispatch();
   const users = useSelector(state => state.users)
   const posts = useSelector(state => state.posts)
 
-  const getUserById = (id) => users.list.filter((user) => user.id === id);
-
-  useEffect(()=>{
-    dispatch(loadUsers());
-    dispatch(loadPosts());
-    dispatch(login(1));
-  }, [])
+  const getUserById = (id) => users.list.filter((user) => user.id == id);
 
   return (
     <ScrollView styles={styles.container}>
       {posts.lists
         ? (<View><Text>loading</Text></View>)
         : (posts.list.map(post => {
+
           const name = getUserById(post.id)[0].username;
           return (
           <View key={post.id}>

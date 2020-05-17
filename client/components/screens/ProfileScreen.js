@@ -92,9 +92,8 @@ export default function ProfileScreen() {
       <View>
         <Image style={styles.profilePic} source={{uri: currentUser.image_url}}/>
         <TouchableOpacity style={styles.infoContainer}>
-          <Text style={styles.username}>{currentUser.name_first} {currentUser.name_last}</Text>
-          <Text style={styles.bio}>{currentUser.username}</Text>
-          <Text style={styles.bio}>{currentUser.bio}</Text>
+          <Text style={styles.username}>{currentUser.username}</Text>
+          <Text style={styles.bio}>I love plants, people, and puppies!</Text>
             {/* All static "following/follower" dummy data */}
           <View style={styles.followCount}>
             <Text style={styles.followText}>{userInfo.followingCount} Following</Text>
@@ -140,6 +139,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   bio: {
+    paddingTop: 5,
     alignSelf: 'center'
   },
   followCount: {

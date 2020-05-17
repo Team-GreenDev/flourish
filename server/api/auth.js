@@ -14,6 +14,13 @@ authRouter.get('/:id', (req, res) => {
     .catch((error) => res.status(500).send(error));
 });
 
+// Add user to database => { username, name_first, name_last, id, image_url }
+authRouter.post('/', (req, res) => {
+  db.createUser(req, res)
+    .then(() => res.status(201).send(req.body))
+    .catch((error) => res.status(500).send(error));
+});
+
 module.exports = {
   authRouter,
 };
