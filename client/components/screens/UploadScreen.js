@@ -24,7 +24,6 @@ export default function UploadScreen() {
     if (pickerResult.cancelled === true) {
       return;
     }
-    console.log(pickerResult.base64, 'imagepicker');
     let base64Img = `data:image/jpg;base64,${pickerResult.base64}`;
 
     let data = {
@@ -40,7 +39,6 @@ export default function UploadScreen() {
       method: 'POST',
     }).then(async r => {
       let data = await r.json()
-      console.log(data.url, 'url')
       setPhoto(data.url);
     }).catch(err => console.log(err))
   };
