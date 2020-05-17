@@ -14,7 +14,7 @@ export default function HomeScreen() {
         ? (<View><Text>loading</Text></View>)
         : (posts.list.map(post => {
 
-          const name = getUserById(post.id)[0].username;
+          const name = getUserById(post.user_id)[0].username;
           return (
           <View key={post.id}>
             <Text> </Text>
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     color: 'forestgreen',
   },
   message: {
-    
+
   },
   tags: {
     color: 'blue',
@@ -56,13 +56,13 @@ const styles = StyleSheet.create({
   post: {
     // Setting up image width.
     width: 300,
-    
+
     // Set border width.
     borderWidth: 1,
-    
+
     // Set border Hex Color code here.
     borderColor: '#C0CDC6',
-    
+
     // Set border Radius.
     borderRadius: 10,
     alignSelf: 'center',
