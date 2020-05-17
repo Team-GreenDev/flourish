@@ -1,16 +1,15 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, Button, Text } from 'react-native';
-import * as Google from 'expo-google-app-auth'
+import * as Google from 'expo-google-app-auth';
 import * as Facebook from 'expo-facebook';
 import { IOS_CLIENT_ID, FACEBOOK_ID, AND_CLIENT_ID } from 'react-native-dotenv';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '.././store/slices/auth';
+import { login, setCurrentUser } from '.././store/slices/auth';
 
-
-
-export default function LoginScreen ({itWorked}) {
+export default function LoginScreen ({logInSuccessful}) {
   const dispatch = useDispatch();
+  const users = useSelector(state => state.users.list)
 
   async function signInWithGoogleAsync() {
     try {
@@ -22,9 +21,27 @@ export default function LoginScreen ({itWorked}) {
       });
 
       if (result.type === 'success') {
-        dispatch(login(1));
-        console.log(result.user)
-        itWorked();
+        const prevUser = users.find(user => user.id == result.user.id);
+
+        let data = {
+          name_first: result.user.givenName,
+          name_last: result.user.familyName,
+          username: result.user.name,
+          id: result.user.id,
+          image_url: result.user.photoUrl
+        };
+
+        if(prevUser) {
+          // if previous user then current user is set to the previous users data
+          dispatch(setCurrentUser(prevUser));
+        } else {
+          // if new user, new user is saved to the database
+          dispatch(login(data));
+        }
+
+        // renders the rest of the app after user successfully logged in through google
+        logInSuccessful();
+
         return result.accessToken;
       } else {
         return { cancelled: true };
