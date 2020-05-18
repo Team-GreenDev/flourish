@@ -59,12 +59,7 @@ const getUserPosts = (req) => {
 
 // Adds new post
 const addPost = (req) => {
-  const user_id = parseInt(req.body.user_id, 10);
-  const { text, type, url } = req.body;
-  // return pool.query(`INSERT INTO media set type = '${type}', url = '${url}'`)
-  //   .then((media) => {
-  //     pool.query(`INSERT INTO posts set user_id = ${user_id}, like_count = ${0}, media_id = ${media.insertId}, text = '${text}', created_at = NOW()`);
-  //   });
+  const { text, url, user_id } = req.body;
   return pool.query(`INSERT INTO posts set user_id = ${user_id}, like_count = ${0}, url = '${url}', text = '${text}', created_at = NOW()`);
 };
 
