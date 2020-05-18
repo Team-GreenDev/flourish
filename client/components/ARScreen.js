@@ -1,46 +1,50 @@
-import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import ExpoTHREE, { THREE } from 'expo-three';
-import ExpoGraphics from 'expo-graphics';
+import React, { useState, useEffect } from 'react';
+import { Text, View, TouchableOpacity } from 'react-native';
+import { Camera } from 'expo-camera';
 
+export default function ARScreen() {
+  const [hasPermission, setHasPermission] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.back);
 
-export default class ARScreen extends React.Component {
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
 
-  static navigationOptions = {
-    header: null,
-  };
-
-  onContextCreate = async ({gl, scale, width, height, arSession}) => {
-    // initialize renderer...
-    this.renderer = ExpoTHREE.createRenderer({gl});
-    this.renderer.setPixelRatio(scale);
-    this.renderer.setSize(width, height);
-
-    // initialize scene...
-    this.scene = new THREE.Scene();
-    this.scene.background = ExpoTHREE.createARBackgroundTexture(arSession, this.renderer);
-
-    // initialize camera...
-    this.camera = ExpoTHREE.createARCamera(arSession, width / scale, height / scale, 0.01, 1000);
+  if (hasPermission === null) {
+    return <View />;
   }
-
-  onRender = (delta) => {
-    this.renderer.render(this.scene, this.camera);
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
   }
-
-  render() {
-    return (
-      <ExpoGraphics.View style={{flex:1}}
-        onContextCreate={this.onContextCreate}
-        onRender={this.onRender}
-        arEnabled={true}
-      />
-    );
-  }
-  
+  return (
+    <View style={{ flex: 1 }}>
+      <Camera style={{ flex: 1 }} type={type}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'transparent',
+            flexDirection: 'row',
+          }}>
+          <TouchableOpacity
+            style={{
+              flex: 0.1,
+              alignSelf: 'flex-end',
+              alignItems: 'center',
+            }}
+            onPress={() => {
+              setType(
+                type === Camera.Constants.Type.back
+                  ? Camera.Constants.Type.front
+                  : Camera.Constants.Type.back
+              );
+            }}>
+            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
+          </TouchableOpacity>
+        </View>
+      </Camera>
+    </View>
+  );
 }
-
-
-const styles = StyleSheet.create({
-
-});
