@@ -3,35 +3,22 @@ import { Text, View, TouchableOpacity } from 'react-native';
 import { Asset } from 'expo-asset';
 import { AR } from 'expo';
 import * as Permissions from 'expo-permissions';
-// import { Camera } from 'expo-camera';
 import { loadDaeAsync, Renderer, THREE, utils } from 'expo-three';
 import { GraphicsView } from 'expo-graphics';
 import { BackgroundTexture, Camera, Light } from 'expo-three-ar';
 
 export default function ARScreen() {
-  // const [hasPermission, setHasPermission] = useState(null);
-  // const [type, setType] = useState(Camera.Constants.Type.back);
 
   useEffect(() => {
     (async () => {
-      // const { status } = await Camera.requestPermissionsAsync();
-      // setHasPermission(status === 'granted');
       const { status } = await Permissions.askAsync(Permissions.CAMERA);
       if (status !== 'granted') {
         return <Text>No access to camera</Text>;
       }
       // Turn off extra warnings
       THREE.suppressExpoWarnings(true);
-      return <Text>aslkdfsadkjf</Text>;
     })();
   }, []);
-
-  // if (hasPermission === null) {
-  //   return <GraphicsView />;
-  // }
-  // if (hasPermission === false) {
-  //   return <Text>No access to camera</Text>;
-  // }
 
   const onContextCreate = async ({ gl, scale: pixelRatio, width, height }) => {
     // This will allow ARKit to collect Horizontal surfaces
@@ -69,7 +56,7 @@ export default function ARScreen() {
   // Called every frame.
     const onRender = () => {
       // This will make the points get more rawDataPoints from Expo.AR
-      // points.update(); idk what this is but commenting out lets camera open so whatever
+      // points.update(); idk what this is but commenting out lets camera open so whatever lol, may uncomment later
       // Finally render the scene with the AR Camera
       renderer.render(scene, camera);
     };
