@@ -4,7 +4,13 @@ import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { Formik } from 'formik';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { addPost } from '../../store/slices/posts';
+
 export default function UploadScreen() {
+  const dispatch = useDispatch();
+  const currentUser = useSelector(state => state.auth.currentUser);
+
   function AppTextInput({ icon, ...otherProps }) {
     return (
       <View style={styles.container}>
@@ -56,7 +62,12 @@ export default function UploadScreen() {
     initialValues={{description: '', tag: '', image: ''}}
     onSubmit={values => {
       values.image = photo;
-      console.log(values)
+      dispatch(addPost({
+        text: values.description,
+        url: values.image,
+        user_id: currentUser.id,
+        tag: values.tag
+      }));
     }}
     >
       {({handleChange, handleBlur, handleSubmit, values}) => (

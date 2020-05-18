@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useEffect } from 'react';
-import { View, StyleSheet, Button, Text } from 'react-native';
+import { View, StyleSheet, Button, Text, Image } from 'react-native';
 import * as Google from 'expo-google-app-auth';
 import * as Facebook from 'expo-facebook';
 import { IOS_CLIENT_ID, FACEBOOK_ID, AND_CLIENT_ID } from 'react-native-dotenv';
@@ -83,7 +83,10 @@ export default function LoginScreen ({logInSuccessful}) {
 
     return (
       <View style={styles.container}>
-        <Button onPress={() => signInWithGoogle()} title="Sign in with Google" />
+        <View style-={styles.imageContainer}>
+          <Image source={require('../../assets/images/logo.png')} style={styles.logo}/>
+        </View>
+          <Button onPress={() => signInWithGoogle()} title="Sign in with Google"/>
         {/* <Button onPress={() => signInWithFacebook()} title="Sign in with Facebook" /> */}
       </View>
     )
@@ -96,15 +99,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center"
   },
-  header: {
-    fontSize: 25
+  imageContainer: {
+    width: 100,
+    height: 100,
+    marginBottom: -10,
   },
-  image: {
-    marginTop: 15,
-    width: 150,
-    height: 150,
-    borderColor: "rgba(0,0,0,0.2)",
-    borderWidth: 3,
-    borderRadius: 150
-  }
 })
