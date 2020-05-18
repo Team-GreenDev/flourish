@@ -69,13 +69,15 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   messagesUsername: {
-    fontSize: 15
+    fontSize: 15,
+    color: '#94a57e',
+    fontWeight: 'bold',
   },
   vertText: {
     flexDirection: 'column'
   },
   timeStamp: {
-    color: 'forestgreen',
+    color: '#94a57e',
     position: 'absolute',
     left: 340,
   }

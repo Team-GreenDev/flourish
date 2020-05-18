@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, Button, View, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput} from 'react-native';
+import {Text, Button, View, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput, SafeAreaView} from 'react-native';
 
 export default function PrivateMessageScreen({ history }){
 
@@ -71,7 +71,9 @@ export default function PrivateMessageScreen({ history }){
           <Image style={styles.messagesImage} source={{uri: user.profilePic}}/>
           <View style={styles.vertText} >
             <Text style={styles.messagesUsername}>{user.username}</Text>
-            <Text style={styles.messagesText} >{user.lastMessage}</Text>
+            <SafeAreaView>
+              <Text style={styles.messagesText} >{user.lastMessage}</Text>
+            </SafeAreaView>
           </View>
           <Text style={styles.timeStamp}>{user.created_at}</Text>
         </TouchableOpacity>
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 10,
     marginBottom: 5,
-    maxWidth: 345,
+    // maxWidth: 345,
   },
   messagesUsername: {
     fontSize: 15
@@ -112,7 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#E9F1E9',
   },
   timeStamp: {
-    color: 'forestgreen',
+    color: '#94a57e',
     position: 'absolute',
     left: 340,
   }
