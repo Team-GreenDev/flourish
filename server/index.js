@@ -2,7 +2,6 @@
 const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
 const socketio = require('@feathersjs/socketio');
-const ngrok = require('ngrok');
 const path = require('path');
 const cors = require('cors');
 
@@ -41,12 +40,4 @@ app.use(express.errorHandler());
 
 app.listen(process.env.PORT).on('listening', () => {
   console.log(`Feathers listening on localhost:${process.env.PORT}`);
-  (async () => {
-    await ngrok.connect({
-      authtoken: process.env.NGROK_TOKEN,
-      port: process.env.PORT,
-      subdomain: process.env.NGROK_SUBDOMAIN,
-    });
-    console.log('Publicly available on ngrok subdomain 🌿');
-  })();
 });
