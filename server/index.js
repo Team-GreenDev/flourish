@@ -2,7 +2,9 @@
 const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
 const socketio = require('@feathersjs/socketio');
+const ngrok = require('ngrok');
 const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '/./../../.env') });
 var cors = require('cors')
 const db = require('./db');
 const { apiRouter } = require('./api/index');
@@ -37,4 +39,10 @@ app.configure(socketio());
 // Register an error handler
 app.use(express.errorHandler());
 
-app.listen(8080).on('listening', () => console.log('Feathers server listening on localhost:8080'));
+app.listen(process.env.PORT).on('listening', () => {
+  console.log(`Feathers server listening on localhost:${process.env.PORT}`);
+  (async function() {
+    const endpointAccessibleOnTheInternet = await ngrok.connect(process.env.PORT);
+    console.log(`Publically accessible tunnel to localhost:${process.env.PORT} is available on ${endpointAccessibleOnTheInternet}`)
+  })()
+});
