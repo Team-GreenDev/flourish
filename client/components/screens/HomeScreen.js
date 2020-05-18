@@ -1,18 +1,24 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { loadPosts } from '../../store/slices/posts';
 
 export default function HomeScreen() {
   const users = useSelector(state => state.users)
   const posts = useSelector(state => state.posts)
+  const dispatch = useDispatch();
 
   const getUserById = (id) => users.list.filter((user) => user.id == id);
+
+  useEffect(()=>{
+    dispatch(loadPosts());
+  }, [posts.postAdded])
 
   return (
     <ScrollView styles={styles.container}>
       {posts.lists
         ? (<View><Text>loading</Text></View>)
-        : (posts.list.map(post => {
+        : (posts.list.slice(0).reverse().map(post => {
 
           const name = getUserById(post.user_id)[0].username;
           return (
@@ -22,7 +28,7 @@ export default function HomeScreen() {
               <Image style={styles.image} source={{ uri: post.url }}/>
               <Text style={styles.username}>{name}</Text>
               <Text style={styles.message}>{post.text}</Text>
-              <Text style={styles.tags}>#plants #cool #pokemon</Text>
+              <Text style={styles.tags}>#favplants #new2flourish</Text>
             </View>
             <Text> </Text>
           </View>
