@@ -21,7 +21,7 @@ DROP TABLE IF EXISTS post_tags;
 
 CREATE TABLE users (
   -- id INT NOT NULL AUTO_INCREMENT,
-  id varchar(50) NOT NULL,
+  id varchar(255) NOT NULL,
   username varchar(50),
   name_first varchar(50),
   name_last varchar(50),
@@ -33,7 +33,7 @@ CREATE TABLE users (
 
 CREATE TABLE comments (
   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  user_id varchar(50),
+  user_id varchar(255),
   post_id int,
   comment_text varchar(255),
   created_at datetime
@@ -42,7 +42,7 @@ CREATE TABLE comments (
 CREATE TABLE likes (
   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   post_id int,
-  user_id varchar(50)
+  user_id varchar(255)
 );
 
 -- CREATE TABLE media (
@@ -53,18 +53,16 @@ CREATE TABLE likes (
 
 CREATE TABLE posts (
   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  user_id varchar(50),
+  user_id varchar(255),
   like_count int,
-  -- media_id int,
   url varchar(255),
-  media_id int,
   text varchar(255),
   created_at datetime
 );
 
 CREATE TABLE messages (
   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  user_id varchar(50),
+  user_id varchar(255),
   recipient_id int,
   created_at datetime,
   text varchar(255)
@@ -73,7 +71,7 @@ CREATE TABLE messages (
 
 CREATE TABLE followers (
   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  user_id varchar(50),
+  user_id varchar(255),
   follower_id int
 );
 
