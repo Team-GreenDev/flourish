@@ -34,8 +34,8 @@ export default function App() {
             <Stack.Screen name="Root" component={BottomTabNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
-        // : <LoginScreen logInSuccessful={logInSuccessful} />}
-         : <ARScreen />}
+        : <LoginScreen logInSuccessful={logInSuccessful} />}
+        {/* : <ARScreen />} */}
       </View>
     </Provider>
   );
