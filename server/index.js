@@ -4,9 +4,9 @@ const express = require('@feathersjs/express');
 const socketio = require('@feathersjs/socketio');
 const ngrok = require('ngrok');
 const path = require('path');
+const cors = require('cors');
+
 require('dotenv').config({ path: path.join(__dirname, '/./../../.env') });
-var cors = require('cors')
-const db = require('./db');
 const { apiRouter } = require('./api/index');
 
 // Creates an ExpressJS compatible Feathers application
@@ -40,9 +40,13 @@ app.configure(socketio());
 app.use(express.errorHandler());
 
 app.listen(process.env.PORT).on('listening', () => {
-  console.log(`Feathers server listening on localhost:${process.env.PORT}`);
-  (async function() {
-    const endpointAccessibleOnTheInternet = await ngrok.connect(process.env.PORT);
-    console.log(`Publically accessible tunnel to localhost:${process.env.PORT} is available on ${endpointAccessibleOnTheInternet}`)
-  })()
+  console.log(`Feathers listening on localhost:${process.env.PORT}`);
+  (async () => {
+    await ngrok.connect({
+      authtoken: process.env.NGROK_TOKEN,
+      port: process.env.PORT,
+      subdomain: process.env.NGROK_SUBDOMAIN,
+    });
+    console.log('Publicly available on ngrok subdomain 🌿');
+  })();
 });
