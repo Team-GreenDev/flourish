@@ -1,17 +1,23 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
-import * as React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 
 export default function SearchScreen() {
-  const search = '';
-  const updateSearch = console.log('this will change state of search');
+  const [ searchQuery, setSearchQuery ] = useState('');
+
+  const handleSearch = (e) => {
+    console.log(searchQuery);
+    setSearchQuery('');
+  };
+
   return (
     <SearchBar
-      placeholder="Type Here..."
-      onChangeText={updateSearch}
-      value={search}
+      placeholder="Search for a plant!"
+      onChangeText={(e) => setSearchQuery(e)}
+      value={searchQuery}
+      onSubmitEditing={handleSearch}
     />
   );
 }
