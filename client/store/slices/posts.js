@@ -27,7 +27,7 @@ const slice = createSlice({
     // adds a post from the payload by pushing it to the current list in state
     postAdded: (posts, action) => {
       // may not need the .data ...? double check afterward
-      posts.list.push(action.payload.data);
+      // posts.list.push(action.payload);
     },
   },
 });
