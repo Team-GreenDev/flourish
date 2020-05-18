@@ -14,7 +14,7 @@ const pool = mariadb.createPool({
 // creates a new connection object to ensure mariadb is connected
 pool.getConnection()
   .then((connection) => {
-    console.log(`connected to db guys! connection id is:${connection.threadId} 🌲`);
+    console.log(`Connected to MariaDB\nConnection ID: ${connection.threadId}`);
     connection.release();
   })
   .catch((error) => {
