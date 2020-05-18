@@ -35,19 +35,19 @@ export default function ProfileScreen() {
       url: 'https://media.architecturaldigest.com/photos/5a94846e4692126e06f34f67/master/w_1600%2Cc_limit/popular-houseplants-pilea-peperomioides.jpg',
       username: 'Rachel Davis',
       message: 'Army of five, might even go pick up some more!',
-      tags: '#plants #cool #pokemon',
+      tags: '#favplants #new2flourish',
     },
     {
       url: 'https://secure.img1-fg.wfcdn.com/im/42349074/resize-h600%5Ecompr-r85/8506/85069027/Tejeda+5+Tier+Self-Watering+Wood+Vertical+Garden.jpg',
       username: 'Jaime Vazquez',
       message: 'Five tier wall garden is looking healthy this month',
-      tags: '#plants #cool #pokemon',
+      tags: '#favplants #new2flourish',
     },
     {
       url: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/high-angle-view-of-potted-cactus-royalty-free-image-1568039795.jpg?crop=0.752xw:1.00xh;0.139xw,0&resize=480:*',
       username: 'Brenden Malone',
       message: 'Check out this succulent collection',
-      tags: '#plants #cool #pokemon',
+      tags: '#favplants #new2flourish',
     },
   ]
 
@@ -64,13 +64,13 @@ export default function ProfileScreen() {
   ));
 
   // Maps over the current users posts to list them on profile feed
-  const postData = getPostById(currentUser.id).map(post => (
+  const postData = getPostById(currentUser.id).reverse().map(post => (
     <View key={post.id}>
       <View style={styles.post}>
         <Image style={styles.image} source={{ uri: post.url }}/>
         <Text style={styles.postUsername}>{currentUser.username}</Text>
         <Text style={styles.message}>{post.text}</Text>
-        <Text style={styles.tags}>#plants #cool #pokemon</Text>
+        <Text style={styles.tags}>#favplants #new2flourish</Text>
       </View>
     </View>
   ));
