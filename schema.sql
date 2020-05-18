@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS post_tags;
 
 CREATE TABLE users (
   -- id INT NOT NULL AUTO_INCREMENT,
+  pk int AUTO_INCREMENT,
   id varchar(255) NOT NULL,
   username varchar(50),
   name_first varchar(50),
@@ -28,7 +29,7 @@ CREATE TABLE users (
   total_like int,
   image_url varchar(255),
   bio varchar(255),
-  PRIMARY KEY (id)
+  PRIMARY KEY (pk)
 );
 
 CREATE TABLE comments (
