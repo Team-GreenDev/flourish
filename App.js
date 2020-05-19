@@ -7,7 +7,7 @@ import configureStore from './client/store/configureStore';
 
 import BottomTabNavigator from './client/components/navigation/BottomTabNavigator';
 import LoginScreen from './client/components/LoginScreen';
-import ARScreen from './client/components/ARScreen';
+// import ARScreen from './client/components/ARScreen';
 import { loadUsers } from './client/store/slices/users';
 import { loadPosts } from './client/store/slices/posts';
 
@@ -34,8 +34,8 @@ export default function App() {
             <Stack.Screen name="Root" component={BottomTabNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
-        // : <LoginScreen logInSuccessful={logInSuccessful} />}
-        : <ARScreen />}
+        : <LoginScreen logInSuccessful={logInSuccessful} />}
+        {/* : <ARScreen />} */}
       </View>
     </Provider>
   );
