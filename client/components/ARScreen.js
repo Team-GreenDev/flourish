@@ -8,7 +8,8 @@ import { GraphicsView } from 'expo-graphics';
 import { BackgroundTexture, Camera, Light } from 'expo-three-ar';
 
 export default function ARScreen() {
-
+  
+  let renderer, scene, camera, mesh;
   useEffect(() => {
     (async () => {
       const { status } = await Permissions.askAsync(Permissions.CAMERA);
@@ -39,6 +40,12 @@ export default function ARScreen() {
     const material = new THREE.MeshPhongMaterial({
       color: 0xff00ff,
     });
+    // Combine our geometry and material
+    let cube = new THREE.Mesh(geometry, material);
+    // Place the box 0.4 meters in front of us.
+    cube.position.z = -0.4;
+    // Add the cube to the scene
+    scene.add(cube);
   }
 
     // When the phone rotates, or the view changes size, this method will be called.
@@ -56,7 +63,7 @@ export default function ARScreen() {
   // Called every frame.
     const onRender = () => {
       // This will make the points get more rawDataPoints from Expo.AR
-      // points.update(); idk what this is but commenting out lets camera open so whatever lol, may uncomment later
+      // points.update();
       // Finally render the scene with the AR Camera
       renderer.render(scene, camera);
     };
