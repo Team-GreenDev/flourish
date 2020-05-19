@@ -1,11 +1,8 @@
 import React from 'react';
-import {Text, Button, View, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput, SafeAreaView} from 'react-native';
-// var BubbleText = require('react-native-message-bubble');
+import {Text, Button, View, StyleSheet, ScrollView, TextInput,} from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import Svg, {
-  Path,
-} from 'react-native-svg';
-
+import Svg, { Path } from 'react-native-svg';
+ 
 export default function PrivateMessageScreen({ history }){
 
   let messageDummy = [{
@@ -75,7 +72,7 @@ export default function PrivateMessageScreen({ history }){
     {messageDummy.map(message => {
       if (message.id % 2 !== 0) {
         return (
-    <View style={[styles.item, styles.itemIn]}>
+    <View key={message.id} style={[styles.item, styles.itemIn]}>
       <View style={[styles.balloon, {backgroundColor: 'grey'}]}>
         <Text style={{paddingTop: 5, color: 'white'}}>{message.lastMessage}</Text>
         <View
@@ -98,7 +95,7 @@ export default function PrivateMessageScreen({ history }){
         )
       } else {
         return (
-    <View style={[styles.item, styles.itemOut]}>
+    <View key={message.id} style={[styles.item, styles.itemOut]}>
       <View style={[styles.balloon, {backgroundColor: '#94a57e'}]}>
         <Text style={{paddingTop: 5, color: 'white'}}>{message.lastMessage}</Text>
         <View
