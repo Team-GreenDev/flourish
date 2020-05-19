@@ -67,6 +67,10 @@ export default function PrivateMessageScreen({ history }){
 ]
 
   return (
+    <ScrollView>
+      <Button
+    title="Back"
+    onPress={() => history.push("/")}/>
     <View style={[styles.item, styles.itemIn]}>
     <View style={[styles.balloon, {backgroundColor: 'grey'}]}>
       <Text style={{paddingTop: 5, color: 'white'}}>Hey! How are you?</Text>
@@ -89,6 +93,29 @@ export default function PrivateMessageScreen({ history }){
     </View>
   </View>
 
+   <View style={[styles.item, styles.itemOut]}>
+    <View style={[styles.balloon, {backgroundColor: '#94a57e'}]}>
+    <Text style={{paddingTop: 5, color: 'white'}}>Hey! I am good. How are you?</Text>
+      <View
+      style={[
+        styles.arrowContainer,
+        styles.arrowRightContainer,
+      ]}
+    >
+       <Svg style={styles.arrowRight} width={moderateScale(15.5, 0.6)} height={moderateScale(17.5, 0.6)} viewBox="32.485 17.5 15.515 17.5"  enable-background="new 32.485 17.5 15.515 17.5">
+            <Path
+                d="M48,35c-7-4-6-8.75-6-17.5C28,17.5,29,35,48,35z"
+                fill="#94a57e"
+                x="0"
+                y="0"
+            />
+        </Svg>
+    </View>
+    </View>
+  </View>
+
+
+  </ScrollView>
 
   // <View style={[styles.item, styles.itemOut]}>
   //   <View style={[styles.balloon, {backgroundColor: '#1084ff'}]}>
