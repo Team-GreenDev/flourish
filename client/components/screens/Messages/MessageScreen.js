@@ -13,19 +13,19 @@ export default function ProfileScreen({ history }) {
   {
     username: 'Brad',
     profilePic: 'https://randomuser.me/api/portraits/men/3.jpg',
-    lastMessage: 'I love your fern :)',
+    lastMessage: 'I love your ferns!',
     created_at: '1:27 PM'
   },
   {
     username: 'Tad',
     profilePic: 'https://randomuser.me/api/portraits/men/4.jpg',
-    lastMessage: 'You are so beautiful',
+    lastMessage: 'You are so such a good gardener!',
     created_at: '1:21 PM'
   },
   {
-    username: 'Pirahna Plant',
-    profilePic: 'https://www.mariowiki.com/images/thumb/4/44/Big_Piranha_Plant_SM3DW_Prima.jpg/1200px-Big_Piranha_Plant_SM3DW_Prima.jpg',
-    lastMessage: 'Do you have a little plant in you?',
+    username: 'Kyle',
+    profilePic: 'https://randomuser.me/api/portraits/men/5.jpg',
+    lastMessage: 'Do you have any house plants?',
     created_at: '12:20 PM'
   },
 ]
@@ -69,13 +69,15 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   messagesUsername: {
-    fontSize: 15
+    fontSize: 15,
+    color: '#94a57e',
+    fontWeight: 'bold',
   },
   vertText: {
     flexDirection: 'column'
   },
   timeStamp: {
-    color: 'forestgreen',
+    color: '#94a57e',
     position: 'absolute',
     left: 340,
   }
