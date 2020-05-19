@@ -34,6 +34,10 @@ export default function ARScreen() {
 
     camera = new Camera(width, height, 0.01, 1000);
 
+    let light = new THREE.DirectionalLight( 0xffffff );
+    light.position.set( 0, 1, 1 ).normalize();
+    scene.add(light);
+
     // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
     const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
     // Simple color material
