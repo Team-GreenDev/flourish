@@ -39,7 +39,7 @@ const api = (store) => (next) => (action) => {
   // method is get by default but can be set to another type
   // data is the object that the request is sending to the server
   axios.request({
-    baseURL: DEPLOYED_URL || NGROK_URL || 'http://localhost:8080',
+    baseURL: DEPLOYED_URL || NGROK_URL,
     url,
     method,
     data,
