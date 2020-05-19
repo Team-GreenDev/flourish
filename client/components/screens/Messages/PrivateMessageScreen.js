@@ -67,187 +67,75 @@ export default function PrivateMessageScreen({ history }){
 ]
 
   return (
-    <ScrollView>
-      <Button
-    title="Back"
-    onPress={() => history.push("/")}/>
+  <ScrollView>
+    <Button
+      title="Back"
+      onPress={() => history.push("/")}
+    />
+    {messageDummy.map(message => {
+      if (message.id % 2 !== 0) {
+        return (
     <View style={[styles.item, styles.itemIn]}>
-    <View style={[styles.balloon, {backgroundColor: 'grey'}]}>
-      <Text style={{paddingTop: 5, color: 'white'}}>Hey! How are you?</Text>
-      <View
-      style={[
-        styles.arrowContainer,
-        styles.arrowLeftContainer,
-      ]}
-    >
-
-       <Svg style={styles.arrowLeft} width={moderateScale(15.5, 0.6)} height={moderateScale(17.5, 0.6)} viewBox="32.484 17.5 15.515 17.5"  enable-background="new 32.485 17.5 15.515 17.5">
+      <View style={[styles.balloon, {backgroundColor: 'grey'}]}>
+        <Text style={{paddingTop: 5, color: 'white'}}>{message.lastMessage}</Text>
+        <View
+          style={[
+            styles.arrowContainer,
+            styles.arrowLeftContainer,
+          ]}
+        >
+          <Svg style={styles.arrowLeft} width={moderateScale(15.5, 0.6)} height={moderateScale(17.5, 0.6)} viewBox="32.484 17.5 15.515 17.5"  enable-background="new 32.485 17.5 15.515 17.5">
             <Path
-                d="M38.484,17.5c0,8.75,1,13.5-6,17.5C51.484,35,52.484,17.5,38.484,17.5z"
-                fill="grey"
-                x="0"
-                y="0"
+              d="M38.484,17.5c0,8.75,1,13.5-6,17.5C51.484,35,52.484,17.5,38.484,17.5z"
+              fill="grey"
+              x="0"
+              y="0"
             />
-        </Svg>
+          </Svg>
+        </View>
+      </View>
     </View>
-    </View>
-  </View>
-
-   <View style={[styles.item, styles.itemOut]}>
-    <View style={[styles.balloon, {backgroundColor: '#94a57e'}]}>
-    <Text style={{paddingTop: 5, color: 'white'}}>Hey! I am good. How are you?</Text>
-      <View
-      style={[
-        styles.arrowContainer,
-        styles.arrowRightContainer,
-      ]}
-    >
-       <Svg style={styles.arrowRight} width={moderateScale(15.5, 0.6)} height={moderateScale(17.5, 0.6)} viewBox="32.485 17.5 15.515 17.5"  enable-background="new 32.485 17.5 15.515 17.5">
+        )
+      } else {
+        return (
+    <View style={[styles.item, styles.itemOut]}>
+      <View style={[styles.balloon, {backgroundColor: '#94a57e'}]}>
+        <Text style={{paddingTop: 5, color: 'white'}}>{message.lastMessage}</Text>
+        <View
+          style={[
+          styles.arrowContainer,
+          styles.arrowRightContainer,
+          ]}
+        >
+          <Svg style={styles.arrowRight} width={moderateScale(15.5, 0.6)} height={moderateScale(17.5, 0.6)} viewBox="32.485 17.5 15.515 17.5"  enable-background="new 32.485 17.5 15.515 17.5">
             <Path
-                d="M48,35c-7-4-6-8.75-6-17.5C28,17.5,29,35,48,35z"
-                fill="#94a57e"
-                x="0"
-                y="0"
+              d="M48,35c-7-4-6-8.75-6-17.5C28,17.5,29,35,48,35z"
+              fill="#94a57e"
+              x="0"
+              y="0"
             />
-        </Svg>
+          </Svg>
+        </View>
+      </View>
     </View>
-    </View>
-  </View>
+        )
+      }
+    })}
+  <TextInput 
+    style={styles.input}
+    placeholder="Send a message..."/> 
+</ScrollView>
 
 
-  </ScrollView>
-
-  // <View style={[styles.item, styles.itemOut]}>
-  //   <View style={[styles.balloon, {backgroundColor: '#1084ff'}]}>
-  //     <Text style={{paddingTop: 5, color: 'white'}}>Hey! I am good. How are you?</Text>
-  //     <View
-  //     style={[
-  //       styles.arrowContainer,
-  //       styles.arrowRightContainer,
-  //     ]}
-  //   >
-  //      <Svg style={styles.arrowRight} width={moderateScale(15.5, 0.6)} height={moderateScale(17.5, 0.6)} viewBox="32.485 17.5 15.515 17.5"  enable-background="new 32.485 17.5 15.515 17.5">
-  //           <Path
-  //               d="M48,35c-7-4-6-8.75-6-17.5C28,17.5,29,35,48,35z"
-  //               fill="#1084ff"
-  //               x="0"
-  //               y="0"
-  //           />
-  //       </Svg>
-  //   </View>
-  //   </View>
-  // </View>
-
-
-
-
-
-  //  <View style={[styles.item, styles.itemOut]}>
-  //   <View style={[styles.balloon, {backgroundColor: '#1084ff'}]}>
-  //     <Text style={{paddingTop: 5, color: 'white'}}>Check this Image out !!!</Text>
-  //     <View
-  //     style={[
-  //       styles.arrowContainer,
-  //       styles.arrowRightContainer,
-  //     ]}
-  //   >
-  //      <Svg style={styles.arrowRight} width={moderateScale(15.5, 0.6)} height={moderateScale(17.5, 0.6)} viewBox="32.485 17.5 15.515 17.5"  enable-background="new 32.485 17.5 15.515 17.5">
-  //           <Path
-  //               d="M48,35c-7-4-6-8.75-6-17.5C28,17.5,29,35,48,35z"
-  //               fill="#1084ff"
-  //               x="0"
-  //               y="0"
-  //           />
-  //       </Svg>
-  //   </View>
-  //   </View>
-  // </View>
-
-
-  //  <View style={[styles.item, styles.itemOut]}>
-  //   <View style={[styles.balloon, {backgroundColor: '#1084ff'}]}>
-
-  //   <Image
-  //       styleName="small"
-  //       borderRadius={5}
-  //       source={{ uri: 'https://shoutem.github.io/img/ui-toolkit/examples/image-3.png'}}
-  //       />
-  //     <View
-  //     style={[
-  //       styles.arrowContainer,
-  //       styles.arrowRightContainer,
-  //     ]}
-  //   >
-  //      <Svg style={styles.arrowRight} width={moderateScale(15.5, 0.6)} height={moderateScale(17.5, 0.6)} viewBox="32.485 17.5 15.515 17.5"  enable-background="new 32.485 17.5 15.515 17.5">
-  //           <Path
-  //               d="M48,35c-7-4-6-8.75-6-17.5C28,17.5,29,35,48,35z"
-  //               fill="#1084ff"
-  //               x="0"
-  //               y="0"
-  //           />
-  //       </Svg>
-  //   </View>
-  //   </View>
-  // </View>
-
-
-//  <View style={[styles.item, styles.itemIn]}>
-//     <View style={[styles.balloon, {backgroundColor: 'grey'}]}>
-//       <Text style={{paddingTop: 5, color: 'white'}}>Nice Picture</Text>
-//       <View
-//       style={[
-//         styles.arrowContainer,
-//         styles.arrowLeftContainer,
-//       ]}
-//     >
-
-//        <Svg style={styles.arrowLeft} width={moderateScale(15.5, 0.6)} height={moderateScale(17.5, 0.6)} viewBox="32.484 17.5 15.515 17.5"  enable-background="new 32.485 17.5 15.515 17.5">
-//             <Path
-//                 d="M38.484,17.5c0,8.75,1,13.5-6,17.5C51.484,35,52.484,17.5,38.484,17.5z"
-//                 fill="grey"
-//                 x="0"
-//                 y="0"
-//             />
-//         </Svg>
-//     </View>
-//     </View>
-//   </View>
   );
 }
 
 const styles = StyleSheet.create({
-  // messagesContainer: {
-  //   flexDirection: 'row',
-  // },
-  // messagesImage: {
-  //   height: 50,
-  //   width: 50,
-  //   alignSelf: 'center',
-  //   margin: 7,
-  //   borderRadius: 100 / 2,
-  // },
-  // messagesText: {
-  //   fontSize: 20,
-  //   marginLeft: 10,
-  //   marginBottom: 5,
-  //   // maxWidth: 345,
-  // },
-  // messagesUsername: {
-  //   fontSize: 15
-  // },
-  // vertText: {
-  //   flexDirection: 'column'
-  // },
-  // input: {
-  //   height: 40,
-  //   fontSize: 20,
-  //   backgroundColor: '#E9F1E9',
-  // },
-  // timeStamp: {
-  //   color: '#94a57e',
-  //   position: 'absolute',
-  //   left: 340,
-  // }
+  input: {
+    height: 40,
+    fontSize: 20,
+    backgroundColor: '#94a57e',
+  },
   item: {
     marginVertical: moderateScale(7, 2),
     flexDirection: 'row'
