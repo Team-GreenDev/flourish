@@ -7,6 +7,8 @@ const slice = createSlice({
   initialState: {
     list: [],
     loading: false,
+    messageAdded: 0,
+    recipientId: '',
   },
   // actions => action handlers
   reducers: {
@@ -18,16 +20,19 @@ const slice = createSlice({
     messagesRequestFailed: (messages, action) => {
       messages.loading = false;
     },
-    // Reassigns the plant list to the payload received from the axios request
+    // Reassigns the messages list to the payload received from the axios request
     // loading set to false, ending the loading spinner because request succeeded
     messagesReceived: (messages, action) => {
       messages.list = action.payload;
       messages.loading = false;
     },
-    // adds a plant from the payload by pushing it to the current list in state
     messageAdded: (messages, action) => {
-      // may not need the .data ...? double check afterward
-      messages.list.push(action.payload.data);
+      // get messages when this number changes
+      messages.messageAdded += 1;
+    },
+    // sets private message recipient id
+    setRecipientId: (messages, action) => {
+      messages.recipientId = action.payload;
     },
   },
 });
@@ -38,6 +43,8 @@ const {
   messagesRequested,
   messagesRequestFailed,
 } = slice.actions;
+
+export const { setRecipientId } = slice.actions;
 
 export default slice.reducer;
 
