@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, Image, StatusBar } from 'react-native';
 import * as Google from 'expo-google-app-auth';
 import * as Facebook from 'expo-facebook';
-import { IOS_CLIENT_ID, FACEBOOK_ID, AND_CLIENT_ID } from 'react-native-dotenv';
+import { IOS_CLIENT_ID, FACEBOOK_ID, AND_CLIENT_ID, JAMES_ID, JAMES_URL } from 'react-native-dotenv';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, setCurrentUser } from '.././store/slices/auth';
 
@@ -92,6 +92,21 @@ export default function LoginScreen ({logInSuccessful}) {
         <View>
           <TouchableOpacity onPress={() => signInWithGoogle()}>
             <Text style={styles.button}>Sign in with Google</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+            dispatch(setCurrentUser({
+              pk: 6,
+              id: JAMES_ID,
+              username: "James Easter",
+              name_first: "James",
+              name_last: "Easter",
+              total_like: 0,
+              image_url: JAMES_URL,
+              bio:"Love my family, writing code, & posting about plants!",
+            }));
+            logInSuccessful();
+          }}>
+          <Text style={styles.button}>login as james</Text>
           </TouchableOpacity>
           </View>
         {/* <Button onPress={() => signInWithFacebook()} title="Sign in with Facebook" /> */}
