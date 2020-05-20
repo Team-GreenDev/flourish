@@ -28,7 +28,7 @@ messagesRouter.get('/sent/:id', (req, res) => {
 // Add message to database => { user_id, recipient_id, text }
 messagesRouter.post('/', (req, res) => {
   db.addMessage(req, res)
-    .then(() => res.status(201).send('Added a message!'))
+    .then(() => res.sendStatus(201))
     .catch((error) => res.status(500).send(error));
 });
 
