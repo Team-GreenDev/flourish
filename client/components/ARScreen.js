@@ -40,6 +40,65 @@ export default function ARScreen() {
     light.position.set( 3, 3, 3 )
     scene.add(light);
     
+
+    // -------------------------------------------------------
+    // var loader = new THREE.ObjectLoader();
+    // loader.load(
+    //   // resource URL
+    //   "flower.json",
+    //   // onLoad callback
+    //   // Here the loaded data is assumed to be an object
+    //   function ( obj ) {
+    //     // Add the loaded object to the scene
+    //     scene.add( obj );
+    //   },
+    //   // onProgress callback
+    //   function ( xhr ) {
+    //     console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+    //   },
+    //   // onError callback
+    //   function ( err ) {
+    //     console.error( 'An error happened' );
+    //   }
+    // );
+    // -------------------------------------------------------
+    // const objLoader = new THREE.ObjectLoader();
+    // objLoader.setPath('/');
+    // objLoader.load('flower.json', (root) => {
+    //   root.position.z = -0.7;
+    //   scene.add(root);
+    // });
+    // -------------------------------------------------------
+    // var mtlLoader = new THREE.MaterialLoader();
+    // mtlLoader.load('/home/chryen/flourish/01Alocasia_obj.mtl', function(materials) {
+    //   materials.preload();
+
+    //   var objLoader = new THREE.ObjectLoader();
+    //   objLoader.load('/home/chryen/flourish/01Alocasia_obj.obj', function(object) {
+    //     object.position.z = -0.7;
+    //     scene.add(object);
+    //   });
+    // });
+    // -------------------------------------------------------
+    // var objLoader = new THREE.OBJLoader();
+    // objLoader.setPath('/');
+
+    // var mtlLoader = new THREE.MTLLoader();
+    // mtlLoader.setPath('/');
+
+    // new Promise((resolve) => {
+    //   mtlLoader.load('01Alocasia_obj.mtl', (materials) => {
+    //     resolve(materials);
+    //   })
+    // })
+    // .then((materials) => {
+    //   materials.preload();
+    //   objLoader.setMaterials(materials);
+    //   objLoader.load('01Alocasia_obj.obj', (object) => {
+    //     scene.add(object);
+    //   })
+    // })
+    // -------------------------------------------------------
     // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
     const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
     // Simple color material
