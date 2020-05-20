@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserById } from '../../../store/slices/users';
-import { setPrivateMessage } from '../../../store/slices/privateMessage';
+import { loadMessages, setRecipientId } from '../../../store/slices/messages';
 
 export default function ProfileScreen({ history }) {
   const dispatch = useDispatch();
@@ -22,10 +22,14 @@ export default function ProfileScreen({ history }) {
     return [...singleThreadIncomingMessages(receivedMessages, user), ...singleThreadOutgoingMessages(sentMessages, user)].sort((a, b) => a.id - b.id);
   });
 
-  const handleClick = (privateMessageThread) => {
-    dispatch(setPrivateMessage(privateMessageThread));
+  const handleClick = (userId) => {
+    dispatch(setRecipientId(userId));
     history.push("/privatemessages")
   }
+
+  useEffect(() => {
+    dispatch(loadMessages());
+  }, [state.messages.messageAdded])
 
   return (
     <ScrollView>
@@ -39,15 +43,15 @@ export default function ProfileScreen({ history }) {
           <TouchableOpacity
             key={user.id}
             style={styles.messagesContainer}
-            onPress={() => handleClick(mesThreads[index])}
+            onPress={() => handleClick(user.id)}
           >
             <Image style={styles.messagesImage} source={{uri: user.image_url}}/>
             <View style={styles.vertText}>
               <Text style={styles.messagesUsername}>{user.username}</Text>
               <Text style={styles.messagesText}>
                 {mostRecentMessage.user_id === userId ? "" : "You : "}
-                {mostRecentMessage.text.length > 30
-                  ? (`${mostRecentMessage.text.slice(0, 30)}...`)
+                {mostRecentMessage.text.length > 27
+                  ? (`${mostRecentMessage.text.slice(0, 27)}...`)
                   : (mostRecentMessage.text)}
               </Text>
             </View>
