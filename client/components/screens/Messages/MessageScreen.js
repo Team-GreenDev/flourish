@@ -1,56 +1,55 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SearchBar } from 'react-native-elements';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserById } from '../../../store/slices/users';
 
 export default function ProfileScreen({ history }) {
+  const currentUser = useSelector(state => state.auth.currentUser)
+  const state = useSelector(state => state)
+  const receivedMessages = useSelector(state => state.messages.list.filter((message) => message.recipient_id === state.auth.currentUser.id))
+  const sentMessages = useSelector(state => state.messages.list.filter((message) => message.user_id === state.auth.currentUser.id))
 
-  let messageDummy = [{
-    username: 'Chad',
-    profilePic: 'https://randomuser.me/api/portraits/men/2.jpg',
-    lastMessage: 'Sup you into plants',
-    created_at: '3:20 PM'
-  },
-  {
-    username: 'Brad',
-    profilePic: 'https://randomuser.me/api/portraits/men/3.jpg',
-    lastMessage: 'I love your ferns!',
-    created_at: '1:27 PM'
-  },
-  {
-    username: 'Tad',
-    profilePic: 'https://randomuser.me/api/portraits/men/4.jpg',
-    lastMessage: 'You are so such a good gardener!',
-    created_at: '1:21 PM'
-  },
-  {
-    username: 'Kyle',
-    profilePic: 'https://randomuser.me/api/portraits/men/5.jpg',
-    lastMessage: 'Do you have any house plants?',
-    created_at: '12:20 PM'
-  },
-]
+  const otherUsers = [...receivedMessages, ...sentMessages]
+    .map((m) => m.user_id === currentUser.id ? m.recipient_id : m.user_id)
+    .filter((e, i, c) => c.indexOf(e) === i);
+
+  const mesThreads = otherUsers.map(user => {
+    const singleThreadIncomingMessages = (sent, sender_id) => sent.filter((message) => message.user_id === sender_id);
+    const singleThreadOutgoingMessages = (sent, sender_id) => sent.filter((message) => message.recipient_id === sender_id);
+    return [...singleThreadIncomingMessages(receivedMessages, user), ...singleThreadOutgoingMessages(sentMessages, user)].sort((a, b) => a.id - b.id);
+  });
+
   return (
     <ScrollView>
-    <SearchBar
-      placeholder="Search Messages..."
-    />
-      {messageDummy.map(user => (
-        <TouchableOpacity key={user.username} style={styles.messagesContainer} onPress={() => {
-          console.log(user.username);
-          history.push("/privatemessages")}}>
-          <Image style={styles.messagesImage} source={{uri: user.profilePic}}/>
-          <View style={styles.vertText} >
-            <Text style={styles.messagesUsername}>{user.username}</Text>
-            <Text style={styles.messagesText} >{user.lastMessage}</Text>
-          </View>
-          <Text style={styles.timeStamp}>{user.created_at}</Text>
-        </TouchableOpacity>
-      ))}
-    </ScrollView> 
-  
-  );
-}
-
+      <SearchBar
+        placeholder="Search Messages..."
+      />
+      {state ? (otherUsers.map((userId, index) => {
+        const user = getUserById(state, userId)[0];
+        const mostRecentMessage = mesThreads[index][mesThreads[index].length - 1];
+        return (
+          <TouchableOpacity
+            key={user.id}
+            style={styles.messagesContainer}
+            onPress={() => {history.push("/privatemessages")}}
+          >
+            <Image style={styles.messagesImage} source={{uri: user.image_url}}/>
+            <View style={styles.vertText}>
+              <Text style={styles.messagesUsername}>{user.username}</Text>
+              <Text style={styles.messagesText}>
+                {mostRecentMessage.user_id === userId ? "" : "You : "}
+                {mostRecentMessage.text.length > 30
+                  ? (`${mostRecentMessage.text.slice(0, 30)}...`)
+                  : (mostRecentMessage.text)}
+              </Text>
+            </View>
+            <Text style={styles.timeStamp}>{mostRecentMessage.created_at}</Text>
+          </TouchableOpacity>
+        )})) : <Text>Loading...</Text>}
+      </ScrollView>
+    );
+  }
 
 const styles = StyleSheet.create({
   messagesContainer: {
