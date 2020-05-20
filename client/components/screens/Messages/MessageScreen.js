@@ -3,8 +3,10 @@ import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'rea
 import { SearchBar } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserById } from '../../../store/slices/users';
+import { setPrivateMessage } from '../../../store/slices/privateMessage';
 
 export default function ProfileScreen({ history }) {
+  const dispatch = useDispatch();
   const currentUser = useSelector(state => state.auth.currentUser)
   const state = useSelector(state => state)
   const receivedMessages = useSelector(state => state.messages.list.filter((message) => message.recipient_id === state.auth.currentUser.id))
@@ -20,6 +22,11 @@ export default function ProfileScreen({ history }) {
     return [...singleThreadIncomingMessages(receivedMessages, user), ...singleThreadOutgoingMessages(sentMessages, user)].sort((a, b) => a.id - b.id);
   });
 
+  const handleClick = (privateMessageThread) => {
+    dispatch(setPrivateMessage(privateMessageThread));
+    history.push("/privatemessages")
+  }
+
   return (
     <ScrollView>
       <SearchBar
@@ -32,7 +39,7 @@ export default function ProfileScreen({ history }) {
           <TouchableOpacity
             key={user.id}
             style={styles.messagesContainer}
-            onPress={() => {history.push("/privatemessages")}}
+            onPress={() => handleClick(mesThreads[index])}
           >
             <Image style={styles.messagesImage} source={{uri: user.image_url}}/>
             <View style={styles.vertText}>
