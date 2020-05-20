@@ -2,12 +2,11 @@ import React from 'react';
 import {Text, Button, View, StyleSheet, ScrollView, TextInput,} from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import Svg, { Path } from 'react-native-svg';
-import { loadMessages } from '../../../store/slices/messages'
 import { useSelector, useDispatch } from 'react-redux';
 
 export default function PrivateMessageScreen({ history }){
-  const messages = useSelector(state => state.messages.list)
   const currentUser = useSelector(state => state.auth.currentUser)
+  const messageThread = useSelector(state => state.privateMessage.thread)
 
   return (
   <ScrollView>
@@ -15,7 +14,7 @@ export default function PrivateMessageScreen({ history }){
       title="Back"
       onPress={() => history.push("/")}
     />
-    {messages.map(message => {
+    {messageThread.map(message => {
       if (message.recipient_id === currentUser.id) {
         return (
     <View key={message.id} style={[styles.item, styles.itemIn]}>
