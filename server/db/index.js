@@ -83,9 +83,7 @@ const getCommentsFromUserId = (req) => {
 
 // Add new comment to database
 const addComment = (req) => {
-  const user_id = parseInt(req.body.user_id, 10);
-  const post_id = parseInt(req.body.post_id, 10);
-  const { comment_text } = req.body;
+  const { comment_text, user_id, post_id } = req.body;
   return pool.query(`insert into comments set user_id = ${user_id}, post_id = ${post_id}, comment_text = '${comment_text}', created_at = NOW()`);
 };
 
@@ -109,9 +107,7 @@ const getSentUserMessages = (req) => {
 
 // Add new message to database
 const addMessage = (req) => {
-  const user_id = parseInt(req.body.user_id, 10);
-  const recipient_id = parseInt(req.body.recipient_id, 10);
-  const { text } = req.body;
+  const { text, recipient_id, user_id } = req.body;
   return pool.query(`insert into messages set user_id = ${user_id}, recipient_id = ${recipient_id}, created_at = NOW(), text = '${text}'`);
 };
 
