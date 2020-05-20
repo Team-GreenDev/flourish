@@ -10,6 +10,7 @@ import LoginScreen from './client/components/LoginScreen';
 // import ARScreen from './client/components/ARScreen';
 import { loadUsers } from './client/store/slices/users';
 import { loadPosts } from './client/store/slices/posts';
+import { loadMessages } from './client/store/slices/messages';
 
 // disables yellow flag for
 console.disableYellowBox = true;
@@ -19,6 +20,7 @@ const store = configureStore();
 
 store.dispatch(loadUsers());
 store.dispatch(loadPosts());
+store.dispatch(loadMessages());
 
 export default function App() {
   const [ loggedIn, setLoggedIn ] = useState(false)
