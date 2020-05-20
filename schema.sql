@@ -64,7 +64,7 @@ CREATE TABLE posts (
 CREATE TABLE messages (
   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   user_id varchar(255),
-  recipient_id int,
+  recipient_id varchar(255),
   created_at datetime,
   text varchar(255)
 );
@@ -106,3 +106,31 @@ INSERT INTO posts set user_id = "108191618273119179607", like_count = 1, url = '
 INSERT INTO posts set user_id = "2", like_count = 1, url = 'https://secure.img1-fg.wfcdn.com/im/42349074/resize-h600%5Ecompr-r85/8506/85069027/Tejeda+5+Tier+Self-Watering+Wood+Vertical+Garden.jpg', text = 'Five tier wall garden is looking healthy this month', created_at = NOW();
 INSERT INTO posts set user_id = "4", like_count = 1, url = 'https://secure.img1-fg.wfcdn.com/im/45353388/resize-h600%5Ecompr-r85/4797/47975478/Philodendron+Plant+in+Basket.jpg', text = 'Love this guy, adds life to this corner of our room', created_at = NOW();
 INSERT INTO posts set user_id = "1", like_count = 0, url = 'https://media.architecturaldigest.com/photos/5a94846e4692126e06f34f67/master/w_1600%2Cc_limit/popular-houseplants-pilea-peperomioides.jpg', text = 'Army of five, might even go pick up some more!', created_at = NOW();
+
+/* Message thread with user 1 */
+insert into messages set user_id = '1', recipient_id = '108191618273119179607', created_at = NOW(), text = 'Hey, I really like your posts!';
+insert into messages set user_id = '108191618273119179607', recipient_id = '1', created_at = NOW(), text = 'Thanks man, you too!';
+insert into messages set user_id = '1', recipient_id = '108191618273119179607', created_at = NOW(), text = 'What plants do you have';
+insert into messages set user_id = '108191618273119179607', recipient_id = '1', created_at = NOW(), text = 'Tons, lots of plants';
+insert into messages set user_id = '1', recipient_id = '108191618273119179607', created_at = NOW(), text = 'like what uwu';
+insert into messages set user_id = '108191618273119179607', recipient_id = '1', created_at = NOW(), text = 'Ferns, calatheas, and cacti mostly';
+insert into messages set user_id = '1', recipient_id = '108191618273119179607', created_at = NOW(), text = 'That\'s so cool :D';
+insert into messages set user_id = '108191618273119179607', recipient_id = '1', created_at = NOW(), text = 'Thanks that\s really nice of you';
+insert into messages set user_id = '1', recipient_id = '108191618273119179607', created_at = NOW(), text = 'You should check out my post I made on calathea';
+insert into messages set user_id = '1', recipient_id = '108191618273119179607', created_at = NOW(), text = 'I\'m really proud of it :)';
+insert into messages set user_id = '108191618273119179607', recipient_id = '1', created_at = NOW(), text = 'Will do!';
+
+/* Message thread with user 2 */
+insert into messages set user_id = '2', recipient_id = '108191618273119179607', created_at = NOW(), text = 'Hey, I really like your posts!';
+insert into messages set user_id = '108191618273119179607', recipient_id = '2', created_at = NOW(), text = 'Thanks man, you too!';
+insert into messages set user_id = '2', recipient_id = '108191618273119179607', created_at = NOW(), text = 'That\'s so cool :D';
+
+/* Message thread with user 3 */
+insert into messages set user_id = '108191618273119179607', recipient_id = '3', created_at = NOW(), text = 'Thanks man, you too!';
+insert into messages set user_id = '3', recipient_id = '108191618273119179607', created_at = NOW(), text = 'That\'s so cool :D';
+
+/* Message thread with user 4 */
+insert into messages set user_id = '108191618273119179607', recipient_id = '4', created_at = NOW(), text = 'I\'ve got a question about your latest post';
+
+/* Message thread with user 5 */
+insert into messages set user_id = '5', recipient_id = '108191618273119179607', created_at = NOW(), text = 'Hey how are you doing?!';
