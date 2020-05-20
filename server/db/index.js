@@ -63,6 +63,13 @@ const addPost = (req) => {
   return pool.query(`INSERT INTO posts set user_id = ${user_id}, like_count = ${0}, url = '${url}', text = '${text}', created_at = NOW()`);
 };
 
+// LIKES QUERIES //
+
+const likePost = (req) => {
+  const id = parseInt(req.body.id, 10);
+  const user_id = parseInt(req.body.user_id, 10);
+  return pool.query(`UPDATE posts set like_count = like_count + 1 WHERE user_id = ${user_id} AND id = ${id}`);
+};
 
 // COMMENTS QUERIES //
 
@@ -182,7 +189,6 @@ module.exports = {
   addTag,
   getPostsFromTagId,
   getTagsFromPostId,
-  getUserPosts,
   getUserMessages,
-  getAllPosts,
+  likePost,
 };
