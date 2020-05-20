@@ -1,12 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Text, Button, View, StyleSheet, ScrollView, TextInput,} from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import Svg, { Path } from 'react-native-svg';
 import { useSelector, useDispatch } from 'react-redux';
+import { addMessage, loadMessages } from '../../../store/slices/messages';
 
 export default function PrivateMessageScreen({ history }){
+  // a place holder for the input text field before sent to the store
+  const [ messageText, setMessageText ] = useState('');
+
+  const dispatch = useDispatch();
   const currentUser = useSelector(state => state.auth.currentUser)
-  const messageThread = useSelector(state => state.privateMessage.thread)
+  const state = useSelector(state => state)
+  const thread = useSelector(state => state.messages.list.filter((message) => (
+    message.user_id === state.auth.currentUser.id && message.recipient_id === state.messages.recipientId ||
+    message.user_id === state.messages.recipientId && message.recipient_id === state.auth.currentUser.id
+  )))
+
+  useEffect(() => {
+    dispatch(loadMessages());
+  }, [state.messages.messageAdded])
+
+  const handleSubmit = (e) => {
+    dispatch(addMessage({
+      user_id: currentUser.id,
+      recipient_id: state.messages.recipientId.toString(),
+      text: messageText
+    }))
+    setMessageText('');
+  };
 
   return (
   <ScrollView>
@@ -14,7 +36,7 @@ export default function PrivateMessageScreen({ history }){
       title="Back"
       onPress={() => history.push("/")}
     />
-    {messageThread.map(message => {
+    {thread.map(message => {
       if (message.recipient_id === currentUser.id) {
         return (
     <View key={message.id} style={[styles.item, styles.itemIn]}>
@@ -71,10 +93,12 @@ export default function PrivateMessageScreen({ history }){
     })}
   <TextInput
     style={styles.input}
-    placeholder="Send a message..."/>
+    placeholder="Send a message..."
+    value={messageText}
+    onChangeText={(e) => setMessageText(e)}
+    onSubmitEditing={handleSubmit}
+  />
 </ScrollView>
-
-
   );
 }
 
