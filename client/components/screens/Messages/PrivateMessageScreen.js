@@ -2,66 +2,12 @@ import React from 'react';
 import {Text, Button, View, StyleSheet, ScrollView, TextInput,} from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import Svg, { Path } from 'react-native-svg';
- 
-export default function PrivateMessageScreen({ history }){
+import { loadMessages } from '../../../store/slices/messages'
+import { useSelector, useDispatch } from 'react-redux';
 
-  let messageDummy = [{
-    username: 'Chad',
-    profilePic: 'https://randomuser.me/api/portraits/men/2.jpg',
-    lastMessage: 'Sup you into plants',
-    created_at: '3:20 AM',
-    id: 1,
-  },
-  {
-    username: 'James Easter',
-    profilePic: 'https://res.cloudinary.com/practicaldev/image/fetch/s--WmtzXedJ--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/350985/7b8fc9d7-e830-4ca2-905c-5691bcb16f99.jpeg',
-    lastMessage: 'Yeah man! Just got a new fern.',
-    created_at: '3:27 AM',
-    id: 2,
-  },
-  {
-    username: 'Chad',
-    profilePic: 'https://randomuser.me/api/portraits/men/2.jpg',
-    lastMessage: 'That\'s really cool! I\'m mostly into cactus myself',
-    created_at: '8:27 AM',
-    id: 3,
-  },
-  {
-    username: 'James Easter',
-    profilePic: 'https://res.cloudinary.com/practicaldev/image/fetch/s--WmtzXedJ--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/350985/7b8fc9d7-e830-4ca2-905c-5691bcb16f99.jpeg',
-    lastMessage: 'Cactuses are nice too',
-    created_at: '8:47 AM',
-    id: 4,
-  },
-  {
-    username: 'Chad',
-    profilePic: 'https://randomuser.me/api/portraits/men/2.jpg',
-    lastMessage: 'Yeah I am very busy, and they are really easy to take care of',
-    created_at: '11:21 AM',
-    id: 5,
-  },
-  {
-    username: 'James Easter',
-    profilePic: 'https://res.cloudinary.com/practicaldev/image/fetch/s--WmtzXedJ--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/350985/7b8fc9d7-e830-4ca2-905c-5691bcb16f99.jpeg',
-    lastMessage: 'Yeah I have a couple lying around myself',
-    created_at: '11:27 AM',
-    id: 6,
-  },
-  {
-    username: 'Chad',
-    profilePic: 'https://randomuser.me/api/portraits/men/2.jpg',
-    lastMessage: 'You should check out my post I made on cactus',
-    created_at: '12:20 PM',
-    id: 7,
-  },
-  {
-    username: 'James Easter',
-    profilePic: 'https://res.cloudinary.com/practicaldev/image/fetch/s--WmtzXedJ--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/350985/7b8fc9d7-e830-4ca2-905c-5691bcb16f99.jpeg',
-    lastMessage: 'Will do man!',
-    created_at: '2:27 PM',
-    id: 8,
-  },
-]
+export default function PrivateMessageScreen({ history }){
+  const messages = useSelector(state => state.messages.list)
+  const currentUser = useSelector(state => state.auth.currentUser)
 
   return (
   <ScrollView>
@@ -69,19 +15,25 @@ export default function PrivateMessageScreen({ history }){
       title="Back"
       onPress={() => history.push("/")}
     />
-    {messageDummy.map(message => {
-      if (message.id % 2 !== 0) {
+    {messages.map(message => {
+      if (message.recipient_id === currentUser.id) {
         return (
     <View key={message.id} style={[styles.item, styles.itemIn]}>
       <View style={[styles.balloon, {backgroundColor: 'grey'}]}>
-        <Text style={{paddingTop: 5, color: 'white'}}>{message.lastMessage}</Text>
+        <Text style={{paddingTop: 5, color: 'white'}}>{message.text}</Text>
         <View
           style={[
             styles.arrowContainer,
             styles.arrowLeftContainer,
           ]}
         >
-          <Svg style={styles.arrowLeft} width={moderateScale(15.5, 0.6)} height={moderateScale(17.5, 0.6)} viewBox="32.484 17.5 15.515 17.5"  enable-background="new 32.485 17.5 15.515 17.5">
+          <Svg
+            style={styles.arrowLeft}
+            width={moderateScale(15.5, 0.6)}
+            height={moderateScale(17.5, 0.6)}
+            viewBox="32.484 17.5 15.515 17.5"
+            enable-background="new 32.485 17.5 15.515 17.5"
+          >
             <Path
               d="M38.484,17.5c0,8.75,1,13.5-6,17.5C51.484,35,52.484,17.5,38.484,17.5z"
               fill="grey"
@@ -97,7 +49,7 @@ export default function PrivateMessageScreen({ history }){
         return (
     <View key={message.id} style={[styles.item, styles.itemOut]}>
       <View style={[styles.balloon, {backgroundColor: '#94a57e'}]}>
-        <Text style={{paddingTop: 5, color: 'white'}}>{message.lastMessage}</Text>
+        <Text style={{paddingTop: 5, color: 'white'}}>{message.text}</Text>
         <View
           style={[
           styles.arrowContainer,
@@ -118,9 +70,9 @@ export default function PrivateMessageScreen({ history }){
         )
       }
     })}
-  <TextInput 
+  <TextInput
     style={styles.input}
-    placeholder="Send a message..."/> 
+    placeholder="Send a message..."/>
 </ScrollView>
 
 
