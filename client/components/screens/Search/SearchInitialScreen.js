@@ -14,7 +14,8 @@ export default function SearchScreen({history}) {
   };
 
   return (
-    <ScrollView>
+    // <ScrollView>
+    <View>
       <SearchBar
         placeholder="Search..."
         onChangeText={(e) => setSearchQuery(e)}
@@ -25,18 +26,16 @@ export default function SearchScreen({history}) {
         containerStyle={{backgroundColor: '#ccd1c5', borderRadius: 1, }}
       />
       <View style={styles.container}>
-        <Text style={styles.text}>Search for tags and plants!</Text>
+        <Text style={styles.text}>Search for tags and plants</Text>
         <Image style={styles.image} source={{uri: 'https://lh3.googleusercontent.com/proxy/S6sI1k-0-QTyKelaSKldpykzH_Y_OUFhfg_3soiZKrWh_Yh0V_s67_k8DELstyOuDidxqkVAIUwYuy_GSCFV87VY'}}/> 
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
@@ -47,6 +46,8 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 25,
     top: 150,
+    textAlignVertical: 'center',
+    color: '#94a57e'
   }
 
 });
