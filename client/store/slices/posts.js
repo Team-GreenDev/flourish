@@ -34,6 +34,11 @@ const slice = createSlice({
       // incrementing postAdded in order to trigger update
       posts.postAdded += 1;
     },
+    // Decrease the like count
+    postUnliked: (posts, action) => {
+      // decrementing postAdded in order to trigger update
+      posts.postAdded -= 1;
+    },
   },
 });
 
@@ -43,6 +48,7 @@ const {
   postsRequested,
   postsRequestFailed,
   postLiked,
+  postUnliked,
 } = slice.actions;
 
 export default slice.reducer;
@@ -72,10 +78,18 @@ export const addPost = (post) => apiCallBegan({
 
 export const likePost = (post) => apiCallBegan({
   url: `/api/posts/${post.id}`,
-  method: 'PATCH',
+  method: 'POST',
   onStart: postsRequested.type,
   onError: postsRequestFailed.type,
   onSuccess: postLiked.type,
+});
+
+export const unlikePost = (post) => apiCallBegan({
+  url: `/api/posts/${post.id}`,
+  method: 'PATCH',
+  onStart: postsRequested.type,
+  onError: postsRequestFailed.type,
+  onSuccess: postUnliked.type,
 });
 
 // SELECTOR FUNCTIONS - takes the state and returns the computed state
