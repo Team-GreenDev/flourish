@@ -32,6 +32,12 @@ postsRouter.post('/', (req, res) => {
     .catch((error) => res.status(500).send(error));
 });
 
+postsRouter.patch('/:id', (req, res) => {
+  db.updatePostById(req, res)
+    .then(() => res.sendStatus(204))
+    .catch((err) => res.status(500).send(err));
+});
+
 module.exports = {
   postsRouter,
 };
