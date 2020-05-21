@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { loadPosts } from '../../store/slices/posts';
+import { loadPosts, likePost } from '../../store/slices/posts';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import Axios from 'axios';
 
 
 export default function HomeScreen({ likedPosts }) {
   const users = useSelector(state => state.users)
   const posts = useSelector(state => state.posts)
   const dispatch = useDispatch();
-  const [likes, setLikes] = useState({});
 
   const getUserById = (id) => users.list.filter((user) => user.id == id);
 
@@ -18,9 +16,9 @@ export default function HomeScreen({ likedPosts }) {
     dispatch(loadPosts());
   }, [posts.postAdded])
 
-  const addLike = (users, posts) => {
-    console.log('liked');
-    // Axios.post(`api/likes/${users.id}/${posts.id}`);
+  const addLike = (post) => {
+    console.log(post);
+    dispatch(likePost(post));
   }
 
 
@@ -38,14 +36,15 @@ export default function HomeScreen({ likedPosts }) {
               <Image style={styles.image} source={{ uri: post.url }}/>
               <View style={styles.likesContainer}>
               <Text style={styles.username}>{name}</Text>
-              <TouchableOpacity>
+              <TouchableOpacity style={{flexDirection: 'row'}}>
                     <MaterialCommunityIcons
                     name={"flower-tulip"}
                     size={24}
                     raised
                     style={styles.icon}
-                    onPress={addLike}
+                    onPress={() => addLike(post)}
                     />
+                    <Text>{post.like_count}</Text>
               </TouchableOpacity>
               </View>
               <Text style={styles.message}>{post.text}</Text>
