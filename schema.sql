@@ -88,13 +88,22 @@ CREATE TABLE post_tags (
 );
 
 
-/* add 5 users */
+/* add 15 users */
+insert into users set id = "108191618273119179607", username = 'James Easter', name_first = 'James', name_last = 'Easter', total_like = 0, image_url = 'https://lh3.googleusercontent.com/a-/AOh14Gg16XZOeRz2vboJiotAP-YcCYaiObbtrzC6vCPQow', bio = 'Love my family, writing code, & posting about plants!';
 insert into users set id = "1", username = 'Rachel Davis', name_first = 'Rachel', name_last = 'Davis', total_like = 5, image_url = 'https://randomuser.me/api/portraits/women/1.jpg', bio = 'I really like plants';
 insert into users set id = "2", username = 'Jaime Vazquez', name_first = 'Jaime', name_last = 'Vazquez', total_like = 10, image_url = 'https://randomuser.me/api/portraits/women/2.jpg', bio = 'I really like plants';
 insert into users set id = "3", username = 'Brenden Malone', name_first = 'Brenden', name_last = 'Malone', total_like = 0, image_url = 'https://randomuser.me/api/portraits/women/3.jpg', bio = 'I really like plants';
 insert into users set id = "4", username = 'Lance Johns', name_first = 'Lance', name_last = 'Johns', total_like = 16, image_url = 'https://randomuser.me/api/portraits/men/4.jpg', bio = 'I really like plants';
 insert into users set id = "5", username = 'Jeremy Silva', name_first = 'Jeremy', name_last = 'Silva', total_like = 9, image_url = 'https://randomuser.me/api/portraits/men/5.jpg', bio = 'I really like plants';
-insert into users set id = "108191618273119179607", username = 'James Easter', name_first = 'James', name_last = 'Easter', total_like = 0, image_url = 'https://lh3.googleusercontent.com/a-/AOh14Gg16XZOeRz2vboJiotAP-YcCYaiObbtrzC6vCPQow', bio = 'Love my family, writing code, & posting about plants!';
+insert into users set id = "6", username = 'Tyler Hall', name_first = 'Tyler', name_last = 'Hall', total_like = 5, image_url = 'https://randomuser.me/api/portraits/men/6.jpg', bio = 'I really like plants';
+insert into users set id = "7", username = 'German Carter', name_first = 'German', name_last = 'Carter', total_like = 5, image_url = 'https://randomuser.me/api/portraits/men/7.jpg', bio = 'I really like plants';
+insert into users set id = "8", username = 'Jeff Matthews', name_first = 'Jeff', name_last = 'Matthews', total_like = 5, image_url = 'https://randomuser.me/api/portraits/men/8.jpg', bio = 'I really like plants';
+insert into users set id = "9", username = 'Ryan Westbrook', name_first = 'Ryan', name_last = 'Westbrook', total_like = 5, image_url = 'https://randomuser.me/api/portraits/men/9.jpg', bio = 'I really like plants';
+insert into users set id = "10", username = 'Amy Morrics', name_first = 'Amy', name_last = 'Morrics', total_like = 5, image_url = 'https://randomuser.me/api/portraits/women/4.jpg', bio = 'I really like plants';
+insert into users set id = "11", username = 'Selena Thomas', name_first = 'Selena', name_last = 'Thomas', total_like = 5, image_url = 'https://randomuser.me/api/portraits/women/5.jpg', bio = 'I really like plants';
+insert into users set id = "12", username = 'Hamilton Green', name_first = 'Hamilton', name_last = 'Green', total_like = 5, image_url = 'https://randomuser.me/api/portraits/men/10.jpg', bio = 'I really like plants';
+insert into users set id = "13", username = 'Mariana Ruiz', name_first = 'Mariana', name_last = 'Ruiz', total_like = 5, image_url = 'https://randomuser.me/api/portraits/women/6.jpg', bio = 'I really like plants';
+insert into users set id = "14", username = 'Blake Taylor', name_first = 'Blake', name_last = 'Taylor', total_like = 5, image_url = 'https://randomuser.me/api/portraits/men/11.jpg', bio = 'I really like plants';
 
 /* add 5 posts */
 INSERT INTO posts set user_id = "108191618273119179607", like_count = 3, url = 'https://hgtvhome.sndimg.com/content/dam/images/hgtv/products/2019/9/19/3/RX_1800Flowers_Money-Plant.jpg.rend.hgtvcom.616.616.suffix/1568931656068.jpeg', text = 'Looking like an indoor lily pad jungle', created_at = NOW();

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { getUserById } from '../../../store/slices/users';
 import { loadMessages, setRecipientId } from '../../../store/slices/messages';
 
@@ -32,37 +33,51 @@ export default function ProfileScreen({ history }) {
   }, [state.messages.messageAdded])
 
   return (
-    <ScrollView>
-      <SearchBar
-        placeholder="Search Messages..."
-      />
-      {state ? (otherUsers.map((userId, index) => {
-        const user = getUserById(state, userId)[0];
-        const mostRecentMessage = mesThreads[index][mesThreads[index].length - 1];
-        return (
-          <TouchableOpacity
-            key={user.id}
-            style={styles.messagesContainer}
-            onPress={() => handleClick(user.id)}
-          >
-            <Image style={styles.messagesImage} source={{uri: user.image_url}}/>
-            <View style={styles.vertText}>
-              <Text style={styles.messagesUsername}>{user.username}</Text>
-              <Text style={styles.messagesText}>
-                {mostRecentMessage.user_id === userId ? "" : "You : "}
-                {mostRecentMessage.text.length > 27
-                  ? (`${mostRecentMessage.text.slice(0, 27)}...`)
-                  : (mostRecentMessage.text)}
-              </Text>
-            </View>
-            <Text style={styles.timeStamp}>{mostRecentMessage.created_at}</Text>
+    <View style={styles.screenContainer}>
+      <View style={styles.headerContainer}>
+        <View style={{ flex: 6 }}>
+          <SearchBar placeholder="Search Messages..."/>
+        </View>
+        <View style={{ flex: 1, marginLeft: 10 }}>
+          <TouchableOpacity onPress={() => history.push("/newmessage")}>
+            <MaterialCommunityIcons name="square-edit-outline" color="green" size={40}/>
           </TouchableOpacity>
-        )})) : <Text>Loading...</Text>}
-      </ScrollView>
+        </View>
+      </View>
+      <ScrollView>
+        {state ? (otherUsers.map((userId, index) => {
+          const user = getUserById(state, userId)[0];
+          const mostRecentMessage = mesThreads[index][mesThreads[index].length - 1];
+          return (
+            <TouchableOpacity
+              key={user.id}
+              style={styles.messagesContainer}
+              onPress={() => handleClick(user.id)}
+            >
+              <Image style={styles.messagesImage} source={{uri: user.image_url}}/>
+              <View style={styles.vertText}>
+                <Text style={styles.messagesUsername}>{user.username}</Text>
+                <Text style={styles.messagesText}>
+                  {mostRecentMessage.user_id === userId ? "" : "You : "}
+                  {mostRecentMessage.text.length > 27
+                    ? (`${mostRecentMessage.text.slice(0, 27)}...`)
+                    : (mostRecentMessage.text)}
+                </Text>
+              </View>
+              <Text style={styles.timeStamp}>{mostRecentMessage.created_at}</Text>
+            </TouchableOpacity>
+          )})) : <Text>Loading...</Text>}
+        </ScrollView>
+      </View>
     );
   }
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
   messagesContainer: {
     flexDirection: 'row',
   },
@@ -85,6 +100,9 @@ const styles = StyleSheet.create({
   },
   vertText: {
     flexDirection: 'column'
+  },
+  screenContainer: {
+    height: "100%",
   },
   timeStamp: {
     color: '#94a57e',
