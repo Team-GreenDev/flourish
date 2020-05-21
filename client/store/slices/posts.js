@@ -29,6 +29,11 @@ const slice = createSlice({
     postAdded: (posts, action) => {
       posts.postAdded += 1;
     },
+    // Increase the like count
+    postLiked: (posts, action) => {
+      // incrementing postAdded in order to trigger update
+      posts.postAdded += 1;
+    },
   },
 });
 
@@ -37,6 +42,7 @@ const {
   postAdded,
   postsRequested,
   postsRequestFailed,
+  postLiked,
 } = slice.actions;
 
 export default slice.reducer;
@@ -62,6 +68,14 @@ export const addPost = (post) => apiCallBegan({
   // on success this action will update (add to) the store
   // so that it reflects the correct data in the database
   onSuccess: postAdded.type,
+});
+
+export const likePost = (post) => apiCallBegan({
+  url: `/api/posts/${post.id}`,
+  method: 'PATCH',
+  onStart: postsRequested.type,
+  onError: postsRequestFailed.type,
+  onSuccess: postLiked.type,
 });
 
 // SELECTOR FUNCTIONS - takes the state and returns the computed state
