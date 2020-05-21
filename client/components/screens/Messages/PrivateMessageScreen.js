@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import {Text, Button, View, StyleSheet, ScrollView, TextInput,} from 'react-native';
+import {Text, View, StyleSheet, ScrollView, TextInput, TouchableOpacity} from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import Svg, { Path } from 'react-native-svg';
 import { useSelector, useDispatch } from 'react-redux';
 import { addMessage, loadMessages } from '../../../store/slices/messages';
+import { getUserById } from '../../../store/slices/users';
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 export default function PrivateMessageScreen({ history }){
   // a place holder for the input text field before sent to the store
@@ -16,7 +18,8 @@ export default function PrivateMessageScreen({ history }){
     message.user_id === state.auth.currentUser.id && message.recipient_id === state.messages.recipientId ||
     message.user_id === state.messages.recipientId && message.recipient_id === state.auth.currentUser.id
   )))
-
+  const otherUser = useSelector(state => getUserById(state, state.messages.recipientId)[0])
+    console.log(otherUser);
   useEffect(() => {
     dispatch(loadMessages());
   }, [state.messages.messageAdded])
@@ -31,11 +34,20 @@ export default function PrivateMessageScreen({ history }){
   };
 
   return (
+    <View>
   <ScrollView>
-    <Button
-      title="Back"
-      onPress={() => history.push("/")}
-    />
+  <View style={{flexDirection: "row", height: 50, justifyContent: "center", alignItems: "center"}}>
+    <TouchableOpacity onPress={() => history.push("/")} style={{ flex: 1, paddingLeft: 10 }}>
+      <MaterialCommunityIcons name="keyboard-backspace" color="black" size={35}/>
+    </TouchableOpacity>
+    <View style={{flex: 3, alignItems: "center" }}>
+      <Text style={{fontSize: 20}}>{otherUser.username}</Text>
+    </View>
+    <View
+    style={{flex: 1}}
+    ></View>
+
+  </View>
     {thread.map(message => {
       if (message.recipient_id === currentUser.id) {
         return (
@@ -99,6 +111,7 @@ export default function PrivateMessageScreen({ history }){
     onSubmitEditing={handleSubmit}
   />
 </ScrollView>
+</View>
   );
 }
 
