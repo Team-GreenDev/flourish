@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { loadPosts, likePost } from '../../store/slices/posts';
+import { loadPosts, likePost, unlikePost } from '../../store/slices/posts';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 
@@ -9,7 +9,7 @@ export default function HomeScreen({ likedPosts }) {
   const users = useSelector(state => state.users)
   const posts = useSelector(state => state.posts)
   const dispatch = useDispatch();
-
+  const [like, setLike] = useState(false);
   const getUserById = (id) => users.list.filter((user) => user.id == id);
 
   useEffect(()=>{
@@ -21,6 +21,10 @@ export default function HomeScreen({ likedPosts }) {
     dispatch(likePost(post));
   }
 
+  const unlike = (post) => {
+    console.log('unliked', post)
+    dispatch(unlikePost(post));
+  }
 
   return (
     <ScrollView styles={styles.container}>
@@ -42,7 +46,15 @@ export default function HomeScreen({ likedPosts }) {
                     size={24}
                     raised
                     style={styles.icon}
-                    onPress={() => addLike(post)}
+                    onPress={
+                      like === false ? () => {
+                        setLike(true)
+                        addLike(post)  }
+                        : () => {
+                          setLike(false)
+                          unlike(post)
+                        }
+                      }
                     />
                     <Text>{post.like_count}</Text>
               </TouchableOpacity>
@@ -99,7 +111,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   icon: {
-    color: "blue",
+    color: "white",
     
   }
 });
