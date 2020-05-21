@@ -3,10 +3,10 @@ import * as React from 'react';
 
 import TabBarIcon from '../icons/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import SearchScreen from '../screens/SearchScreen';
 import UploadScreen from '../screens/UploadScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MessageRouteScreen from '../screens/Messages/MessageRouteScreen';
+import SearchRouteScreen from '../screens/Search/SearchRouteScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -28,7 +28,7 @@ export default function BottomTabNavigator({ navigation, route }) {
       />
       <BottomTab.Screen
         name="Search"
-        component={SearchScreen}
+        component={SearchRouteScreen}
         options={{
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-search" />,
         }}
