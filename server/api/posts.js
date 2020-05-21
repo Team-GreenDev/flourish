@@ -32,8 +32,14 @@ postsRouter.post('/', (req, res) => {
     .catch((error) => res.status(500).send(error));
 });
 
-postsRouter.patch('/:id', (req, res) => {
+postsRouter.post('/:id', (req, res) => {
   db.updatePostById(req, res)
+    .then(() => res.sendStatus(204))
+    .catch((err) => res.status(500).send(err));
+});
+
+postsRouter.patch('/:id', (req, res) => {
+  db.unlikePostById(req, res)
     .then(() => res.sendStatus(204))
     .catch((err) => res.status(500).send(err));
 });
