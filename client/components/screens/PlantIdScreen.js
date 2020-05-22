@@ -1,9 +1,15 @@
-import React from 'react';
-import { StyleSheet, TouchableOpacity, SafeAreaView, Text } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { StyleSheet, TouchableOpacity, SafeAreaView, Text, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { Ionicons, AntDesign, FontAwesome5 } from '@expo/vector-icons';
+
+import { useDispatch } from 'react-redux'
+import { loadPlants } from '../../store/slices/plants'
 
 const PlantIdScreen = () => {
+  const dispatch = useDispatch();
+  const [ plantIdData, setPlantIdData ] = useState(null)
+
   // Using ImagePicker to access phone image and send request
   const openImagePickerAsync = async () => {
     let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
@@ -23,7 +29,7 @@ const PlantIdScreen = () => {
     let base64Img = [`data:image/jpg;base64,${pickerResult.base64}`];
 
     // The code below is the same code as example from Plant.ID
-    const data = {
+    setPlantIdData({
       api_key: "KS6TZZRUA1RqTfiWM2ojZv1IQ4frPWlEK0AxFZeVFXhxYMn99u",
       images: base64Img,
       modifiers: ["crops_fast", "similar_images"],
@@ -34,26 +40,15 @@ const PlantIdScreen = () => {
                         "wiki_description",
                         "taxonomy",
                         "synonyms"]
-    };
-
-    fetch('https://api.plant.id/v2/identify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Success:', data.suggestions);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
     });
+
   };
 
+  const handlePress = () =>{
+    dispatch(loadPlants(plantIdData));
+  }
+
   return (
-    // Rendering an icon to a mobile screen to upload and send request
     <SafeAreaView style={styles.container}>
       <TouchableOpacity>
         <Ionicons
@@ -62,7 +57,13 @@ const PlantIdScreen = () => {
           size={60}
           onPress={() => openImagePickerAsync()}/>
       </TouchableOpacity>
-      <Text>Load Image to Plant.ID API</Text>
+      <TouchableOpacity onPress={handlePress} style={styles.submitButton}>
+        <View style={{flexDirection: "row"}}>
+          <FontAwesome5 name="seedling" size={24} color="white" style={{padding: 3}}/>
+          <AntDesign name="idcard" size={24} color="white" style={{padding: 3}}/>
+        </View>
+        <Text style={{color: "white", fontSize: 18, fontWeight: "bold"}}>Identify Plant</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   )
 }
@@ -78,4 +79,13 @@ const styles = StyleSheet.create({
   icon: {
     color: "dodgerblue"
   },
+  submitButton: {
+    borderColor: "#000",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "dodgerblue",
+  }
 })
