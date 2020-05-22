@@ -39,7 +39,7 @@ export default function App() {
         </NavigationContainer>
         : <LoginScreen logInSuccessful={logInSuccessful} />}
         {/* : <ARScreen />} */}
-        {/*: <PlantIdScreen />}*/}
+        {/* <PlantIdScreen /> */}
       </View>
     </Provider>
   );
