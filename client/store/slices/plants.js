@@ -8,7 +8,8 @@ import { apiCallBegan } from '../api';
 const slice = createSlice({
   name: 'plants',
   initialState: {
-    list: [],
+    response: [],
+    suggestions: [],
     loading: false,
   },
   // actions => action handlers
@@ -24,7 +25,8 @@ const slice = createSlice({
     // Reassigns the plant list to the payload received from the axios request
     // loading set to false, ending the loading spinner because request succeeded
     plantsReceived: (plants, action) => {
-      plants.list = action.payload.suggestions;
+      plants.response = action.payload;
+      plants.suggestions = action.payload.suggestions;
       plants.loading = false;
     },
   },
