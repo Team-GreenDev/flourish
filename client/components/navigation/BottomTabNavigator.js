@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import TabBarIcon from '../icons/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import UploadScreen from '../screens/UploadScreen';
+import UploadRouteScreen from '../screens/Upload/UploadRouteScreen'
 import ProfileScreen from '../screens/ProfileScreen';
 import MessageRouteScreen from '../screens/Messages/MessageRouteScreen';
 import SearchRouteScreen from '../screens/Search/SearchRouteScreen';
@@ -35,7 +35,7 @@ export default function BottomTabNavigator({ navigation, route }) {
       />
       <BottomTab.Screen
         name="Upload"
-        component={UploadScreen}
+        component={UploadRouteScreen}
         options={{
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-add-circle" />,
         }}
