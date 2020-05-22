@@ -1,16 +1,20 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image, SafeAreaView } from 'react-native';
+import { StyleSheet, View, TextInput, Button, TouchableOpacity, Image, SafeAreaView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { Formik } from 'formik';
-
+import { Link } from 'react-router-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { addPost } from '../../store/slices/posts';
+import { addPost } from '../../../store/slices/posts';
 
-export default function UploadScreen() {
+
+export default function UploadScreen({ history }) {
+  const [photo, setPhoto] = React.useState('');
   const dispatch = useDispatch();
-  const currentUser = useSelector(state => state.auth.currentUser);
+  const currentPhoto = useSelector(state => state.photo.currentPhoto);
 
+
+  const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dsw29lceg/upload';
   function AppTextInput({ icon, ...otherProps }) {
     return (
       <View style={styles.container}>
@@ -22,8 +26,6 @@ export default function UploadScreen() {
       </View>
     );
   }
-  const [photo, setPhoto] = React.useState('');
-  const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dsw29lceg/upload'
   const openImagePickerAsync = async () => {
     let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
     if (permissionResult.granted === false) {
@@ -39,7 +41,6 @@ export default function UploadScreen() {
       return;
     }
     let base64Img = `data:image/jpg;base64,${pickerResult.base64}`;
-
     let data = {
       "file": base64Img,
       "upload_preset": "cdqppny0"
@@ -56,7 +57,6 @@ export default function UploadScreen() {
       setPhoto(data.url);
     }).catch(err => console.log(err))
   };
-
   return (
     <Formik
     initialValues={{description: '', tag: '', image: ''}}
@@ -100,20 +100,22 @@ export default function UploadScreen() {
        {photo === '' ? null : <Image style= {styles.imageUpload} source={{uri: photo}} />}
        </SafeAreaView>
           <View style={styles.iconsView}>
-         {/* <TouchableOpacity>
-           <Ionicons style={styles.icon} name="ios-camera" size={50} />
-         </TouchableOpacity> */}
+          <TouchableOpacity>
+            <Link to='/camera'>
+           <Ionicons style={styles.icon} name="ios-camera" size={50} onPress={() => history.push("/camera")}/>
+            </Link>
+         </TouchableOpacity> 
          <TouchableOpacity>
            <Ionicons style={styles.icon} name="ios-image" size={50} onPress={() => openImagePickerAsync()}/>
          </TouchableOpacity>
        </View>
           <Button onPress={handleSubmit} title="post" />
+          <Button onPress={() => console.log(currentPhoto.uri)} title="test" />
         </>
   )}
     </Formik>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#f8f4f4",
@@ -152,7 +154,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 });
-
-
-
-
