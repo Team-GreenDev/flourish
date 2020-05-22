@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity, SafeAreaView, Text, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, SafeAreaView, Text, Image, View, ImageBackground, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { Ionicons, AntDesign, FontAwesome5 } from '@expo/vector-icons';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { PLANT_ID_KEY } from 'react-native-dotenv';
 
-import { useDispatch } from 'react-redux'
-import { loadPlants } from '../../store/slices/plants'
+import { loadPlants } from '../../store/slices/plants';
 
 const PlantIdScreen = () => {
   const dispatch = useDispatch();
+  const plants = useSelector(state => state.plants);
   const [ plantIdData, setPlantIdData ] = useState(null)
+  const [ uploadPhoto, setUploadPhoto ] = useState(null)
 
   // Using ImagePicker to access phone image and send request
   const openImagePickerAsync = async () => {
@@ -28,9 +31,12 @@ const PlantIdScreen = () => {
     }
     let base64Img = [`data:image/jpg;base64,${pickerResult.base64}`];
 
+    // Display uploaded photo
+    setUploadPhoto(pickerResult.uri);
+
     // The code below is the same code as example from Plant.ID
     setPlantIdData({
-      api_key: "KS6TZZRUA1RqTfiWM2ojZv1IQ4frPWlEK0AxFZeVFXhxYMn99u",
+      api_key: PLANT_ID_KEY,
       images: base64Img,
       modifiers: ["crops_fast", "similar_images"],
       plant_language: "en",
@@ -45,25 +51,56 @@ const PlantIdScreen = () => {
   };
 
   const handlePress = () =>{
-    dispatch(loadPlants(plantIdData));
+    if(uploadPhoto) {
+      dispatch(loadPlants(plantIdData));
+    }
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity>
-        <Ionicons
-          style={styles.icon}
-          name="ios-image"
-          size={60}
-          onPress={() => openImagePickerAsync()}/>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handlePress} style={styles.submitButton}>
-        <View style={{flexDirection: "row"}}>
-          <FontAwesome5 name="seedling" size={24} color="white" style={{padding: 3}}/>
-          <AntDesign name="idcard" size={24} color="white" style={{padding: 3}}/>
+      {uploadPhoto ?
+      <ImageBackground style={{width: 200, height: 200}} imageStyle={{borderRadius: 10}} source={{uri: uploadPhoto}}>
+      <TouchableOpacity style={{alignItems: "flex-end"}}>
+        <MaterialIcons
+          style={{marginRight: 5}}
+          name="clear"
+          color="white"
+          size={18}
+          onPress={() => setUploadPhoto(null)}/>
+        </TouchableOpacity>
+      </ImageBackground>
+      :
+      <View style={{width: 200, height: 200, justifyContent: "center", alignItems: "center"}}>
+        <TouchableOpacity>
+          <MaterialIcons
+            style={{marginRight: 5}}
+            name="add-a-photo"
+            size={60}
+            onPress={() => openImagePickerAsync()}
+          />
+        </TouchableOpacity>
+      </View>}
+
+      <View style={{flexDirection: "row"}}>
+        {plants.loading ? <Image source={require('../../../assets/images/spinny.gif')} style={{width: 70, height: 70}}/> :
+        <TouchableOpacity onPress={handlePress} style={styles.submitButton}>
+          <AntDesign name="idcard" size={24} color="white" style={{paddingRight: 7}}/>
+          <Text style={{color: "white", fontSize: 18, fontWeight: "bold"}}>Identify Plant</Text>
+        </TouchableOpacity>}
+      </View>
+
+      <ScrollView style={{width: "80%"}}>
+      {plants.suggestions ? plants.suggestions.map((plant, index) => (
+        <View style={{marginVertical: 20, alignItems: "center"}} key={plant.id}>
+          <Text>Suggestion #{index + 1} - Probability {Math.round(plant.probability*100)}%</Text>
+          <Text>Common name(s): {plant.plant_details.common_names ? plant.plant_details.common_names[0] : null}</Text>
+          {plant.similar_images.length ? <Image style={{width: 200, height: 200, borderRadius: 10}} source={{uri: plant.similar_images[0].url}}/> : null}
+          <Text>Scientific name: {plant.plant_name}</Text>
+          <Text></Text>
+          <Text>Description: {plant.plant_details.wiki_description ? plant.plant_details.wiki_description.value : "not available"}</Text>
         </View>
-        <Text style={{color: "white", fontSize: 18, fontWeight: "bold"}}>Identify Plant</Text>
-      </TouchableOpacity>
+      )) : null }
+      </ScrollView>
     </SafeAreaView>
   )
 }
@@ -80,12 +117,14 @@ const styles = StyleSheet.create({
     color: "dodgerblue"
   },
   submitButton: {
+    marginVertical: 10,
     borderColor: "#000",
     borderWidth: 1,
     borderRadius: 10,
-    padding: 10,
+    padding: 8,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "dodgerblue",
+    flexDirection: "row",
   }
 })
