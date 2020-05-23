@@ -458,10 +458,10 @@ export default class HomeScreen extends React.Component {
   onRender = (delta) => {
 
     // Rotate the object...
-    if (this.threeModel) {
-      this.threeModel.rotation.x += 2 * delta;
-      this.threeModel.rotation.y += 1.5 * delta;
-    }
+    // if (this.threeModel) {
+    //   this.threeModel.rotation.x += 2 * delta;
+    //   this.threeModel.rotation.y += 1.5 * delta;
+    // }
 
     // Render...
     this.renderer.render(this.scene, this.camera);
@@ -474,8 +474,8 @@ export default class HomeScreen extends React.Component {
     // Add the current object...
     GooglePoly.getThreeModel(this.state.currentAsset, function(object) {
       this.threeModel = object;
-      ExpoTHREE.utils.scaleLongestSideToSize(object, 0.75);
-      object.position.z = -3;
+      ExpoTHREE.utils.scaleLongestSideToSize(object, 0.25);
+      object.position.z = -0.4;
       this.scene.add(object);
     }.bind(this), function(error) {
       console.log(error);
