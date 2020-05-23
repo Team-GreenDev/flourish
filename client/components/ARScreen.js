@@ -7,12 +7,12 @@ import * as THREE from 'three';
 import { loadDaeAsync, Renderer, utils } from 'expo-three';
 import { GraphicsView } from 'expo-graphics';
 import { BackgroundTexture, Camera, Light } from 'expo-three-ar';
-// import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
-import * as butts from '../../flower.json';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+// import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
+// import MODEL from '../../flower.json';
 
 export default function ARScreen() {
-  
   let renderer, scene, camera, mesh;
   useEffect(() => {
     (async () => {
@@ -43,36 +43,57 @@ export default function ARScreen() {
     let light = new THREE.DirectionalLight( 0xffffff, 0.5 );
     light.position.set( 3, 3, 3 )
     scene.add(light);
+    
+    // --------------------------------------------------
+    // const loader = new GLTFLoader();
 
-    var addBananaInScene = function(object){
-      banana = object;
-      //Move the banana in the scene
-      banana.rotation.x = Math.PI/2;
-      banana.position.y = -200;
-      banana.position.z = 50;
-      //Go through all children of the loaded object and search for a Mesh
-      object.traverse( function ( child ) {
-          //This allow us to check if the children is an instance of the Mesh constructor
-          if(child instanceof THREE.Mesh){
-              child.material.color = new THREE.Color(0X00FF00);
-              //Sometimes there are some vertex normals missing in the .obj files, ThreeJs will compute them
-              child.geometry.computeVertexNormals();
-          }
-      });
-      //Add the 3D object in the scene
-      scene.add(banana);
-      onRender();
-    };
+    // // this utility function allows you to use any three.js
+    // // loader with promises and async/await
+    // const modelLoader = (url) => {
+    //   return new Promise((resolve, reject) => {
+    //     loader.load(url, data=> resolve(data), null, reject);
+    //   });
+    // }
+    // async function main() {
+    //   const gltf = await modelLoader('./uploads_files_1969587_Cactus1.gltf'),
+   
+    //   model = gltf.scene;
+    //   scene.add(model);
+    // }
+    
+    // main().catch(error => {
+    //   console.error(error);
+    // });
+    // ---------------------------------------
+    // var addBananaInScene = function(object){
+    //   banana = object;
+    //   //Move the banana in the scene
+    //   banana.rotation.x = Math.PI/2;
+    //   banana.position.y = -200;
+    //   banana.position.z = 50;
+    //   //Go through all children of the loaded object and search for a Mesh
+    //   object.traverse( function ( child ) {
+    //       //This allow us to check if the children is an instance of the Mesh constructor
+    //       if(child instanceof THREE.Mesh){
+    //           child.material.color = new THREE.Color(0X00FF00);
+    //           //Sometimes there are some vertex normals missing in the .obj files, ThreeJs will compute them
+    //           child.geometry.computeVertexNormals();
+    //       }
+    //   });
+    //   //Add the 3D object in the scene
+    //   scene.add(banana);
+    //   onRender();
+    // };
 
-    var loadOBJ = function(){
-      //Manager from ThreeJs to track a loader and its status
-      var manager = new THREE.LoadingManager();
-      //Loader for Obj from Three.js
-      var loader = new THREE.OBJLoader( manager );
-      //Launch loading of the obj file, addBananaInScene is the callback when it's ready 
-      loader.load( 'http://mamboleoo.be/learnThree/demos/banana.obj', addBananaInScene);
-    };
-    loadOBJ();
+    // var loadOBJ = function(){
+    //   //Manager from ThreeJs to track a loader and its status
+    //   var manager = new THREE.LoadingManager();
+    //   //Loader for Obj from Three.js
+    //   var loader = new THREE.OBJLoader( manager );
+    //   //Launch loading of the obj file, addBananaInScene is the callback when it's ready 
+    //   loader.load( 'http://mamboleoo.be/learnThree/demos/banana.obj', addBananaInScene);
+    // };
+    // loadOBJ();
     // --------------------------------------------------
     // var mtlLoader = new THREE.MTLLoader();
     // mtlLoader.setPath( '/' );
@@ -129,26 +150,28 @@ export default function ARScreen() {
     //   scene.add( obj );
     // });
     // -------------------------------------------------------
-    // var loader = new THREE.OBJLoader();
-    // loader.load(
-    //   // resource URL
-    //   'flower.json',
-    //   // onLoad callback
-    //   // Here the loaded data is assumed to be an object
-    //   function ( obj ) {
-    //     // Add the loaded object to the scene
-    //     console.log(obj);
-    //     scene.add( obj );
-    //   },
-    //   // onProgress callback
-    //   function ( xhr ) {
-    //     console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-    //   },
-    //   // onError callback
-    //   function ( err ) {
-    //     console.error( err );
-    //   }
-    // );
+    var loader = new OBJLoader();
+    loader.load(
+      // resource URL
+      'http://mamboleoo.be/learnThree/demos/banana.obj',
+      // `assets/models/01Alocasia_obj.obj`,
+      // onLoad callback
+      // Here the loaded data is assumed to be an object
+      function ( obj ) {
+        // Add the loaded object to the scene
+        console.log("loaded", obj)
+        obj.position.z = -0.2;
+        scene.add( obj );
+      },
+      // onProgress callback
+      function ( xhr ) {
+        console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+      },
+      // onError callback
+      function ( err ) {
+        console.error( err );
+      }
+    );
     // -------------------------------------------------------
     // const objLoader = new THREE.ObjectLoader();
     // objLoader.setPath('/');
