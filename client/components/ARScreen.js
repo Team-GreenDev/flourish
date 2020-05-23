@@ -14,6 +14,7 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 
 export default function ARScreen() {
   let renderer, scene, camera, mesh;
+  // Ask for camera permission on load
   useEffect(() => {
     (async () => {
       const { status } = await Permissions.askAsync(Permissions.CAMERA);
@@ -25,6 +26,7 @@ export default function ARScreen() {
     })();
   }, []);
 
+  // Main function for creating Augmented Reality with 3D Models
   const onContextCreate = async ({ gl, scale: pixelRatio, width, height }) => {
     // This will allow ARKit to collect Horizontal surfaces
     AR.setPlaneDetection(AR.PlaneDetectionTypes.Horizontal);
@@ -33,13 +35,15 @@ export default function ARScreen() {
     renderer.gammaOutput = true;
     renderer.shadowMap.enabled = true;
 
+    // Creating scene for Augmented Reality
     scene = new THREE.Scene();
     scene.background = new BackgroundTexture(renderer);
 
+    // Creating camera for rendering later
     camera = new Camera(width, height, 0.01, 1000);
 
+    // Lighting for 3D model - should not affect loading
     scene.add(new THREE.AmbientLight( 0x404040 ));
-
     let light = new THREE.DirectionalLight( 0xffffff, 0.5 );
     light.position.set( 3, 3, 3 )
     scene.add(light);
