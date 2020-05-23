@@ -1,8 +1,8 @@
 import ExpoTHREE from 'expo-three';
 import AssetUtils from 'expo-asset-utils';
 import * as THREE from 'three';
-require('./OBJLoader');
-require('./MTLLoader');
+require('./util/OBJLoader');
+require('./util/MTLLoader');
 
 export default class GooglePoly {
 
