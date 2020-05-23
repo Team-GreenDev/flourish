@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, TouchableOpacity, Button } from 'react-native';
+import { Text, View, TouchableOpacity, Button, Dimensions, StyleSheet } from 'react-native';
 import { Camera } from 'expo-camera';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCurrentPhoto } from '../../../store/slices/photo';
 
 export default function CameraScreen({ history }) {
-  // use dispatch & useSelector to get information form the store
+
+  // using dispatch & useSelector to get information form the store
   const dispatch = useDispatch();
   const photo = useSelector(state => state.photo);
 
@@ -34,8 +35,8 @@ if (hasPermission === null) {
 
 // if permission if granted return a view displaying the camera
   return (
-    <View style={ { height: '100%'}  }>
-      <Camera type={type} ref={ref => {
+    <>
+      <Camera style={styles.preview} type={type} ref={ref => {
         setCameraRef(ref) ;
     }}>
         <View>
@@ -51,14 +52,24 @@ if (hasPermission === null) {
           </TouchableOpacity>
           <TouchableOpacity style={{alignSelf: 'center'}} onPress={async() => {
             if(cameraRef){
-              let photo = await cameraRef.takePictureAsync();
+              // this will save a photo taken from camera with normal file path
+              let photo = await cameraRef.takePictureAsync({
+                quality: .5,
+              });
+              // this will save a photo taken from camera with base64 image
+              let photoBase64 = await cameraRef.takePictureAsync({
+                quality: .5,
+                base64: true
+              });
+              console.log(photoBase64, 'base64');
+              console.log(photo, 'nonbase64');
               dispatch(setCurrentPhoto(photo));
-              console.log('photo', photo);
+              history.push('/');
             }
           }}>
-            <View style={{ 
+            <View style={{
                borderWidth: 2,
-               borderRadius:"50%",
+               borderRadius: 50,
                borderColor: 'white',
                height: 50,
                width:50,
@@ -68,7 +79,7 @@ if (hasPermission === null) {
             >
               <View style={{
                  borderWidth: 2,
-                 borderRadius:"50%",
+                 borderRadius:50,
                  borderColor: 'white',
                  height: 40,
                  width:40,
@@ -78,7 +89,24 @@ if (hasPermission === null) {
           </TouchableOpacity>
         </View>
       </Camera>
+      <View>
       <Button title="back" onPress={() => history.push('/')}></Button>
-    </View>
+      </View>
+      </>
   );
 }
+// this will allow camera to fit any iphone screen
+const { width: winWidth, height: winHeight } = Dimensions.get('window');
+
+// style for camera
+const styles = StyleSheet.create({
+  preview: {
+      height: winHeight,
+      width: winWidth,
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+  },
+});

@@ -6,15 +6,21 @@ import { Formik } from 'formik';
 import { Link } from 'react-router-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { addPost } from '../../../store/slices/posts';
+import { setCurrentPhoto } from '../../../store/slices/photo';
+
 
 
 export default function UploadScreen({ history }) {
-  const [photo, setPhoto] = React.useState('');
+  // using dispatch & useSelector to get information from the redux store
   const dispatch = useDispatch();
   const currentPhoto = useSelector(state => state.photo.currentPhoto);
+  console.log(currentPhoto);
 
 
+  // storing cloudinary url using our
   const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dsw29lceg/upload';
+
+  // function for formik input fields
   function AppTextInput({ icon, ...otherProps }) {
     return (
       <View style={styles.container}>
@@ -27,20 +33,52 @@ export default function UploadScreen({ history }) {
     );
   }
   const openImagePickerAsync = async () => {
+    // function to ask permission to use camera roll
     let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
     if (permissionResult.granted === false) {
       alert('Permission to access camera roll is required!');
       return
     }
+
+    // function to store the image that was chosen by user
     let pickerResult = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
       base64: true
     });
+
+    // dispatch chosen image to store
+    dispatch(setCurrentPhoto(pickerResult))
     if (pickerResult.cancelled === true) {
       return;
     }
+
+    // declare and assign base64 version of image picked from camera roll
     let base64Img = `data:image/jpg;base64,${pickerResult.base64}`;
+
+    // format body of request to send to cloudinary
+    let data = {
+      "file": base64Img,
+      "upload_preset": "cdqppny0"
+    }
+
+    // post request to cloudinary 
+    fetch(CLOUDINARY_URL, {
+      body: JSON.stringify(data),
+      headers: {
+        'content-type': 'application/json'
+      },
+      method: 'POST',
+    }).then(async result => {
+      let data = await result.json()
+      setPhoto(data.url);
+    }).catch(err => console.log(err))
+  };
+
+  // function to be used to post to cloudiary with base64 image from photo taken from camera
+    // not in use
+  const cameraPhoto = async () => {
+    let base64Img = `data:image/jpg;base64,${currentPhoto.base64}`;
     let data = {
       "file": base64Img,
       "upload_preset": "cdqppny0"
@@ -54,9 +92,8 @@ export default function UploadScreen({ history }) {
       method: 'POST',
     }).then(async r => {
       let data = await r.json()
-      setPhoto(data.url);
     }).catch(err => console.log(err))
-  };
+  }
   return (
     <Formik
     initialValues={{description: '', tag: '', image: ''}}
@@ -79,16 +116,6 @@ export default function UploadScreen({ history }) {
             placeholder="description"
             textContentType="none"
           />
-           {/* <AppTextInput
-            maxLength={255}
-            autoCapitalize="none"
-            autoCorrect={true}
-            multiline
-            numberOfLines={3}
-            onChangeText={handleChange("description")}
-            placeholder="Upload Photo"
-            textContentType="none"
-          /> */}
           <AppTextInput
             autoCapitalize="none"
             autoCorrect={true}
@@ -97,20 +124,17 @@ export default function UploadScreen({ history }) {
             textContentType="none"
           />
           <SafeAreaView style={styles.imageUploadView}>
-       {photo === '' ? null : <Image style= {styles.imageUpload} source={{uri: photo}} />}
+       {currentPhoto.uri === '' ? <View></View> : <Image style={styles.imageUpload} source={{uri: currentPhoto.uri}} />}
        </SafeAreaView>
           <View style={styles.iconsView}>
           <TouchableOpacity>
-            <Link to='/camera'>
            <Ionicons style={styles.icon} name="ios-camera" size={50} onPress={() => history.push("/camera")}/>
-            </Link>
-         </TouchableOpacity> 
+         </TouchableOpacity>
          <TouchableOpacity>
            <Ionicons style={styles.icon} name="ios-image" size={50} onPress={() => openImagePickerAsync()}/>
          </TouchableOpacity>
        </View>
           <Button onPress={handleSubmit} title="post" />
-          <Button onPress={() => console.log(currentPhoto.uri)} title="test" />
         </>
   )}
     </Formik>
