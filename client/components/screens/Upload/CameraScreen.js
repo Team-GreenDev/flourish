@@ -52,11 +52,19 @@ if (hasPermission === null) {
           </TouchableOpacity>
           <TouchableOpacity style={{alignSelf: 'center'}} onPress={async() => {
             if(cameraRef){
+              // this will save a photo taken from camera with normal file path
               let photo = await cameraRef.takePictureAsync({
-                base64: true,
-                quality: 1
+                quality: .5,
               });
+              // this will save a photo taken from camera with base64 image
+              let photoBase64 = await cameraRef.takePictureAsync({
+                quality: .5,
+                base64: true
+              });
+              console.log(photoBase64, 'base64');
+              console.log(photo, 'nonbase64');
               dispatch(setCurrentPhoto(photo));
+              history.push('/');
             }
           }}>
             <View style={{
@@ -87,8 +95,10 @@ if (hasPermission === null) {
       </>
   );
 }
+// this will allow camera to fit any iphone screen
 const { width: winWidth, height: winHeight } = Dimensions.get('window');
 
+// style for camera
 const styles = StyleSheet.create({
   preview: {
       height: winHeight,
