@@ -56,13 +56,11 @@ if (hasPermission === null) {
               let photo = await cameraRef.takePictureAsync({
                 quality: .5,
               });
-              // this will save a photo taken from camera with base64 image
-              let photoBase64 = await cameraRef.takePictureAsync({
-                quality: .5,
-                base64: true
-              });
-              console.log(photoBase64, 'base64');
-              console.log(photo, 'nonbase64');
+              // // this will save a photo taken from camera with base64 image
+              // let photoBase64 = await cameraRef.takePictureAsync({
+              //   quality: .5,
+              //   base64: true
+              // });
               dispatch(setCurrentPhoto(photo));
               history.push('/');
             }
