@@ -160,7 +160,7 @@ export default function ARScreen() {
       function ( obj ) {
         // Add the loaded object to the scene
         console.log("loaded", obj)
-        obj.position.z = -0.2;
+        // obj.position.z = -0.2;
         scene.add( obj );
       },
       // onProgress callback
