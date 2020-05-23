@@ -46,12 +46,6 @@ CREATE TABLE likes (
   user_id varchar(255)
 );
 
--- CREATE TABLE media (
---   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
---   type varchar(255),
---   url varchar(255)
--- );
-
 CREATE TABLE posts (
   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   user_id varchar(255),

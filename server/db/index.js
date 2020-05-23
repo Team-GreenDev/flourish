@@ -130,7 +130,20 @@ const addMessage = (req) => {
 // Get all followers_id from user_id
 const getFollowersId = (req) => {
   const id = parseInt(req.params.id, 10);
-  return pool.query(`select * from followers where user_id = ${id} order by created_at desc `);
+  return pool.query(`select * from followers where user_id = ${id}`)
+    .then((followers) => Promise.all(followers.map((follower) => pool.query(`select * from users where pk = ${follower.follower_id}`))));
+};
+
+// Follow new user
+const followNewUser = (req) => {
+  const { user_id, follower_id } = req.body;
+  return pool.query(`insert into followers set user_id = ${user_id}, follower_id = ${follower_id}`);
+};
+
+// Un-follow a user
+const unFollowUser = (req) => {
+  const { user_id, follower_id } = req.body;
+  return pool.query(`delete from followers where user_id = ${user_id} and follower_id = ${follower_id}`);
 };
 
 
@@ -198,4 +211,6 @@ module.exports = {
   getUserMessages,
   likePost,
   updatePostById,
+  followNewUser,
+  unFollowUser,
 };
