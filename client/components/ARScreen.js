@@ -44,9 +44,8 @@ export default function ARScreen() {
     light.position.set( 3, 3, 3 )
     scene.add(light);
     
-    // --------------------------------------------------
+    // ---------------Attempt with GLTFLoader (Error: isTrusted: false...)------------------------
     // const loader = new GLTFLoader();
-
     // // this utility function allows you to use any three.js
     // // loader with promises and async/await
     // const modelLoader = (url) => {
@@ -56,15 +55,13 @@ export default function ARScreen() {
     // }
     // async function main() {
     //   const gltf = await modelLoader('./uploads_files_1969587_Cactus1.gltf'),
-   
     //   model = gltf.scene;
     //   scene.add(model);
     // }
-    
     // main().catch(error => {
     //   console.error(error);
     // });
-    // ---------------------------------------
+    // ---------------Attempt with Banana and OBJLoader (Works: Banana loads)------------------
     // var addBananaInScene = function(object){
     //   banana = object;
     //   //Move the banana in the scene
@@ -84,7 +81,6 @@ export default function ARScreen() {
     //   scene.add(banana);
     //   onRender();
     // };
-
     // var loadOBJ = function(){
     //   //Manager from ThreeJs to track a loader and its status
     //   var manager = new THREE.LoadingManager();
@@ -94,7 +90,7 @@ export default function ARScreen() {
     //   loader.load( 'http://mamboleoo.be/learnThree/demos/banana.obj', addBananaInScene);
     // };
     // loadOBJ();
-    // --------------------------------------------------
+    // -----------------Attempt with MTLLoader and OBJLoader (Error: deprecated - setPath is old :( ))--------------------------
     // var mtlLoader = new THREE.MTLLoader();
     // mtlLoader.setPath( '/' );
     // var url = "indoor plant_02.mtl";
@@ -113,7 +109,7 @@ export default function ARScreen() {
     //   }, onProgress, onError );
 
     // });
-    // -------------------------------------------------
+    // -------------------Attempt with MTLLoader and OBJLoader (Error: isTrusted: false...)----------------------
     // const loadObjModel = (materialURL, objectURL) => {
     //   new MTLLoader().load(materialURL, materials => {
     //     materials.preload();
@@ -144,12 +140,12 @@ export default function ARScreen() {
     //   });
     // };
     // loadObjModel('../../indoor plant_02.mtl', '../../indoor plant_02.obj');
-    // -------------------------------------------------------
+    // -------------------Attempt with ObjectLoader (not to be confused with OBJLoader - also doesnt work)----------------------------
     // var loader = new THREE.ObjectLoader();
     // loader.load("01Alocasia_obj.obj",function ( obj ) {
     //   scene.add( obj );
     // });
-    // -------------------------------------------------------
+    // -------------------Attempt with OBJLoader(importing directly - no THREE) (can load banana)-----------------------------
     var loader = new OBJLoader();
     loader.load(
       // resource URL
@@ -172,14 +168,14 @@ export default function ARScreen() {
         console.error( err );
       }
     );
-    // -------------------------------------------------------
+    // --------------Attempt with ObjectLoader (also deprecated)------------------------------
     // const objLoader = new THREE.ObjectLoader();
     // objLoader.setPath('/');
     // objLoader.load('flower.json', (root) => {
     //   root.position.z = -0.7;
     //   scene.add(root);
     // });
-    // -------------------------------------------------------
+    // ----------------Attempt with MTLLoader and OBJLoader(imported directly) (nada)-----------------------------
     // var mtlLoader = new MTLLoader();
     // console.log("AHHHHHHHHHHHHHHHHHHHHHHH");
     // mtlLoader.load('01Alocasia_obj.mtl', function(materials) {
@@ -193,7 +189,7 @@ export default function ARScreen() {
     //     scene.add(object);
     //   });
     // });
-    // -------------------------------------------------------
+    // --------------(OLD OLD OLD)-----------------------------
     // var objLoader = new THREE.OBJLoader();
     // objLoader.setPath('/');
 
@@ -212,7 +208,7 @@ export default function ARScreen() {
     //     scene.add(object);
     //   })
     // })
-    // -------------------------------------------------------
+    // -------------------Cube works at least----------------------------
     // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
     const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
     // Simple color material
@@ -228,7 +224,7 @@ export default function ARScreen() {
 
     // loadModel();
   }
-
+  // ---------Attempt made outside of onContextCreate----------------------
   // const loadModel = () => {
   //   var loader = new THREE.ObjectLoader();
   //   loader.load(
