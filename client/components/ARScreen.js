@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
-import { Asset } from 'expo-asset';
-import { AR } from 'expo';
-import * as Permissions from 'expo-permissions';
-import * as THREE from 'three';
-import { loadDaeAsync, Renderer, utils } from 'expo-three';
-import { GraphicsView } from 'expo-graphics';
-import { BackgroundTexture, Camera, Light } from 'expo-three-ar';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+// import { Asset } from 'expo-asset';
+// import { AR } from 'expo';
+// import * as Permissions from 'expo-permissions';
+// import * as THREE from 'three';
+// import { loadDaeAsync, Renderer, utils } from 'expo-three';
+// import { GraphicsView } from 'expo-graphics';
+// import { BackgroundTexture, Camera, Light } from 'expo-three-ar';
+// import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 // import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 // import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
 // import MODEL from '../../flower.json';
@@ -15,40 +15,40 @@ import GooglePoly from './GooglePoly';
 const poly = 'AIzaSyD4Sa0WT6oQlE52pMlcurzaNKrz2SEkj6c';
 
 export default function ARScreen() {
-  let renderer, scene, camera, mesh;
+  // let renderer, scene, camera, mesh;
   // Ask for camera permission on load
-  useEffect(() => {
-    (async () => {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA);
-      if (status !== 'granted') {
-        return <Text>No access to camera</Text>;
-      }
-      // Turn off extra warnings
-      THREE.suppressExpoWarnings(true);
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const { status } = await Permissions.askAsync(Permissions.CAMERA);
+  //     if (status !== 'granted') {
+  //       return <Text>No access to camera</Text>;
+  //     }
+  //     // Turn off extra warnings
+  //     THREE.suppressExpoWarnings(true);
+  //   })();
+  // }, []);
 
   // Main function for creating Augmented Reality with 3D Models
   const onContextCreate = async ({ gl, scale: pixelRatio, width, height }) => {
-    // This will allow ARKit to collect Horizontal surfaces
-    AR.setPlaneDetection(AR.PlaneDetectionTypes.Horizontal);
-    renderer = new Renderer({ gl, pixelRatio, width, height });
-    renderer.gammaInput = true;
-    renderer.gammaOutput = true;
-    renderer.shadowMap.enabled = true;
+    // // This will allow ARKit to collect Horizontal surfaces
+    // AR.setPlaneDetection(AR.PlaneDetectionTypes.Horizontal);
+    // renderer = new Renderer({ gl, pixelRatio, width, height });
+    // renderer.gammaInput = true;
+    // renderer.gammaOutput = true;
+    // renderer.shadowMap.enabled = true;
 
-    // Creating scene for Augmented Reality
-    scene = new THREE.Scene();
-    scene.background = new BackgroundTexture(renderer);
+    // // Creating scene for Augmented Reality
+    // scene = new THREE.Scene();
+    // scene.background = new BackgroundTexture(renderer);
 
-    // Creating camera for rendering later
-    camera = new Camera(width, height, 0.01, 1000);
+    // // Creating camera for rendering later
+    // camera = new Camera(width, height, 0.01, 1000);
 
-    // Lighting for 3D model - should not affect loading
-    scene.add(new THREE.AmbientLight( 0x404040 ));
-    let light = new THREE.DirectionalLight( 0xffffff, 0.5 );
-    light.position.set( 3, 3, 3 )
-    scene.add(light);
+    // // Lighting for 3D model - should not affect loading
+    // scene.add(new THREE.AmbientLight( 0x404040 ));
+    // let light = new THREE.DirectionalLight( 0xffffff, 0.5 );
+    // light.position.set( 3, 3, 3 )
+    // scene.add(light);
     
     var googlePoly = new GooglePoly(poly);
     googlePoly.setSearchParams('duck');
@@ -220,18 +220,18 @@ export default function ARScreen() {
     //   })
     // })
     // -------------------Cube works at least----------------------------
-    // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
-    const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
-    // Simple color material
-    const material = new THREE.MeshPhongMaterial({
-      color: 0xff00ff,
-    });
-    // Combine our geometry and material
-    let cube = new THREE.Mesh(geometry, material);
-    // Place the box 0.4 meters in front of us.
-    cube.position.z = -0.4;
-    // Add the cube to the scene
-    scene.add(cube);
+    // // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
+    // const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+    // // Simple color material
+    // const material = new THREE.MeshPhongMaterial({
+    //   color: 0xff00ff,
+    // });
+    // // Combine our geometry and material
+    // let cube = new THREE.Mesh(geometry, material);
+    // // Place the box 0.4 meters in front of us.
+    // cube.position.z = -0.4;
+    // // Add the cube to the scene
+    // scene.add(cube);
 
     // loadModel();
   }
@@ -280,7 +280,8 @@ export default function ARScreen() {
   };
 
   return (
-    (<GraphicsView
+    (
+    <GraphicsView
       style={{ flex: 1 }}
       onContextCreate={onContextCreate}
       onRender={onRender}
@@ -289,6 +290,7 @@ export default function ARScreen() {
       isArRunningStateEnabled
       isArCameraStateEnabled
       arTrackingConfiguration={'ARWorldTrackingConfiguration'}
-      />)
+      />
+      )
   );
 }
