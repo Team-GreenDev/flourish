@@ -11,6 +11,8 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 // import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 // import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
 // import MODEL from '../../flower.json';
+import GooglePoly from './GooglePoly';
+const poly = 'AIzaSyD4Sa0WT6oQlE52pMlcurzaNKrz2SEkj6c';
 
 export default function ARScreen() {
   let renderer, scene, camera, mesh;
@@ -150,28 +152,28 @@ export default function ARScreen() {
     //   scene.add( obj );
     // });
     // -------------------Attempt with OBJLoader(importing directly - no THREE) (can load banana)-----------------------------
-    var loader = new OBJLoader();
-    loader.load(
-      // resource URL
-      'http://mamboleoo.be/learnThree/demos/banana.obj',
-      // `assets/models/01Alocasia_obj.obj`,
-      // onLoad callback
-      // Here the loaded data is assumed to be an object
-      function ( obj ) {
-        // Add the loaded object to the scene
-        console.log("loaded", obj)
-        // obj.position.z = -0.2;
-        scene.add( obj );
-      },
-      // onProgress callback
-      function ( xhr ) {
-        console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-      },
-      // onError callback
-      function ( err ) {
-        console.error( err );
-      }
-    );
+    // var loader = new OBJLoader();
+    // loader.load(
+    //   // resource URL
+    //   'http://mamboleoo.be/learnThree/demos/banana.obj',
+    //   // `assets/models/01Alocasia_obj.obj`,
+    //   // onLoad callback
+    //   // Here the loaded data is assumed to be an object
+    //   function ( obj ) {
+    //     // Add the loaded object to the scene
+    //     console.log("loaded", obj)
+    //     // obj.position.z = -0.2;
+    //     scene.add( obj );
+    //   },
+    //   // onProgress callback
+    //   function ( xhr ) {
+    //     console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+    //   },
+    //   // onError callback
+    //   function ( err ) {
+    //     console.error( err );
+    //   }
+    // );
     // --------------Attempt with ObjectLoader (also deprecated)------------------------------
     // const objLoader = new THREE.ObjectLoader();
     // objLoader.setPath('/');
