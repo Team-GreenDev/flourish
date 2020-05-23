@@ -2,11 +2,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as React from 'react';
 
 import TabBarIcon from '../icons/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
 import UploadRouteScreen from '../screens/Upload/UploadRouteScreen'
 import ProfileScreen from '../screens/ProfileScreen';
 import MessageRouteScreen from '../screens/Messages/MessageRouteScreen';
 import SearchRouteScreen from '../screens/Search/SearchRouteScreen';
+import HomeRouteScreen from '../screens/Home/HomeRouteScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -21,7 +21,7 @@ export default function BottomTabNavigator({ navigation, route }) {
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
       <BottomTab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeRouteScreen}
         options={{
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-home" />,
         }}
