@@ -8,6 +8,7 @@ import configureStore from './client/store/configureStore';
 import BottomTabNavigator from './client/components/navigation/BottomTabNavigator';
 import LoginScreen from './client/components/LoginScreen';
 // import ARScreen from './client/components/ARScreen';
+import PlantIdScreen from './client/components/screens/PlantIdScreen';
 import { loadUsers } from './client/store/slices/users';
 import { loadPosts } from './client/store/slices/posts';
 import { loadMessages } from './client/store/slices/messages';
@@ -38,6 +39,7 @@ export default function App() {
         </NavigationContainer>
         : <LoginScreen logInSuccessful={logInSuccessful} />}
         {/* : <ARScreen />} */}
+        {/* <PlantIdScreen /> */}
       </View>
     </Provider>
   );

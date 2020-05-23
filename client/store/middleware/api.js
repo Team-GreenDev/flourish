@@ -11,9 +11,11 @@ const api = (store) => (next) => (action) => {
 
   // These are variable destructured from the action's payload for an axios request
   const {
+    plantIdUrl,
     url,
     method,
     data,
+    headers,
     onSuccess,
     onError,
     onStart,
@@ -39,10 +41,11 @@ const api = (store) => (next) => (action) => {
   // method is get by default but can be set to another type
   // data is the object that the request is sending to the server
   axios.request({
-    baseURL: NGROK_URL,
+    baseURL: plantIdUrl || "http://e87dd71c.ngrok.io",
     url,
     method,
     data,
+    headers,
   })
     .then((res) => {
       // General success dispatches the data from the successful api call
