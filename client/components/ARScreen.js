@@ -279,18 +279,69 @@ export default function ARScreen() {
     renderer.render(scene, camera);
   };
 
-  return (
-    (
-    <GraphicsView
-      style={{ flex: 1 }}
-      onContextCreate={onContextCreate}
-      onRender={onRender}
-      onResize={onResize}
-      isArEnabled
-      isArRunningStateEnabled
-      isArCameraStateEnabled
-      arTrackingConfiguration={'ARWorldTrackingConfiguration'}
-      />
-      )
-  );
+  onCancelPress = () => {    
+    this.setState({searchModalVisible: false});  
+  }
+
+  onSearchModalPress = () => {    
+    this.setState({searchModalVisible: true});  
+  }
+
+  onRemoveObjectPress = () => {    
+    if (this.threeModel) {      
+      this.scene.remove(this.threeModel);    
+    }  
+  }
+
+  onAddObjectPress = () => {    
+    // Remove the current object...    
+    this.onRemoveObjectPress();     
+    // Add the current object...      
+    GooglePoly.getThreeModel(this.state.currentAsset, function(object)   
+    {      
+      this.threeModel = object;      
+      ExpoTHREE.utils.scaleLongestSideToSize(object, 0.75);      
+      object.position.z = -3;      
+      this.scene.add(object);    
+    }.bind(this), function(error) {      
+      console.log(error);    
+    });  
+  }
+
+  render () {
+    return (
+      <View style={{flex:1}}>
+        {/* <GraphicsView
+        style={{ flex: 1 }}
+        onContextCreate={onContextCreate}
+        onRender={onRender}
+        onResize={onResize}
+        isArEnabled
+        isArRunningStateEnabled
+        isArCameraStateEnabled
+        arTrackingConfiguration={'ARWorldTrackingConfiguration'}
+        /> */}
+        <ExpoGraphics.View style={{flex:1}}
+          onContextCreate={this.onContextCreate}
+          onRender={this.onRender}
+          arEnabled={true}
+        />
+        <Modal 
+        visible={this.state.searchModalVisible} 
+        animationType="slide">
+          <SearchableGooglePolyAssetList
+            googlePoly={this.googlePoly}
+            onCancelPress={this.onCancelPress}
+            onAssetPress={this.onAssetPress}
+          />
+        </Modal>
+        <Icon.Button size={40} name="plus" backgroundColor="transparent" 
+          onPress={this.onAddObjectPress} />            
+        <Icon.Button size={40} name="magnify" backgroundColor="transparent" 
+          onPress={this.onSearchModalPress} />            
+        <Icon.Button size={40} name="minus" backgroundColor="transparent" 
+          onPress={this.onRemoveObjectPress} />
+      </View>
+    )
+  }
 }
