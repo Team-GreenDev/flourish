@@ -9,11 +9,14 @@ import { addPost } from '../../../store/slices/posts';
 
 
 export default function UploadScreen({ history }) {
-  const [photo, setPhoto] = React.useState('');
+  // using dispatch & useSelector to get information from the redux store
   const dispatch = useDispatch();
   const currentPhoto = useSelector(state => state.photo.currentPhoto);
 
+  // local state to keep track of current photo being uploaded
+  const [photo, setPhoto] = React.useState('');
 
+  // storing cloudinary url using our 
   const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dsw29lceg/upload';
   function AppTextInput({ icon, ...otherProps }) {
     return (
@@ -57,6 +60,29 @@ export default function UploadScreen({ history }) {
       setPhoto(data.url);
     }).catch(err => console.log(err))
   };
+
+  const cameraPhoto = async () => {
+    console.log(currentPhoto, 'photo')
+    let base64Img = `data:image/jpg;base64,${currentPhoto.base64}`;
+    console.log(base64Img, 'base');
+    let data = {
+      "file": base64Img,
+      "upload_preset": "cdqppny0"
+    }
+    console.log(data, 'data')
+
+    fetch(CLOUDINARY_URL, {
+      body: JSON.stringify(data),
+      headers: {
+        'content-type': 'application/json'
+      },
+      method: 'POST',
+    }).then(async r => {
+      let data = await r.json()
+      console.log(data)
+      setPhoto(data.url);
+    }).catch(err => console.log(err))
+  }
   return (
     <Formik
     initialValues={{description: '', tag: '', image: ''}}
@@ -101,16 +127,14 @@ export default function UploadScreen({ history }) {
        </SafeAreaView>
           <View style={styles.iconsView}>
           <TouchableOpacity>
-            <Link to='/camera'>
            <Ionicons style={styles.icon} name="ios-camera" size={50} onPress={() => history.push("/camera")}/>
-            </Link>
-         </TouchableOpacity> 
+         </TouchableOpacity>
          <TouchableOpacity>
            <Ionicons style={styles.icon} name="ios-image" size={50} onPress={() => openImagePickerAsync()}/>
          </TouchableOpacity>
        </View>
           <Button onPress={handleSubmit} title="post" />
-          <Button onPress={() => console.log(currentPhoto.uri)} title="test" />
+          <Button onPress={() => console.log(cameraPhoto())} title="test" />
         </>
   )}
     </Formik>
