@@ -50,6 +50,11 @@ export default function ARScreen() {
     light.position.set( 3, 3, 3 )
     scene.add(light);
     
+    var googlePoly = new GooglePoly(poly);
+    googlePoly.setSearchParams('duck');
+    googlePoly.getSearchResults().then(function(results) {
+      console.log('Got some results!', results);
+    });
     // ---------------Attempt with GLTFLoader (Error: isTrusted: false...)------------------------
     // const loader = new GLTFLoader();
     // // this utility function allows you to use any three.js
