@@ -458,10 +458,10 @@ export default class HomeScreen extends React.Component {
   onRender = (delta) => {
 
     // Rotate the object...
-    if (this.threeModel) {
-      this.threeModel.rotation.x += 2 * delta;
-      this.threeModel.rotation.y += 1.5 * delta;
-    }
+    // if (this.threeModel) {
+    //   this.threeModel.rotation.x += 2 * delta;
+    //   this.threeModel.rotation.y += 1.5 * delta;
+    // }
 
     // Render...
     this.renderer.render(this.scene, this.camera);
@@ -475,7 +475,7 @@ export default class HomeScreen extends React.Component {
     GooglePoly.getThreeModel(this.state.currentAsset, function(object) {
       this.threeModel = object;
       ExpoTHREE.utils.scaleLongestSideToSize(object, 0.75);
-      object.position.z = -3;
+      object.position.z = -1;
       this.scene.add(object);
     }.bind(this), function(error) {
       console.log(error);
@@ -501,7 +501,11 @@ export default class HomeScreen extends React.Component {
     this.setState({searchModalVisible: true});
   }
 
-    // When the phone rotates, or the view changes size, this method will be called.
+  onExitPress = () => {
+    console.log('exit ARScreen')
+  }
+
+  // When the phone rotates, or the view changes size, this method will be called.
   onResize = ({ x, y, scale, width, height }) => {
   // Let's stop the function if we haven't setup our scene yet
     if (!renderer) {
@@ -532,11 +536,18 @@ export default class HomeScreen extends React.Component {
           arTrackingConfiguration={'ARWorldTrackingConfiguration'}
           />
 
-        <View style={{position:"absolute", bottom: 0, flex: 1, flexDirection: "row"}}>
+        <View style={{position:"absolute", bottom: 25, flex: 1, flexDirection: "row"}}>
           <View style={{flex: 1, flexDirection: "row", justifyContent: "space-between"}}>
+            <View></View>
+            <View></View>
+            <View></View>
+            <View></View>
+            <View></View>
+            <View></View>
             <Icon.Button size={40} name="plus" backgroundColor="transparent" onPress={this.onAddObjectPress} />
             <Icon.Button size={40} name="magnify" backgroundColor="transparent" onPress={this.onSearchModalPress} />
             <Icon.Button size={40} name="minus" backgroundColor="transparent" onPress={this.onRemoveObjectPress} />
+            <Icon.Button size={40} name="close" backgroundColor="transparent" onPress={this.onExitPress} />
           </View>
         </View>
 

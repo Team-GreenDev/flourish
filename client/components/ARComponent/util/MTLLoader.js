@@ -4,6 +4,8 @@
  * @author angelxuanchang
  */
 
+import { LoadingManager } from "three";
+
 THREE.MTLLoader = function ( manager ) {
 
 	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
@@ -532,7 +534,9 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 	loadTexture: function ( url, mapping, onLoad, onProgress, onError ) {
 
 		var texture;
-		var loader = THREE.Loader.Handlers.get( url );
+    // var loader = THREE.Loader.Handlers.get( url );
+    // var loader = THREE.LoadingManager.getHandler( url );
+    var loader = THREE.DefaultLoadingManager.getHandler(url);
 		var manager = ( this.manager !== undefined ) ? this.manager : THREE.DefaultLoadingManager;
 
 		if ( loader === null ) {
