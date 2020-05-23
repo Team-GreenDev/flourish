@@ -1,10 +1,16 @@
+/**
+ * Loads a Wavefront .mtl file specifying materials
+ *
+ * @author angelxuanchang
+ */
+
 THREE.MTLLoader = function ( manager ) {
 
-	THREE.Loader.call( this, manager );
+	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
 
 };
 
-THREE.MTLLoader.prototype = Object.assign( Object.create( THREE.Loader.prototype ), {
+THREE.MTLLoader.prototype = {
 
 	constructor: THREE.MTLLoader,
 
@@ -16,31 +22,78 @@ THREE.MTLLoader.prototype = Object.assign( Object.create( THREE.Loader.prototype
 	 * @param {Function} [onProgress] - Callback for download progress.
 	 * @param {Function} [onError] - Callback for download errors.
 	 *
-	 * @see setPath setResourcePath
+	 * @see setPath setTexturePath
 	 *
 	 * @note In order for relative texture references to resolve correctly
-	 * you must call setResourcePath() explicitly prior to load.
+	 * you must call setPath and/or setTexturePath explicitly prior to load.
 	 */
 	load: function ( url, onLoad, onProgress, onError ) {
 
 		var scope = this;
 
-		var path = ( this.path === '' ) ? THREE.LoaderUtils.extractUrlBase( url ) : this.path;
-
 		var loader = new THREE.FileLoader( this.manager );
 		loader.setPath( this.path );
 		loader.load( url, function ( text ) {
 
-			onLoad( scope.parse( text, path ) );
+			onLoad( scope.parse( text ) );
 
 		}, onProgress, onError );
+
+	},
+
+	/**
+	 * Set base path for resolving references.
+	 * If set this path will be prepended to each loaded and found reference.
+	 *
+	 * @see setTexturePath
+	 * @param {String} path
+	 *
+	 * @example
+	 *     mtlLoader.setPath( 'assets/obj/' );
+	 *     mtlLoader.load( 'my.mtl', ... );
+	 */
+	setPath: function ( path ) {
+
+		this.path = path;
+
+	},
+
+	/**
+	 * Set base path for resolving texture references.
+	 * If set this path will be prepended found texture reference.
+	 * If not set and setPath is, it will be used as texture base path.
+	 *
+	 * @see setPath
+	 * @param {String} path
+	 *
+	 * @example
+	 *     mtlLoader.setPath( 'assets/obj/' );
+	 *     mtlLoader.setTexturePath( 'assets/textures/' );
+	 *     mtlLoader.load( 'my.mtl', ... );
+	 */
+	setTexturePath: function ( path ) {
+
+		this.texturePath = path;
+
+	},
+
+	setBaseUrl: function ( path ) {
+
+		console.warn( 'THREE.MTLLoader: .setBaseUrl() is deprecated. Use .setTexturePath( path ) for texture path or .setPath( path ) for general base path instead.' );
+
+		this.setTexturePath( path );
+
+	},
+
+	setCrossOrigin: function ( value ) {
+
+		this.crossOrigin = value;
 
 	},
 
 	setMaterialOptions: function ( value ) {
 
 		this.materialOptions = value;
-		return this;
 
 	},
 
@@ -50,12 +103,12 @@ THREE.MTLLoader.prototype = Object.assign( Object.create( THREE.Loader.prototype
 	 * @param {String} text - Content of MTL file
 	 * @return {THREE.MTLLoader.MaterialCreator}
 	 *
-	 * @see setPath setResourcePath
+	 * @see setPath setTexturePath
 	 *
 	 * @note In order for relative texture references to resolve correctly
-	 * you must call setResourcePath() explicitly prior to parse.
+	 * you must call setPath and/or setTexturePath explicitly prior to parse.
 	 */
-	parse: function ( text, path ) {
+	parse: function ( text ) {
 
 		var lines = text.split( '\n' );
 		var info = {};
@@ -89,9 +142,9 @@ THREE.MTLLoader.prototype = Object.assign( Object.create( THREE.Loader.prototype
 				info = { name: value };
 				materialsInfo[ value ] = info;
 
-			} else {
+			} else if ( info ) {
 
-				if ( key === 'ka' || key === 'kd' || key === 'ks' || key === 'ke' ) {
+				if ( key === 'ka' || key === 'kd' || key === 'ks' ) {
 
 					var ss = value.split( delimiter_pattern, 3 );
 					info[ key ] = [ parseFloat( ss[ 0 ] ), parseFloat( ss[ 1 ] ), parseFloat( ss[ 2 ] ) ];
@@ -106,7 +159,7 @@ THREE.MTLLoader.prototype = Object.assign( Object.create( THREE.Loader.prototype
 
 		}
 
-		var materialCreator = new THREE.MTLLoader.MaterialCreator( this.resourcePath || path, this.materialOptions );
+		var materialCreator = new THREE.MTLLoader.MaterialCreator( this.texturePath || this.path, this.materialOptions );
 		materialCreator.setCrossOrigin( this.crossOrigin );
 		materialCreator.setManager( this.manager );
 		materialCreator.setMaterials( materialsInfo );
@@ -114,10 +167,10 @@ THREE.MTLLoader.prototype = Object.assign( Object.create( THREE.Loader.prototype
 
 	}
 
-} );
+};
 
 /**
- * Create a new THREE.MTLLoader.MaterialCreator
+ * Create a new THREE-MTLLoader.MaterialCreator
  * @param baseUrl - Url relative to which textures are loaded
  * @param options - Set of options on how to construct the materials
  *                  side: Which side to apply the material
@@ -149,12 +202,11 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
 	constructor: THREE.MTLLoader.MaterialCreator,
 
-	crossOrigin: 'anonymous',
+	crossOrigin: 'Anonymous',
 
 	setCrossOrigin: function ( value ) {
 
 		this.crossOrigin = value;
-		return this;
 
 	},
 
@@ -355,13 +407,6 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
 					break;
 
-				case 'ke':
-
-					// Emissive using RGB values
-					params.emissive = new THREE.Color().fromArray( value );
-
-					break;
-
 				case 'map_kd':
 
 					// Diffuse texture map
@@ -378,14 +423,6 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
 					break;
 
-				case 'map_ke':
-
-					// Emissive map
-
-					setMapForType( "emissiveMap", value );
-
-					break;
-
 				case 'norm':
 
 					setMapForType( "normalMap", value );
@@ -398,15 +435,6 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 					// Bump texture map
 
 					setMapForType( "bumpMap", value );
-
-					break;
-
-				case 'map_d':
-
-					// Alpha map
-
-					setMapForType( "alphaMap", value );
-					params.transparent = true;
 
 					break;
 
@@ -436,9 +464,9 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 
 					if ( this.options && this.options.invertTrProperty ) n = 1 - n;
 
-					if ( n > 0 ) {
+					if ( n < 1 ) {
 
-						params.opacity = 1 - n;
+						params.opacity = n;
 						params.transparent = true;
 
 					}
@@ -504,8 +532,8 @@ THREE.MTLLoader.MaterialCreator.prototype = {
 	loadTexture: function ( url, mapping, onLoad, onProgress, onError ) {
 
 		var texture;
+		var loader = THREE.Loader.Handlers.get( url );
 		var manager = ( this.manager !== undefined ) ? this.manager : THREE.DefaultLoadingManager;
-		var loader = manager.getHandler( url );
 
 		if ( loader === null ) {
 
