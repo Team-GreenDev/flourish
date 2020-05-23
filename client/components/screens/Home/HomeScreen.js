@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { loadPosts, likePost } from '../../store/slices/posts';
+import { loadPosts, likePost } from '../../../store/slices/posts';
+import { clickedUserAssigned } from '../../../store/slices/users';
+
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 
-export default function HomeScreen({ likedPosts }) {
+export default function HomeScreen({ likedPosts, history }) {
   const users = useSelector(state => state.users)
   const posts = useSelector(state => state.posts)
   const dispatch = useDispatch();
@@ -21,6 +23,10 @@ export default function HomeScreen({ likedPosts }) {
     dispatch(likePost(post));
   }
 
+  const handlePress = (user) => {
+   dispatch(clickedUserAssigned(user))
+   history.push("/profile");
+  } 
 
   return (
     <ScrollView styles={styles.container}>
@@ -28,14 +34,14 @@ export default function HomeScreen({ likedPosts }) {
         ? (<View><Text>loading</Text></View>)
         : (posts.list.slice(0).reverse().map(post => {
 
-          const name = getUserById(post.user_id)[0].username;
+          const user = getUserById(post.user_id)[0];
           return (
           <View key={post.id}>
             <Text> </Text>
             <View style={styles.post}>
               <Image style={styles.image} source={{ uri: post.url }}/>
               <View style={styles.likesContainer}>
-              <Text style={styles.username}>{name}</Text>
+              <Text style={styles.username} onPress={() => handlePress(user)}>{user.username}</Text>
               <TouchableOpacity style={{flexDirection: 'row'}}>
                     <MaterialCommunityIcons
                     name={"flower-tulip"}

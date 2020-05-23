@@ -11,6 +11,7 @@ const slice = createSlice({
     list: [],
     loading: false,
     currentUserId: 1,
+    clickedUser: {},
   },
   // actions => action handlers
   reducers: {
@@ -32,6 +33,10 @@ const slice = createSlice({
     userAdded: (users, action) => {
       users.list.push(action.payload.data);
     },
+    // adds a plant from the payload by pushing it to the current list in state
+    clickedUserAssigned: (users, action) => {
+      users.clickedUser = action.payload;
+    },
   },
 });
 
@@ -41,6 +46,8 @@ const {
   usersRequested,
   usersRequestFailed,
 } = slice.actions;
+
+export const { clickedUserAssigned } = slice.actions;
 
 export default slice.reducer;
 
