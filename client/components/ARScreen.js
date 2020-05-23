@@ -14,7 +14,7 @@ import { Text, View, TouchableOpacity } from 'react-native';
 import GooglePoly from './GooglePoly';
 const poly = 'AIzaSyD4Sa0WT6oQlE52pMlcurzaNKrz2SEkj6c';
 
-export default function ARScreen() {
+export default class ARScreen extends React.Component {
   // let renderer, scene, camera, mesh;
   // Ask for camera permission on load
   // useEffect(() => {
@@ -29,7 +29,7 @@ export default function ARScreen() {
   // }, []);
 
   // Main function for creating Augmented Reality with 3D Models
-  const onContextCreate = async ({ gl, scale: pixelRatio, width, height }) => {
+  onContextCreate = async ({ gl, scale: pixelRatio, width, height }) => {
     // // This will allow ARKit to collect Horizontal surfaces
     // AR.setPlaneDetection(AR.PlaneDetectionTypes.Horizontal);
     // renderer = new Renderer({ gl, pixelRatio, width, height });
@@ -260,7 +260,7 @@ export default function ARScreen() {
   // };
 
   // When the phone rotates, or the view changes size, this method will be called.
-  const onResize = ({ x, y, scale, width, height }) => {
+  onResize = ({ x, y, scale, width, height }) => {
   // Let's stop the function if we haven't setup our scene yet
     if (!renderer) {
       return;
@@ -272,7 +272,7 @@ export default function ARScreen() {
   };
 
     // Called every frame.
-  const onRender = () => {
+  onRender = () => {
     // This will make the points get more rawDataPoints from Expo.AR
     // points.update();
     // Finally render the scene with the AR Camera
