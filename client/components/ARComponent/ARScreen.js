@@ -474,8 +474,8 @@ export default class HomeScreen extends React.Component {
     // Add the current object...
     GooglePoly.getThreeModel(this.state.currentAsset, function(object) {
       this.threeModel = object;
-      ExpoTHREE.utils.scaleLongestSideToSize(object, 0.25);
-      object.position.z = -0.4;
+      ExpoTHREE.utils.scaleLongestSideToSize(object, 0.75);
+      object.position.z = -1;
       this.scene.add(object);
     }.bind(this), function(error) {
       console.log(error);
