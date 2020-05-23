@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, Modal } from 'react-native';
 // import { Asset } from 'expo-asset';
 // import { AR } from 'expo';
 // import * as Permissions from 'expo-permissions';
@@ -11,8 +11,12 @@ import { Text, View, TouchableOpacity } from 'react-native';
 // import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 // import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
 // import MODEL from '../../flower.json';
+import Expo from 'expo';
+import ExpoTHREE, { three } from 'expo-three';
+import ExpoGraphics from 'expo-graphics';
 import GooglePoly from './GooglePoly';
 const poly = 'AIzaSyD4Sa0WT6oQlE52pMlcurzaNKrz2SEkj6c';
+console.disableYellowBox= true;
 
 export default class ARScreen extends React.Component {
   // let renderer, scene, camera, mesh;
@@ -29,7 +33,7 @@ export default class ARScreen extends React.Component {
   // }, []);
 
   // Main function for creating Augmented Reality with 3D Models
-  onContextCreate = async ({ gl, scale: pixelRatio, width, height }) => {
+  // onContextCreate = async ({ gl, scale: pixelRatio, width, height }) => {
     // // This will allow ARKit to collect Horizontal surfaces
     // AR.setPlaneDetection(AR.PlaneDetectionTypes.Horizontal);
     // renderer = new Renderer({ gl, pixelRatio, width, height });
@@ -50,11 +54,11 @@ export default class ARScreen extends React.Component {
     // light.position.set( 3, 3, 3 )
     // scene.add(light);
     
-    var googlePoly = new GooglePoly(poly);
-    googlePoly.setSearchParams('duck');
-    googlePoly.getSearchResults().then(function(results) {
-      console.log('Got some results!', results);
-    });
+    // var googlePoly = new GooglePoly(poly);
+    // googlePoly.setSearchParams('duck');
+    // googlePoly.getSearchResults().then(function(results) {
+    //   console.log('Got some results!', results);
+    // });
     // ---------------Attempt with GLTFLoader (Error: isTrusted: false...)------------------------
     // const loader = new GLTFLoader();
     // // this utility function allows you to use any three.js
@@ -234,7 +238,8 @@ export default class ARScreen extends React.Component {
     // scene.add(cube);
 
     // loadModel();
-  }
+  // }
+
   // ---------Attempt made outside of onContextCreate----------------------
   // const loadModel = () => {
   //   var loader = new THREE.ObjectLoader();
@@ -259,25 +264,49 @@ export default class ARScreen extends React.Component {
   //   );
   // };
 
-  // When the phone rotates, or the view changes size, this method will be called.
-  onResize = ({ x, y, scale, width, height }) => {
-  // Let's stop the function if we haven't setup our scene yet
-    if (!renderer) {
-      return;
-    }
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-    renderer.setPixelRatio(scale);
-    renderer.setSize(width, height);
-  };
+  // // When the phone rotates, or the view changes size, this method will be called.
+  // onResize = ({ x, y, scale, width, height }) => {
+  // // Let's stop the function if we haven't setup our scene yet
+  //   if (!renderer) {
+  //     return;
+  //   }
+  //   camera.aspect = width / height;
+  //   camera.updateProjectionMatrix();
+  //   renderer.setPixelRatio(scale);
+  //   renderer.setSize(width, height);
+  // };
 
-    // Called every frame.
-  onRender = () => {
-    // This will make the points get more rawDataPoints from Expo.AR
-    // points.update();
-    // Finally render the scene with the AR Camera
-    renderer.render(scene, camera);
-  };
+  //   // Called every frame.
+  // onRender = () => {
+  //   // This will make the points get more rawDataPoints from Expo.AR
+  //   // points.update();
+  //   // Finally render the scene with the AR Camera
+  //   renderer.render(scene, camera);
+  // };
+
+  onContextCreate = async ({gl, scale, width, height, arSession}) => {
+    // Initialize renderer…
+    this.renderer = ExpoTHREE.createRenderer({gl});
+    this.renderer = setPixelRatio(scale);
+    this.renderer.setSize(width, height);
+    
+    // Initialize scene…
+    this.scene = new THREE.Scene();
+    this.scene.background =  
+        ExpoTHREE.createARBackgroundTexture(arSession, this.renderer);
+    
+    // Initialize camera…
+    this.camera = ExpoTHREE.createARCamera(arSession, width / scale,
+        height / scale, 0.01, 1000);
+    
+    // Initialize lighting…
+    var ambientLight = new THREE.AmbientLight(0xaaaaaa);
+    this.scene.add(ambientLight);
+  }
+
+  onRender = (delta) => {
+    this.renderer.render(this.scene, this.camera);
+  }
 
   onCancelPress = () => {    
     this.setState({searchModalVisible: false});  
