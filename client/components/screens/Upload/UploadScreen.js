@@ -1,26 +1,24 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, Button, TouchableOpacity, Image, SafeAreaView, Platform, Text, ScrollView } from 'react-native';
-import { Ionicons, AntDesign, Feather } from '@expo/vector-icons';
+import { StyleSheet, View, TextInput, TouchableOpacity, Image, SafeAreaView, Platform, Text, ScrollView } from 'react-native';
+import { Ionicons, AntDesign, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { Formik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
-import { PLANT_ID_KEY } from 'react-native-dotenv';
+import { PLANT_ID_KEY, CLOUDINARY_URL } from 'react-native-dotenv';
 
 import PlantList from './PlantList';
 import { addPost } from '../../../store/slices/posts';
-import { setCurrentPhoto, setPlantIdData, setCloudinaryData } from '../../../store/slices/photo';
+import { setCurrentPhoto, setPlantIdData, setPhotoInForm } from '../../../store/slices/photo';
 import { loadPlants } from '../../../store/slices/plants';
 
 export default function UploadScreen({ history }) {
   // using dispatch & useSelector to get information from the redux store
   const dispatch = useDispatch();
+  const photoInForm = useSelector(state => state.photo.photoInForm);
   const currentPhoto = useSelector(state => state.photo.currentPhoto);
   const plants = useSelector(state => state.plants);
-  const cloudinaryData = useSelector(state => state.photo.cloudinaryData);
   const plantIdData = useSelector(state => state.photo.plantIdData);
-
-  // storing cloudinary url using our
-  const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dsw29lceg/upload';
+  const currentUser = useSelector(state => state.auth.currentUser);
 
   const openImagePickerAsync = async () => {
     // function to ask permission to use camera roll
@@ -39,21 +37,13 @@ export default function UploadScreen({ history }) {
 
     // dispatch chosen image to store
     dispatch(setCurrentPhoto(pickerResult))
+
     if (pickerResult.cancelled === true) {
       return;
     }
 
     // declare and assign base64 version of image picked from camera roll
     let base64Img = `data:image/jpg;base64,${pickerResult.base64}`;
-
-    // format body of request to send to cloudinary
-    let data = {
-      "file": base64Img,
-      "upload_preset": "cdqppny0"
-    }
-
-    // add cloudinary data to store for fetch request
-    dispatch(setCloudinaryData(data));
 
     // add plantId data to store for fetch request
     dispatch(setPlantIdData({
@@ -68,51 +58,36 @@ export default function UploadScreen({ history }) {
                         "taxonomy",
                         "synonyms"]
     }));
-  }
 
-  const sendToCloudinary = () => {
-    // post request to cloudinary
+    // format body of request to send to cloudinary
+    let data = {
+      "file": base64Img,
+      "upload_preset": "cdqppny0"
+    }
+
     fetch(CLOUDINARY_URL, {
-      body: JSON.stringify(cloudinaryData),
+      body: JSON.stringify(data),
       headers: {
         'content-type': 'application/json'
       },
       method: 'POST',
     }).then(async result => {
       let data = await result.json()
-      setPhoto(data.url);
+      dispatch(setPhotoInForm(data.url));
     }).catch(err => console.log(err))
-  };
+  }
 
   // Plant Id Lookup
   const plantIdLookUp = () => {
-    if(currentPhoto) {
+    if(currentPhoto.uri) {
       dispatch(loadPlants(plantIdData));
+    } else {
+      alert('Add a photo of a plant!')
     }
   }
 
-  // // function to be used to post to cloudiary with base64 image from photo taken from camera
-  //   // not in use
-  // const cameraPhoto = async () => {
-  //   let base64Img = `data:image/jpg;base64,${currentPhoto.base64}`;
-  //   let data = {
-  //     "file": base64Img,
-  //     "upload_preset": "cdqppny0"
-  //   }
-
-  //   fetch(CLOUDINARY_URL, {
-  //     body: JSON.stringify(data),
-  //     headers: {
-  //       'content-type': 'application/json'
-  //     },
-  //     method: 'POST',
-  //   }).then(async r => {
-  //     let data = await r.json()
-  //   }).catch(err => console.log(err))
-  // }
-
-   // function for formik input fields
-   function AppTextInput({ icon, ...otherProps }) {
+  // function for formik input fields
+  function AppTextInput({ icon, ...otherProps }) {
     return (
       <View style={styles.container}>
         <TextInput
@@ -124,19 +99,39 @@ export default function UploadScreen({ history }) {
     );
   }
 
-  return (
-    <ScrollView>
-      <Formik
-        initialValues={{description: '', tag: '', image: ''}}
-        onSubmit={values => {
-          values.image = photo;
+  const onSubmit = (values, {resetForm}) => {
+    // Use current photo from store
+    values.image = photoInForm;
+    if(values.image.length > 0){
+      if (values.description) {
+        if (values.tag) {
+          // Make a post
           dispatch(addPost({
             text: values.description,
             url: values.image,
             user_id: currentUser.id,
             tag: values.tag
           }));
-        }}
+
+          alert('You shared your post!');
+          resetForm({});
+          dispatch(setCurrentPhoto({}))
+        } else {
+          alert('Add a tag to your post');
+        }
+      } else {
+        alert('Add your description');
+      }
+    } else {
+      alert('Add your photo');
+    }
+  }
+
+  return (
+    <ScrollView>
+      <Formik
+        initialValues={{description: '', tag: '', image: ''}}
+        onSubmit={onSubmit}
       >
       {({handleChange, handleBlur, handleSubmit, values}) => (
         <>
@@ -154,6 +149,7 @@ export default function UploadScreen({ history }) {
           </SafeAreaView>
 
           <AppTextInput
+            value={values.description || ''}
             autoCapitalize="none"
             autoCorrect={false}
             onChangeText={handleChange("description")}
@@ -161,6 +157,7 @@ export default function UploadScreen({ history }) {
             textContentType="none"
           />
           <AppTextInput
+            value={values.tag || ''}
             autoCapitalize="none"
             autoCorrect={true}
             onChangeText={handleChange("tag")}
@@ -169,13 +166,11 @@ export default function UploadScreen({ history }) {
           />
 
           <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
-          {currentPhoto.uri ?
-            (<View style={{flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+            <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
               <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
                 <Feather name="share" size={24} color="white" style={{paddingRight: 7}}/>
-                <Text style={{color: "white", fontSize: 18, fontWeight: "bold"}}>Share Post</Text>
+                <Text style={{color: "white", fontSize: 18, fontWeight: "bold"}}>Post</Text>
               </TouchableOpacity>
-
 
             {plants.loading ? <Image source={require('../../../../assets/images/spinny.gif')} style={{width: 70, height: 70}}/>
               : <TouchableOpacity onPress={plantIdLookUp} style={styles.submitButton}>
@@ -183,8 +178,11 @@ export default function UploadScreen({ history }) {
                   <Text style={{color: "white", fontSize: 18, fontWeight: "bold"}}>Identify Plant</Text>
                 </TouchableOpacity>
             }
-            </View>)
-            : null }
+              <TouchableOpacity onPress={() => console.log('need to redirect to AR screen')} style={styles.submitButton}>
+                <MaterialCommunityIcons name="augmented-reality" size={24} color="white" style={{paddingRight: 7}}/>
+                <Text style={{color: "white", fontSize: 18, fontWeight: "bold"}}>View</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </>
       )}
