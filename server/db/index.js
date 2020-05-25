@@ -59,8 +59,8 @@ const getUserPosts = (req) => {
 
 // Adds new post
 const addPost = (req) => {
-  const { text, url, user_id } = req.body;
-  return pool.query(`INSERT INTO posts set user_id = ${user_id}, like_count = ${0}, url = '${url}', text = '${text}', created_at = NOW()`);
+  const { text, url, user_id, tag } = req.body;
+  return pool.query(`INSERT INTO posts set user_id = ${user_id}, like_count = ${0}, url = '${url}', text = '${text}', created_at = NOW(), tag = ${tag}`);
 };
 
 // Updating post by id
@@ -72,9 +72,17 @@ const updatePostById = (req) => {
 
 // LIKES QUERIES //
 
+// Update likes count on post
 const likePost = (req) => {
   const { id, user_id } = req.body;
   return pool.query(`UPDATE posts set like_count = like_count + 1 WHERE user_id = ${user_id} AND id = ${id}`);
+};
+
+
+// Get user total likes
+const getUserTotalLikes = (req) => {
+  const { id } = req.params;
+  return pool.query(`select total_like from users where id = ${id}`);
 };
 
 // COMMENTS QUERIES //
@@ -98,6 +106,12 @@ const getCommentsFromUserId = (req) => {
 const addComment = (req) => {
   const { comment_text, user_id, post_id } = req.body;
   return pool.query(`insert into comments set user_id = ${user_id}, post_id = ${post_id}, comment_text = '${comment_text}', created_at = NOW()`);
+};
+
+// Delete comment from post
+const deleteComment = (req) => {
+  const { id, user_id } = req.body;
+  return pool.query(`delete from comments where user_id = ${user_id} and id = ${id}`);
 };
 
 
@@ -129,9 +143,10 @@ const addMessage = (req) => {
 
 // Get all followers_id from user_id
 const getFollowersId = (req) => {
-  const id = parseInt(req.params.id, 10);
+  const { id } = req.params;
+  console.log(id);
   return pool.query(`select * from followers where user_id = ${id}`)
-    .then((followers) => Promise.all(followers.map((follower) => pool.query(`select * from users where pk = ${follower.follower_id}`))));
+    .then((followers) => Promise.all(followers.map((follower) => pool.query(`select * from users where id = ${follower.follower_id}`))));
 };
 
 // Follow new user
@@ -213,4 +228,6 @@ module.exports = {
   updatePostById,
   followNewUser,
   unFollowUser,
+  deleteComment,
+  getUserTotalLikes,
 };
