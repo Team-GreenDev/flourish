@@ -53,7 +53,7 @@ export default function HomeScreen({ likedPosts, history }) {
               </TouchableOpacity>
               </View>
               <Text style={styles.message}>{post.text}</Text>
-              <Text style={styles.tags}>#favplants #new2flourish</Text>
+              <Text style={styles.tags}>{post.tag}</Text>
             </View>
             <Text> </Text>
           </View>

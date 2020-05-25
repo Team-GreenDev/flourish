@@ -32,6 +32,13 @@ commentsRouter.post('/', (req, res) => {
     .catch((error) => res.status(500).send(error));
 });
 
+// Delete comment from database
+commentsRouter.patch('/deletecomment', (req, res) => {
+  db.deleteComment(req, res)
+    .then((comment) => res.status(200).send(comment))
+    .catch((error) => res.status(500).send(error));
+});
+
 module.exports = {
   commentsRouter,
 };

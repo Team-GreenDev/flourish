@@ -46,18 +46,13 @@ CREATE TABLE likes (
   user_id varchar(255)
 );
 
--- CREATE TABLE media (
---   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
---   type varchar(255),
---   url varchar(255)
--- );
-
 CREATE TABLE posts (
   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   user_id varchar(255),
   like_count int,
   url varchar(255),
   text varchar(255),
+  tag varchar(60),
   created_at datetime
 );
 
@@ -73,7 +68,7 @@ CREATE TABLE messages (
 CREATE TABLE followers (
   id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   user_id varchar(255),
-  follower_id int
+  follower_id varchar(255)
 );
 
 CREATE TABLE tags (
@@ -106,15 +101,15 @@ insert into users set id = "13", username = 'Mariana Ruiz', name_first = 'Marian
 insert into users set id = "14", username = 'Blake Taylor', name_first = 'Blake', name_last = 'Taylor', total_like = 5, image_url = 'https://randomuser.me/api/portraits/men/11.jpg', bio = 'I really like plants';
 
 /* add 5 posts */
-INSERT INTO posts set user_id = "108191618273119179607", like_count = 3, url = 'https://hgtvhome.sndimg.com/content/dam/images/hgtv/products/2019/9/19/3/RX_1800Flowers_Money-Plant.jpg.rend.hgtvcom.616.616.suffix/1568931656068.jpeg', text = 'Looking like an indoor lily pad jungle', created_at = NOW();
-INSERT INTO posts set user_id = "4", like_count = 6, url = 'https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1557258847-chinese-evergreen-houseplant-1557258690.jpg?crop=0.883xw:0.887xh;0.0849xw,0.0821xh&resize=480:*', text = 'Day one in the new terracotta planter', created_at = NOW();
-INSERT INTO posts set user_id = "5", like_count = 1, url = 'https://bloomscape.com/wp-content/uploads/2019/03/bloomscape_peopleplants-bird-of-paradise-e1570222918824-960x1165.jpg?ver=43337', text = 'Thinking about buying bird of paradise... any advice?', created_at = NOW();
-INSERT INTO posts set user_id = "108191618273119179607", like_count = 1, url = 'https://watchandlearn.scholastic.com/content/dam/classroom-magazines/watchandlearn/videos/animals-and-plants/plants/what-are-plants-/english/wall-2018-whatareplantsmp4.transform/content-tile-large/image.png', text = 'Portrait mode on the new plant', created_at = NOW();
-INSERT INTO posts set user_id = "3", like_count = 2, url = 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/high-angle-view-of-potted-cactus-royalty-free-image-1568039795.jpg?crop=0.752xw:1.00xh;0.139xw,0&resize=480:*', text = 'Check out this succulent collection', created_at = NOW();
-INSERT INTO posts set user_id = "108191618273119179607", like_count = 1, url = 'https://secure.img1-fg.wfcdn.com/im/69945387/resize-h600%5Ecompr-r85/8586/85860997/Fiddle+Leaf+Fig+Tree+with+Basket.jpg', text = 'My fiddle leaf fig is taking over the staircase', created_at = NOW();
-INSERT INTO posts set user_id = "2", like_count = 1, url = 'https://secure.img1-fg.wfcdn.com/im/42349074/resize-h600%5Ecompr-r85/8506/85069027/Tejeda+5+Tier+Self-Watering+Wood+Vertical+Garden.jpg', text = 'Five tier wall garden is looking healthy this month', created_at = NOW();
-INSERT INTO posts set user_id = "4", like_count = 1, url = 'https://secure.img1-fg.wfcdn.com/im/45353388/resize-h600%5Ecompr-r85/4797/47975478/Philodendron+Plant+in+Basket.jpg', text = 'Love this guy, adds life to this corner of our room', created_at = NOW();
-INSERT INTO posts set user_id = "1", like_count = 0, url = 'https://media.architecturaldigest.com/photos/5a94846e4692126e06f34f67/master/w_1600%2Cc_limit/popular-houseplants-pilea-peperomioides.jpg', text = 'Army of five, might even go pick up some more!', created_at = NOW();
+INSERT INTO posts set user_id = "108191618273119179607", like_count = 3, url = 'https://hgtvhome.sndimg.com/content/dam/images/hgtv/products/2019/9/19/3/RX_1800Flowers_Money-Plant.jpg.rend.hgtvcom.616.616.suffix/1568931656068.jpeg', text = 'Looking like an indoor lily pad jungle', created_at = NOW(), tag = '#indoorlife';
+INSERT INTO posts set user_id = "4", like_count = 6, url = 'https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1557258847-chinese-evergreen-houseplant-1557258690.jpg?crop=0.883xw:0.887xh;0.0849xw,0.0821xh&resize=480:*', text = 'Day one in the new terracotta planter', created_at = NOW(), tag = '#firstplant';
+INSERT INTO posts set user_id = "5", like_count = 1, url = 'https://bloomscape.com/wp-content/uploads/2019/03/bloomscape_peopleplants-bird-of-paradise-e1570222918824-960x1165.jpg?ver=43337', text = 'Thinking about buying bird of paradise... any advice?', created_at = NOW(), tag = '#SilvaThePlantGoat';
+INSERT INTO posts set user_id = "108191618273119179607", like_count = 1, url = 'https://watchandlearn.scholastic.com/content/dam/classroom-magazines/watchandlearn/videos/animals-and-plants/plants/what-are-plants-/english/wall-2018-whatareplantsmp4.transform/content-tile-large/image.png', text = 'Portrait mode on the new plant', created_at = NOW(), tag = '#portraitmode';
+INSERT INTO posts set user_id = "3", like_count = 2, url = 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/high-angle-view-of-potted-cactus-royalty-free-image-1568039795.jpg?crop=0.752xw:1.00xh;0.139xw,0&resize=480:*', text = 'Check out this succulent collection', created_at = NOW(), tag = '#myfavplants';
+INSERT INTO posts set user_id = "108191618273119179607", like_count = 1, url = 'https://secure.img1-fg.wfcdn.com/im/69945387/resize-h600%5Ecompr-r85/8586/85860997/Fiddle+Leaf+Fig+Tree+with+Basket.jpg', text = 'My fiddle leaf fig is taking over the staircase', created_at = NOW(), tag = '#figlife';
+INSERT INTO posts set user_id = "2", like_count = 1, url = 'https://secure.img1-fg.wfcdn.com/im/42349074/resize-h600%5Ecompr-r85/8506/85069027/Tejeda+5+Tier+Self-Watering+Wood+Vertical+Garden.jpg', text = 'Five tier wall garden is looking healthy this month', created_at = NOW(), tag = '#lookinghealthy';
+INSERT INTO posts set user_id = "4", like_count = 1, url = 'https://secure.img1-fg.wfcdn.com/im/45353388/resize-h600%5Ecompr-r85/4797/47975478/Philodendron+Plant+in+Basket.jpg', text = 'Love this guy, adds life to this corner of our room', created_at = NOW(), tag = '#growingstrong';
+INSERT INTO posts set user_id = "1", like_count = 0, url = 'https://media.architecturaldigest.com/photos/5a94846e4692126e06f34f67/master/w_1600%2Cc_limit/popular-houseplants-pilea-peperomioides.jpg', text = 'Army of five, might even go pick up some more!', created_at = NOW(), tag = '#thegreenteam';
 
 /* Message thread with user 1 */
 insert into messages set user_id = '1', recipient_id = '108191618273119179607', created_at = NOW(), text = 'Hey, I really like your posts!';
@@ -143,3 +138,16 @@ insert into messages set user_id = '108191618273119179607', recipient_id = '4', 
 
 /* Message thread with user 5 */
 insert into messages set user_id = '5', recipient_id = '108191618273119179607', created_at = NOW(), text = 'Hey how are you doing?!';
+
+/* Add 5 followers */
+insert into followers set user_id = '108191618273119179607', follower_id = '2';
+insert into followers set user_id = '108191618273119179607', follower_id = '3';
+insert into followers set user_id = '108191618273119179607', follower_id = '4';
+insert into followers set user_id = '108191618273119179607', follower_id = '5';
+insert into followers set user_id = '108191618273119179607', follower_id = '6';
+
+/* Add 5 users to follow back */
+insert into followers set user_id = '3', follower_id = '108191618273119179607';
+insert into followers set user_id = '4', follower_id = '108191618273119179607';
+insert into followers set user_id = '5', follower_id = '108191618273119179607';
+insert into followers set user_id = '6', follower_id = '108191618273119179607';
