@@ -5,8 +5,8 @@ const slice = createSlice({
   name: 'photo',
   initialState: {
     currentPhoto: {},
-    cloudinaryData: {},
     plantIdData: {},
+    photoInForm: {},
     loading: true,
   },
   // actions => action handlers
@@ -28,8 +28,8 @@ const slice = createSlice({
       photo.currentPhoto = action.payload;
     },
     // sets current user
-    setCloudinaryData: (photo, action) => {
-      photo.cloudinaryData = action.payload;
+    setPhotoInForm: (photo, action) => {
+      photo.photoInForm = action.payload;
     },
     // sets current user
     setPlantIdData: (photo, action) => {
@@ -38,6 +38,6 @@ const slice = createSlice({
   },
 });
 
-export const { setCurrentPhoto, setCloudinaryData, setPlantIdData } = slice.actions;
+export const { setCurrentPhoto, setPhotoInForm, setPlantIdData } = slice.actions;
 
 export default slice.reducer;
