@@ -34,7 +34,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         }}
       />
       <BottomTab.Screen
-        name="Upload"
+        name="Camera"
         component={UploadRouteScreen}
         options={{
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-add-circle" />,
@@ -63,14 +63,16 @@ function getHeaderTitle(route) {
 
   switch (routeName) {
     case 'Home':
-      return 'Main Feed';
+      return 'Flourish';
     case 'Search':
-      return 'Explore cool plants';
-    case 'Upload':
-      return 'Share your thoughts';
+      return '';
+    case 'Camera':
+      return '';
     case 'Notification':
       return 'What\'s happening!';
     case 'Profile':
-      return 'UserName';
+      return '';
+    case 'Messages':
+      return '';
   }
 }
