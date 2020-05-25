@@ -182,7 +182,7 @@ export default function UploadScreen({ history }) {
                   <Text style={{color: "white", fontSize: 18, fontWeight: "bold"}}>Identify Plant</Text>
                 </TouchableOpacity>
             }
-              <TouchableOpacity onPress={() => console.log('need to redirect to AR screen')} style={styles.submitButton}>
+              <TouchableOpacity onPress={() => history.push('/ar')} style={styles.submitButton}>
                 <MaterialCommunityIcons name="augmented-reality" size={24} color="white" style={{paddingRight: 7}}/>
                 <Text style={{color: "white", fontSize: 18, fontWeight: "bold"}}>View</Text>
               </TouchableOpacity>
