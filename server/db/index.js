@@ -142,11 +142,19 @@ const addMessage = (req) => {
 // FOLLOWERS QUERIES //
 
 // Get all followers_id from user_id
-const getFollowersId = (req) => {
+const getFollowersById = (req) => {
   const { id } = req.params;
   console.log(id);
   return pool.query(`select * from followers where user_id = ${id}`)
     .then((followers) => Promise.all(followers.map((follower) => pool.query(`select * from users where id = ${follower.follower_id}`))));
+};
+
+// Get all following by id
+const getFollowingById = (req) => {
+  const { id } = req.params;
+  console.log(id);
+  return pool.query(`select * from followers where follower_id = ${id}`)
+    .then((followers) => Promise.all(followers.map((follower) => pool.query(`select * from users where id = ${follower.user_id}`))));
 };
 
 // Follow new user
@@ -218,7 +226,7 @@ module.exports = {
   getRecipientMessages,
   getSentUserMessages,
   addMessage,
-  getFollowersId,
+  getFollowersById,
   getAllTags,
   addTag,
   getPostsFromTagId,
@@ -230,4 +238,5 @@ module.exports = {
   unFollowUser,
   deleteComment,
   getUserTotalLikes,
+  getFollowingById,
 };

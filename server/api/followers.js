@@ -19,7 +19,17 @@ followersRouter.post('/', (req, res) => {
 
 // Get all followers_ids from user_id
 followersRouter.get('/user/:id', (req, res) => {
-  db.getFollowersId(req, res)
+  db.getFollowersById(req, res)
+    .then((followers) => res.status(200).send(followers))
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send();
+    });
+});
+
+// Get all followers_ids from user_id
+followersRouter.get('/following/:id', (req, res) => {
+  db.getFollowingById(req, res)
     .then((followers) => res.status(200).send(followers))
     .catch((error) => {
       console.error(error);
