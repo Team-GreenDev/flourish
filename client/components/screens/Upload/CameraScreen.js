@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, TouchableOpacity, Button, Dimensions, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, TouchableOpacity, Button, StyleSheet } from 'react-native';
 import { Camera } from 'expo-camera';
-import { useSelector, useDispatch } from 'react-redux';
-import { setCurrentPhoto } from '../../../store/slices/photo';
+import { useDispatch } from 'react-redux';
+import { PLANT_ID_KEY, CLOUDINARY_URL } from 'react-native-dotenv';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+
+import { setCurrentPhoto, setPlantIdData, setPhotoInForm } from '../../../store/slices/photo';
 
 export default function CameraScreen({ history }) {
-
   // using dispatch & useSelector to get information form the store
   const dispatch = useDispatch();
-  const photo = useSelector(state => state.photo);
 
   // set up hooks to handle permission for camera, type of camera, and camera ref
   const [hasPermission, setHasPermission] = useState(null);
@@ -38,8 +39,11 @@ if (hasPermission === null) {
     <>
       <Camera style={styles.preview} type={type} ref={ref => {
         setCameraRef(ref) ;
-    }}>
-        <View>
+      }}>
+        <View style={styles.topContainer}>
+          <TouchableOpacity onPress={() => history.push("/")} style={{flex: 1}}>
+            <MaterialCommunityIcons name="keyboard-backspace" color="white" size={35} />
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setType(
@@ -48,65 +52,100 @@ if (hasPermission === null) {
                   : Camera.Constants.Type.back
               );
             }}>
-            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
+            <Ionicons name="ios-reverse-camera" size={50} color="white" style={{flex: 1}}/>
           </TouchableOpacity>
+        </View>
+        <View>
           <TouchableOpacity style={{alignSelf: 'center'}} onPress={async() => {
             if(cameraRef){
-              // this will save a photo taken from camera with normal file path
-              let photo = await cameraRef.takePictureAsync({
-                quality: .5,
-              });
-              // this will save a photo taken from camera with base64 image
-              let photoBase64 = await cameraRef.takePictureAsync({
+              let photoFromCamera = await cameraRef.takePictureAsync({
                 quality: .5,
                 base64: true
               });
-              console.log(photoBase64, 'base64');
-              console.log(photo, 'nonbase64');
-              dispatch(setCurrentPhoto(photo));
+
+              // sets current photo to view on upload page
+              dispatch(setCurrentPhoto({uri: photoFromCamera.uri}));
+
+              // declare and assign base64 version of image picked from camera roll
+              let base64Img = `data:image/jpg;base64,${photoFromCamera.base64}`;
+
+              // add plantId data to store for fetch request
+              dispatch(setPlantIdData({
+                api_key: PLANT_ID_KEY,
+                images: [base64Img],
+                modifiers: ["crops_fast", "similar_images"],
+                plant_language: "en",
+                plant_details: ["common_names",
+                                  "url",
+                                  "name_authority",
+                                  "wiki_description",
+                                  "taxonomy",
+                                  "synonyms"]
+              }));
+
+              // format body of request to send to cloudinary
+              let data = {
+                "file": base64Img,
+                "upload_preset": "cdqppny0"
+              }
+              fetch(CLOUDINARY_URL, {
+                body: JSON.stringify(data),
+                headers: {
+                  'content-type': 'application/json'
+                },
+                method: 'POST',
+              })
+              .then(async result => {
+                let data = await result.json()
+                dispatch(setPhotoInForm(data.url));
+              }).catch(err => console.log(err))
+
               history.push('/');
             }
           }}>
-            <View style={{
-               borderWidth: 2,
-               borderRadius: 50,
-               borderColor: 'white',
-               height: 50,
-               width:50,
-               display: 'flex',
-               justifyContent: 'center',
-               alignItems: 'center'}}
+            <View
+              style={{
+                borderWidth: 2,
+                borderRadius: 50,
+                borderColor: 'white',
+                height: 50,
+                width:50,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
             >
-              <View style={{
-                 borderWidth: 2,
-                 borderRadius:50,
-                 borderColor: 'white',
-                 height: 40,
-                 width:40,
-                 backgroundColor: 'white'}} >
+              <View
+                style={{
+                  borderWidth: 2,
+                  borderRadius:50,
+                  borderColor: 'white',
+                  height: 40,
+                  width:40,
+                  backgroundColor: 'white'
+                }} >
               </View>
             </View>
           </TouchableOpacity>
         </View>
       </Camera>
-      <View>
-      <Button title="back" onPress={() => history.push('/')}></Button>
-      </View>
-      </>
+    </>
   );
 }
-// this will allow camera to fit any iphone screen
-const { width: winWidth, height: winHeight } = Dimensions.get('window');
 
-// style for camera
 const styles = StyleSheet.create({
   preview: {
-      height: winHeight,
-      width: winWidth,
-      position: 'absolute',
-      left: 0,
-      top: 0,
-      right: 0,
-      bottom: 0,
+    height: "100%",
+    width: "100%",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingBottom: 12,
+    paddingHorizontal: 10,
   },
+  topContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+  }
 });

@@ -19,7 +19,6 @@ export default function HomeScreen({ likedPosts, history }) {
   }, [posts.postAdded])
 
   const addLike = (post) => {
-    console.log(post);
     dispatch(likePost(post));
   }
 

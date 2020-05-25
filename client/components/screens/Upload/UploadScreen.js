@@ -1,37 +1,25 @@
-import * as React from 'react';
-import { StyleSheet, View, TextInput, Button, TouchableOpacity, Image, SafeAreaView, Platform } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { StyleSheet, View, TextInput, TouchableOpacity, Image, SafeAreaView, Platform, Text, ScrollView, Alert } from 'react-native';
+import { Ionicons, AntDesign, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { Formik } from 'formik';
-import { Link } from 'react-router-native';
 import { useSelector, useDispatch } from 'react-redux';
+import { PLANT_ID_KEY, CLOUDINARY_URL } from 'react-native-dotenv';
+
+import PlantList from './PlantList';
 import { addPost } from '../../../store/slices/posts';
-import { setCurrentPhoto } from '../../../store/slices/photo';
-
-
+import { setCurrentPhoto, setPlantIdData, setPhotoInForm } from '../../../store/slices/photo';
+import { loadPlants } from '../../../store/slices/plants';
 
 export default function UploadScreen({ history }) {
   // using dispatch & useSelector to get information from the redux store
   const dispatch = useDispatch();
+  const photoInForm = useSelector(state => state.photo.photoInForm);
   const currentPhoto = useSelector(state => state.photo.currentPhoto);
-  console.log(currentPhoto);
+  const plants = useSelector(state => state.plants);
+  const plantIdData = useSelector(state => state.photo.plantIdData);
+  const currentUser = useSelector(state => state.auth.currentUser);
 
-
-  // storing cloudinary url using our
-  const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dsw29lceg/upload';
-
-  // function for formik input fields
-  function AppTextInput({ icon, ...otherProps }) {
-    return (
-      <View style={styles.container}>
-        <TextInput
-          placeholderTextColor="#6e6969"
-          style={styles.text}
-          {...otherProps}
-        />
-      </View>
-    );
-  }
   const openImagePickerAsync = async () => {
     // function to ask permission to use camera roll
     let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
@@ -49,6 +37,7 @@ export default function UploadScreen({ history }) {
 
     // dispatch chosen image to store
     dispatch(setCurrentPhoto(pickerResult))
+
     if (pickerResult.cancelled === true) {
       return;
     }
@@ -56,13 +45,26 @@ export default function UploadScreen({ history }) {
     // declare and assign base64 version of image picked from camera roll
     let base64Img = `data:image/jpg;base64,${pickerResult.base64}`;
 
+    // add plantId data to store for fetch request
+    dispatch(setPlantIdData({
+      api_key: PLANT_ID_KEY,
+      images: [base64Img],
+      modifiers: ["crops_fast", "similar_images"],
+      plant_language: "en",
+      plant_details: ["common_names",
+                        "url",
+                        "name_authority",
+                        "wiki_description",
+                        "taxonomy",
+                        "synonyms"]
+    }));
+
     // format body of request to send to cloudinary
     let data = {
       "file": base64Img,
       "upload_preset": "cdqppny0"
     }
 
-    // post request to cloudinary 
     fetch(CLOUDINARY_URL, {
       body: JSON.stringify(data),
       headers: {
@@ -71,45 +73,87 @@ export default function UploadScreen({ history }) {
       method: 'POST',
     }).then(async result => {
       let data = await result.json()
-      setPhoto(data.url);
-    }).catch(err => console.log(err))
-  };
-
-  // function to be used to post to cloudiary with base64 image from photo taken from camera
-    // not in use
-  const cameraPhoto = async () => {
-    let base64Img = `data:image/jpg;base64,${currentPhoto.base64}`;
-    let data = {
-      "file": base64Img,
-      "upload_preset": "cdqppny0"
-    }
-
-    fetch(CLOUDINARY_URL, {
-      body: JSON.stringify(data),
-      headers: {
-        'content-type': 'application/json'
-      },
-      method: 'POST',
-    }).then(async r => {
-      let data = await r.json()
+      dispatch(setPhotoInForm(data.url));
     }).catch(err => console.log(err))
   }
+
+  // Plant Id Lookup
+  const plantIdLookUp = () => {
+    if(currentPhoto.uri) {
+      dispatch(loadPlants(plantIdData));
+    } else {
+      Alert.alert('Add a photo of a plant!')
+    }
+  }
+
+  // function for formik input fields
+  function AppTextInput({ icon, ...otherProps }) {
+    return (
+      <View style={styles.container}>
+        <TextInput
+          placeholderTextColor="#6e6969"
+          style={styles.text}
+          {...otherProps}
+        />
+      </View>
+    );
+  }
+
+  const onSubmit = (values, {resetForm}) => {
+    // Use current photo from store
+    values.image = photoInForm;
+    if(values.image.length > 0){
+      if (values.description) {
+        if (values.tag) {
+          // Make a post
+          dispatch(addPost({
+            text: values.description,
+            url: values.image,
+            user_id: currentUser.id,
+            tag: values.tag
+          }));
+
+          // Alert user of successful post
+          Alert.alert('You shared your post!');
+
+          // resets the form and state to empty
+          resetForm({});
+          dispatch(setCurrentPhoto({}))
+          dispatch(setPhotoInForm(''))
+        } else {
+          Alert.alert('Add a tag to your post');
+        }
+      } else {
+        Alert.alert('Add your description');
+      }
+    } else {
+      Alert.alert('Add your photo');
+    }
+  }
+
   return (
-    <Formik
-    initialValues={{description: '', tag: '', image: ''}}
-    onSubmit={values => {
-      values.image = photo;
-      dispatch(addPost({
-        text: values.description,
-        url: values.image,
-        user_id: currentUser.id,
-        tag: values.tag
-      }));
-    }}
-    >
+    <ScrollView>
+      <Formik
+        initialValues={{description: '', tag: '', image: ''}}
+        onSubmit={onSubmit}
+      >
       {({handleChange, handleBlur, handleSubmit, values}) => (
         <>
+          <SafeAreaView style={styles.imageUploadView}>
+            {currentPhoto.uri ? <Image style={styles.imageUpload} source={{uri: currentPhoto.uri}} />
+              : <View style={styles.imageUpload}><Text style={styles.imageUploadCaption}t>Add Your image here!</Text></View>}
+            <View style={styles.iconsView}>
+              <TouchableOpacity>
+                <Ionicons style={styles.icon} name="ios-camera" size={60} onPress={() => history.push("/camera")}/>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Ionicons style={styles.icon} name="ios-image" size={50} onPress={() => openImagePickerAsync()}/>
+              </TouchableOpacity>
+            </View>
+          </SafeAreaView>
+
           <AppTextInput
+            value={values.description || ''}
             autoCapitalize="none"
             autoCorrect={false}
             onChangeText={handleChange("description")}
@@ -117,29 +161,41 @@ export default function UploadScreen({ history }) {
             textContentType="none"
           />
           <AppTextInput
+            value={values.tag || ''}
             autoCapitalize="none"
             autoCorrect={true}
             onChangeText={handleChange("tag")}
             placeholder="tags"
             textContentType="none"
           />
-          <SafeAreaView style={styles.imageUploadView}>
-       {currentPhoto.uri === '' ? <View></View> : <Image style={styles.imageUpload} source={{uri: currentPhoto.uri}} />}
-       </SafeAreaView>
-          <View style={styles.iconsView}>
-          <TouchableOpacity>
-           <Ionicons style={styles.icon} name="ios-camera" size={50} onPress={() => history.push("/camera")}/>
-         </TouchableOpacity>
-         <TouchableOpacity>
-           <Ionicons style={styles.icon} name="ios-image" size={50} onPress={() => openImagePickerAsync()}/>
-         </TouchableOpacity>
-       </View>
-          <Button onPress={handleSubmit} title="post" />
+
+          <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+            <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+              <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
+                <Feather name="share" size={24} color="white" style={{paddingRight: 7}}/>
+                <Text style={{color: "white", fontSize: 18, fontWeight: "bold"}}>Post</Text>
+              </TouchableOpacity>
+
+            {plants.loading ? <Image source={require('../../../../assets/images/spinny.gif')} style={{width: 70, height: 70}}/>
+              : <TouchableOpacity onPress={plantIdLookUp} style={styles.submitButton}>
+                  <AntDesign name="idcard" size={24} color="white" style={{paddingRight: 7}}/>
+                  <Text style={{color: "white", fontSize: 18, fontWeight: "bold"}}>Identify Plant</Text>
+                </TouchableOpacity>
+            }
+              <TouchableOpacity onPress={() => console.log('need to redirect to AR screen')} style={styles.submitButton}>
+                <MaterialCommunityIcons name="augmented-reality" size={24} color="white" style={{paddingRight: 7}}/>
+                <Text style={{color: "white", fontSize: 18, fontWeight: "bold"}}>View</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </>
-  )}
-    </Formik>
+      )}
+      </Formik>
+      <PlantList />
+    </ScrollView>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#f8f4f4",
@@ -150,31 +206,51 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   icon: {
-  margin: 5,
-  color: 'forestgreen',
+    marginHorizontal: 10,
+    marginBottom: -5,
+    color: 'forestgreen',
   },
   text: {
     color: "#0c0c0c",
     fontSize: 18,
     fontFamily: Platform.OS === "android" ? "Roboto" : "Avenir",
   },
-   input: {
-   height: 150,
-     backgroundColor: '#ede9d9'
-   },
-   iconsView: {
-   flexDirection: 'row',
-    justifyContent: 'center'
-   },
-   imageUpload: {
-    margin: 5,
-    width: 125,
-    height: 125,
-    borderColor: "black",
-    borderWidth: 2
+  input: {
+    height: 150,
+    backgroundColor: '#ede9d9'
+  },
+  iconsView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: "center",
+  },
+  imageUpload: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+    width: 300,
+    height: 300,
+    borderColor: "gray",
+    borderWidth: 2,
+    borderRadius: 10,
+  },
+  imageUploadCaption: {
+    fontSize: 20,
   },
   imageUploadView: {
-    flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: "center",
+  },
+  submitButton: {
+    marginVertical: 0,
+    marginHorizontal: 5,
+    borderColor: "#000",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "forestgreen",
+    flexDirection: "row",
   }
 });
