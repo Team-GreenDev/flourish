@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, TouchableOpacity, Image, SafeAreaView, Platform, Text, ScrollView } from 'react-native';
+import { StyleSheet, View, TextInput, TouchableOpacity, Image, SafeAreaView, Platform, Text, ScrollView, Alert } from 'react-native';
 import { Ionicons, AntDesign, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { Formik } from 'formik';
@@ -82,7 +82,7 @@ export default function UploadScreen({ history }) {
     if(currentPhoto.uri) {
       dispatch(loadPlants(plantIdData));
     } else {
-      alert('Add a photo of a plant!')
+      Alert.alert('Add a photo of a plant!')
     }
   }
 
@@ -113,17 +113,21 @@ export default function UploadScreen({ history }) {
             tag: values.tag
           }));
 
-          alert('You shared your post!');
+          // Alert user of successful post
+          Alert.alert('You shared your post!');
+
+          // resets the form and state to empty
           resetForm({});
           dispatch(setCurrentPhoto({}))
+          dispatch(setPhotoInForm(''))
         } else {
-          alert('Add a tag to your post');
+          Alert.alert('Add a tag to your post');
         }
       } else {
-        alert('Add your description');
+        Alert.alert('Add your description');
       }
     } else {
-      alert('Add your photo');
+      Alert.alert('Add your photo');
     }
   }
 
