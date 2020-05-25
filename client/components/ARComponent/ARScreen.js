@@ -502,7 +502,7 @@ export default class HomeScreen extends React.Component {
   }
 
   onExitPress = () => {
-    console.log('exit ARScreen')
+    this.props.history.push("/");
   }
 
   // When the phone rotates, or the view changes size, this method will be called.
@@ -519,14 +519,13 @@ export default class HomeScreen extends React.Component {
 
   render() {
     return (
-      <View style={{flex:1}}>
+      <View style={styles.container}>
         {/* <ExpoGraphics.View style={{flex:1}}
           onContextCreate={this.onContextCreate}
           onRender={this.onRender}
           arEnabled={true}
         /> */}
         <GraphicsView
-          style={{ flex: 1 }}
           onContextCreate={this.onContextCreate}
           onRender={this.onRender}
           onResize={this.onResize}
@@ -566,5 +565,10 @@ export default class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  
+  container: {
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignContent: 'center',
+  }
 });
