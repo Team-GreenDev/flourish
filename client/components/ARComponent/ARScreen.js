@@ -425,7 +425,7 @@ export default class HomeScreen extends React.Component {
   }
 
   onContextCreate = async ({gl, scale: pixelRatio, width, height, arSession }) => {
-    // AR.setPlaneDetection(AR.PlaneDetectionTypes.Horizontal);
+    AR.setPlaneDetection(AR.PlaneDetectionTypes.Horizontal);
     this.renderer = new Renderer({ gl, pixelRatio, width, height });
     this.renderer.gammaInput = true;
     this.renderer.gammaOutput = true;
@@ -475,7 +475,8 @@ export default class HomeScreen extends React.Component {
     GooglePoly.getThreeModel(this.state.currentAsset, function(object) {
       this.threeModel = object;
       ExpoTHREE.utils.scaleLongestSideToSize(object, 0.75);
-      object.position.z = -1;
+      object.position.z = -0.4;
+      object.position.y = -0.4;
       this.scene.add(object);
     }.bind(this), function(error) {
       console.log(error);
@@ -566,9 +567,10 @@ export default class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    // flex: 1,
     height: '100%',
-    width: '100%',
-    justifyContent: 'center',
-    alignContent: 'center',
+    // width: '100%',
+    // justifyContent: 'center',
+    // alignContent: 'center',
   }
 });
