@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState} from 'react';
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { loadPosts, likePost } from '../../../store/slices/posts';
 import { clickedUserAssigned } from '../../../store/slices/users';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons'
+
 
 
 export default function HomeScreen({ likedPosts, history }) {
@@ -68,26 +69,40 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000',
   },
   image: {
-    height: 300,
-    width: 300,
+    height: 350,
+    width: 325,
     alignSelf: 'center',
     borderRadius: 10,
-    borderWidth: 1,
+    marginBottom: 5,
   },
   username: {
-    fontSize: 25,
-    color: 'forestgreen',
+    fontSize: 18,
+    color: '#697A44',
+    fontWeight: "600",
+    fontFamily: "Thonburi"
   },
   message: {
-
+    fontSize: 16,
+    marginHorizontal:10,
+    fontFamily: "Trebuchet MS",
   },
   tags: {
-    color: 'blue',
+    color: '#69747C',
+    fontWeight: "600",
+    fontSize: 16,
+    marginHorizontal:10,
+    marginTop: 5,
+    marginBottom: 10,
+    fontFamily: "Trebuchet MS"
+  },
+  body: {
+    justifyContent: 'space-around',
+    
   },
   post: {
     // Setting up image width.
-    width: 300,
-
+    width: 325,
+    height: 450,
     // Set border width.
     borderWidth: 1,
 
@@ -98,13 +113,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignSelf: 'center',
     backgroundColor: '#C0CDC6',
+    justifyContent: "space-evenly",
+    flex: 1,
   },
   likesContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginBottom: 10,
+    marginTop: 5,
+    marginHorizontal:10,
   },
   icon: {
-    color: "blue",
-    
+    color: "white",
   }
 });
