@@ -1,16 +1,19 @@
 import React, { useEffect, useState} from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+
 import { loadPosts, likePost } from '../../../store/slices/posts';
 import { clickedUserAssigned } from '../../../store/slices/users';
-
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { loadFollowers, loadFollowing } from '../../../store/slices/follow';
 
 
 
 export default function HomeScreen({ likedPosts, history }) {
   const users = useSelector(state => state.users)
   const posts = useSelector(state => state.posts)
+  const currentUser = useSelector(state => state.auth.currentUser);
+
   const dispatch = useDispatch();
 
   const getUserById = (id) => users.list.filter((user) => user.id == id);
@@ -18,6 +21,11 @@ export default function HomeScreen({ likedPosts, history }) {
   useEffect(()=>{
     dispatch(loadPosts());
   }, [posts.postAdded])
+
+  useEffect(() => {
+    dispatch(loadFollowers(currentUser.id));
+    dispatch(loadFollowing(currentUser.id));
+  }, [])
 
   const addLike = (post) => {
     dispatch(likePost(post));
