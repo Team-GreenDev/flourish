@@ -28,6 +28,7 @@ export default class HomeScreen extends React.Component {
     }
   }
 
+  // On load, ask for camera permission if not already allowed access
   componentDidMount() {
     (async () => {
       const { status } = await Permissions.askAsync(Permissions.CAMERA);
@@ -40,6 +41,7 @@ export default class HomeScreen extends React.Component {
     })();
   }
 
+  // Main Augmented Reality scene creation, handles background, model, and lighting
   onContextCreate = async ({gl, scale: pixelRatio, width, height, arSession }) => {
     AR.setPlaneDetection(AR.PlaneDetectionTypes.Horizontal);
     // Initialize renderer
@@ -60,8 +62,8 @@ export default class HomeScreen extends React.Component {
     this.scene.add(ambientLight);
   }
 
+  // Will render scene along with camera
   onRender = (delta) => {
-
     // Rotate the object...
     // if (this.threeModel) {
     //   this.threeModel.rotation.x += 2 * delta;
@@ -72,6 +74,7 @@ export default class HomeScreen extends React.Component {
     this.renderer.render(this.scene, this.camera);
   }
 
+  // Add model to scene
   onAddObjectPress = () => {
     // Remove the current object...
     this.onRemoveObjectPress();
@@ -88,25 +91,30 @@ export default class HomeScreen extends React.Component {
     });
   }
 
+  // Remove model from scene
   onRemoveObjectPress = () => {
     if (this.threeModel) {
       this.scene.remove(this.threeModel);
     }
   }
 
+  // Cancel search modal
   onCancelPress = () => {
     this.setState({searchModalVisible: false});
   }
 
+  // Change current model
   onAssetPress = (asset) => {
     this.setState({currentAsset: asset});
     this.setState({searchModalVisible: false});
   }
 
+  // Brings up search modal
   onSearchModalPress = () => {
     this.setState({searchModalVisible: true});
   }
 
+  // Exit Augmented Reality screen
   onExitPress = () => {
     this.props.history.push("/");
   }
