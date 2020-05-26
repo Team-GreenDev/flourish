@@ -29,7 +29,9 @@ const getAllUsers = () => pool.query('select * from users');
 
 // Adds new user
 const createUser = (req) => {
-  const { username, name_first, name_last, id, image_url } = req.body;
+  const {
+    username, name_first, name_last, id, image_url,
+  } = req.body;
   return pool.query(`insert into users set id = ${id}, image_url = '${image_url}', username = '${username}', name_first = '${name_first}', name_last = '${name_last}', total_like = ${0}`);
 };
 
@@ -59,7 +61,9 @@ const getUserPosts = (req) => {
 
 // Adds new post
 const addPost = (req) => {
-  const { text, url, user_id, tag } = req.body;
+  const {
+    text, url, user_id, tag,
+  } = req.body;
   return pool.query(`INSERT INTO posts set user_id = '${user_id}', like_count = ${0}, url = '${url}', text = '${text}', created_at = NOW(), tag = '${tag}'`);
 };
 
@@ -72,10 +76,22 @@ const updatePostById = (req) => {
 
 // LIKES QUERIES //
 
-// Update likes count on post
+// add to likes count on post
 const likePost = (req) => {
   const { id, user_id } = req.body;
-  return pool.query(`UPDATE posts set like_count = like_count + 1 WHERE user_id = ${user_id} AND id = ${id}`);
+  return pool.query(`UPDATE posts set like_count = like_count + 1 WHERE user_id = '${user_id}' AND id = ${id}`)
+    .then(() => pool.query(`select total_like from users where id = '${user_id}'`))
+    .then((totalLikeArray) => pool.query(`update users set total_like = ${totalLikeArray[0].total_like} + 1 where id = '${user_id}'`))
+    .then(() => pool.query(`insert into likes set post_id = ${id}, user_id = '${user_id}'`));
+};
+
+// subtract from likes count on post
+const unLikePost = (req) => {
+  const { id, user_id } = req.body;
+  return pool.query(`UPDATE posts set like_count = like_count - 1 WHERE user_id = '${user_id}' AND id = ${id}`)
+    .then(() => pool.query(`select total_like from users where id = '${user_id}'`))
+    .then((totalLikeArray) => pool.query(`update users set total_like = ${totalLikeArray[0].total_like} - 1 where id = '${user_id}'`))
+    .then(() => pool.query(`delete from likes where post_id = ${id} and user_id = '${user_id}'`));
 };
 
 
@@ -239,4 +255,5 @@ module.exports = {
   deleteComment,
   getUserTotalLikes,
   getFollowingById,
+  unLikePost,
 };

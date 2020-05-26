@@ -19,7 +19,7 @@ likesRouter.get('/:id', (req, res) => {
 likesRouter.post('/', (req, res) => {
   db.likePost(req, res)
     .then((like) => {
-      res.status(201).send();
+      res.status(201).send(like);
       console.log(like);
     })
     .catch((error) => {
@@ -27,6 +27,19 @@ likesRouter.post('/', (req, res) => {
       res.status(500).send();
     });
 });
+
+likesRouter.patch('/unlike', (req, res) => {
+  db.unLikePost(req, res)
+    .then((like) => {
+      res.status(201).send(like);
+      console.log(like);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send();
+    });
+});
+
 
 module.exports = {
   likesRouter,
