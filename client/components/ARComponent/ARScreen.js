@@ -139,7 +139,7 @@ export default class HomeScreen extends React.Component {
           onRender={this.onRender}
           onResize={this.onResize}
           isArEnabled
-          isArRunningStateEnabled
+          // isArRunningStateEnabled
           isArCameraStateEnabled
           arTrackingConfiguration={'ARWorldTrackingConfiguration'}
           />
