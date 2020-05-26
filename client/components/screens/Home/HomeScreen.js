@@ -53,8 +53,10 @@ export default function HomeScreen({ likedPosts, history }) {
                     <Text>{post.like_count}</Text>
               </TouchableOpacity>
               </View>
-              <Text style={styles.message}>{post.text}</Text>
+              <View style={styles.body}>
+              <Text style={styles.message} numberOfLines={2}>{post.text}</Text>
               <Text style={styles.tags}>{post.tag}</Text>
+              </View>
             </View>
             <Text> </Text>
           </View>
@@ -62,7 +64,6 @@ export default function HomeScreen({ likedPosts, history }) {
     </ScrollView>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
