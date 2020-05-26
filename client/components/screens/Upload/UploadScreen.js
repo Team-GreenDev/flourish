@@ -137,7 +137,7 @@ export default function UploadScreen({ history }) {
         initialValues={{description: '', tag: '', image: ''}}
         onSubmit={onSubmit}
       >
-      {({handleChange, handleBlur, handleSubmit, values}) => (
+      {({handleChange, handleBlur, submitForm, values}) => (
         <>
           <SafeAreaView style={styles.imageUploadView}>
             {currentPhoto.uri ? <Image style={styles.imageUpload} source={{uri: currentPhoto.uri}} />
@@ -171,7 +171,7 @@ export default function UploadScreen({ history }) {
 
           <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
             <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
-              <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
+              <TouchableOpacity onPress={submitForm} style={styles.submitButton}>
                 <Feather name="share" size={24} color="white" style={{paddingRight: 7}}/>
                 <Text style={{color: "white", fontSize: 18, fontWeight: "bold"}}>Post</Text>
               </TouchableOpacity>
