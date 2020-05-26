@@ -7,7 +7,7 @@ const slice = createSlice({
   initialState: {
     followers: [],
     following: [],
-    loading: 0,
+    loading: false,
   },
   // actions => action handlers
   reducers: {
@@ -33,9 +33,11 @@ const slice = createSlice({
     },
     userFollowed: (follow, action) => {
       // fill in later
+      follow.loading = false;
     },
     UserUnfollowed: (follow, action) => {
       // fill in later
+      follow.loading = false;
     },
   },
 });
