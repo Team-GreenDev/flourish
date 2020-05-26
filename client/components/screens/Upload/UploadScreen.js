@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, TouchableOpacity, Image, SafeAreaView, Platform, Text, ScrollView, Alert } from 'react-native';
+import { StyleSheet, View, TextInput, TouchableOpacity, Image, SafeAreaView, Platform, Text, ScrollView, Alert, Dimensions } from 'react-native';
 import { Ionicons, AntDesign, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { Formik } from 'formik';
@@ -11,6 +11,13 @@ import { addPost } from '../../../store/slices/posts';
 import { setCurrentPhoto, setPlantIdData, setPhotoInForm } from '../../../store/slices/photo';
 import { loadPlants } from '../../../store/slices/plants';
 
+const { width, height } = Dimensions.get('window');
+const guidelineBaseWidth = 350;
+const guidelineBaseHeight = 680;
+
+const scale = size => width / guidelineBaseWidth * size;
+const verticalScale = size => height / guidelineBaseHeight * size;
+const moderateScale = (size, factor = 0.5) => size + (scale(size) - size) * factor;
 export default function UploadScreen({ history }) {
   // using dispatch & useSelector to get information from the redux store
   const dispatch = useDispatch();
@@ -157,7 +164,7 @@ export default function UploadScreen({ history }) {
             autoCapitalize="none"
             autoCorrect={false}
             onChangeText={handleChange("description")}
-            placeholder="description"
+            placeholder="Write a description..."
             textContentType="none"
           />
           <AppTextInput
@@ -165,7 +172,7 @@ export default function UploadScreen({ history }) {
             autoCapitalize="none"
             autoCorrect={true}
             onChangeText={handleChange("tag")}
-            placeholder="tags"
+            placeholder="Add tags"
             textContentType="none"
           />
 
@@ -208,7 +215,7 @@ const styles = StyleSheet.create({
   icon: {
     marginHorizontal: 10,
     marginBottom: -5,
-    color: 'forestgreen',
+    color: '#697A44',
   },
   text: {
     color: "#0c0c0c",
@@ -228,11 +235,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 10,
-    width: 300,
-    height: 300,
+    width: moderateScale(350),
+    height: verticalScale(300),
     borderColor: "gray",
     borderWidth: 2,
     borderRadius: 10,
+    padding: scale(10)
   },
   imageUploadCaption: {
     fontSize: 20,
@@ -250,7 +258,7 @@ const styles = StyleSheet.create({
     padding: 8,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "forestgreen",
+    backgroundColor: "#697A44",
     flexDirection: "row",
   }
 });
