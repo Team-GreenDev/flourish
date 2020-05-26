@@ -35,8 +35,8 @@ export default function HomeScreen({ likedPosts, history }) {
   }
 
   const handlePress = (user) => {
-   dispatch(clickedUserAssigned(user))
-   history.push("/profile");
+    dispatch(clickedUserAssigned(user))
+    history.push("/profile");
   }
 
   const handleDiscover = () => {
