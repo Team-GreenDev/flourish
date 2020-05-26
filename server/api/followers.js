@@ -4,7 +4,7 @@ const db = require('../db');
 // Handles all requests to /api/followers
 const followersRouter = express.Router();
 
-// Add new follower
+// Follow new user
 followersRouter.post('/', (req, res) => {
   db.followNewUser(req, res)
     .then((data) => {
