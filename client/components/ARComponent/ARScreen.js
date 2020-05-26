@@ -146,11 +146,11 @@ export default class HomeScreen extends React.Component {
 
         <View style={{position:"absolute", bottom: 25, flex: 1, flexDirection: "row"}}>
           <View style={{flex: 1, flexDirection: "row", justifyContent: "space-between"}}>
+            {/* <View></View>
             <View></View>
             <View></View>
             <View></View>
-            <View></View>
-            <View></View>
+            <View></View> */}
             <View></View>
             <Icon.Button size={40} name="plus" backgroundColor="transparent" onPress={this.onAddObjectPress} />
             <Icon.Button size={40} name="magnify" backgroundColor="transparent" onPress={this.onSearchModalPress} />
