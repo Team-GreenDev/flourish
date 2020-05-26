@@ -8,7 +8,6 @@ const followersRouter = express.Router();
 followersRouter.post('/', (req, res) => {
   db.followNewUser(req, res)
     .then((data) => {
-      console.log(data);
       res.status(200).send(data);
     })
     .catch((error) => {
