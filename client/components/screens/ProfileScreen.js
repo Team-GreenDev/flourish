@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadPosts } from '../../store/slices/posts';
 
-  // MISSING FUNCTIONALITY: Dynamically render Followers, Following, and all posts current user has liked
+  // MISSING FUNCTIONALITY: Dynamically render all posts current user has liked
 
 export default function ProfileScreen() {
   const dispatch = useDispatch();
