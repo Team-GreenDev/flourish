@@ -10,6 +10,8 @@ export default function ProfileScreen() {
   const dispatch = useDispatch();
   const posts = useSelector(state => state.posts);
   const currentUser = useSelector(state => state.auth.currentUser);
+  const followers = useSelector(state => state.follow.followers);
+  const following = useSelector(state => state.follow.following);
 
   useEffect(()=>{
     dispatch(loadPosts());
@@ -24,8 +26,6 @@ export default function ProfileScreen() {
 
   // Dummy data that needs to be replaced with backend data
   let userInfo = {
-    followingCount: 10,
-    followerCount: 50,
     seedCount: 343
   };
 
@@ -82,10 +82,10 @@ export default function ProfileScreen() {
         <TouchableOpacity style={styles.infoContainer}>
           <Text style={styles.username}>{currentUser.username}</Text>
           <Text style={styles.bio}>{currentUser.bio}</Text>
-            {/* All static "following/follower" dummy data */}
           <View style={styles.followCount}>
-            <Text style={styles.followText}>{userInfo.followingCount} Following</Text>
-            <Text style={styles.followText}>{userInfo.followerCount} Followers</Text>
+            <Text style={styles.followText}>{following.length} Following</Text>
+            <Text style={styles.followText}>{followers.length} Followers</Text>
+            {/* Static info for seeds - update when like join table is done */}
             <Text style={styles.followText}>{userInfo.seedCount} Seeds</Text>
           </View>
         </TouchableOpacity>
