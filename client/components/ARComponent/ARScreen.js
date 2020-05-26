@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View, Image, Button, TextInput, Modal } from 'react-native';
-// import { Asset } from 'expo-asset';
 import { AR } from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as THREE from 'three';
 import { loadDaeAsync, Renderer, utils } from 'expo-three';
 import { GraphicsView } from 'expo-graphics';
 import { BackgroundTexture, Camera, Light } from 'expo-three-ar';
-// import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-// import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
-// import MODEL from '../../flower.json';
 import Expo from 'expo';
 import ExpoTHREE, { three } from 'expo-three';
 import ExpoGraphics from 'expo-graphics';
@@ -49,29 +44,18 @@ export default class HomeScreen extends React.Component {
 
   onContextCreate = async ({gl, scale: pixelRatio, width, height, arSession }) => {
     AR.setPlaneDetection(AR.PlaneDetectionTypes.Horizontal);
+    // Initialize renderer
     this.renderer = new Renderer({ gl, pixelRatio, width, height });
     this.renderer.gammaInput = true;
     this.renderer.gammaOutput = true;
     this.renderer.shadowMap.enabled = true;
 
-    // // Creating scene for Augmented Reality
+    // Creating scene for Augmented Reality
     this.scene = new THREE.Scene();
     this.scene.background = new BackgroundTexture(this.renderer);
 
     // Creating camera for rendering later
     this.camera = new Camera(width, height, 0.01, 1000);
-
-    // Initialize renderer...
-    // this.renderer = ExpoTHREE.createRenderer({gl});
-    // this.renderer.setPixelRatio(scale);
-    // this.renderer.setSize(width, height);
-
-    // // Initialize scene...
-    // this.scene = new THREE.Scene();
-    // this.scene.background = new BackgroundTexture(this.renderer);
-
-    // // Initialize camera...
-    // this.camera = ExpoTHREE.createARCamera(arSession, width / scale, height / scale, 0.01, 1000);
 
     // Initialize lighting...
     var ambientLight = new THREE.AmbientLight(0xaaaaaa);
@@ -144,11 +128,6 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        {/* <ExpoGraphics.View style={{flex:1}}
-          onContextCreate={this.onContextCreate}
-          onRender={this.onRender}
-          arEnabled={true}
-        /> */}
         <GraphicsView
           onContextCreate={this.onContextCreate}
           onRender={this.onRender}
