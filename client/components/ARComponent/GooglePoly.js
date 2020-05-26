@@ -7,10 +7,10 @@ require('./util/MTLLoader');
 export default class GooglePoly {
 
   constructor(apiKey) {
-      this.apiKey = apiKey;
-      this.currentResults = [];
-      this.nextPageToken = "";
-      this.keywords = "";
+    this.apiKey = apiKey;
+    this.currentResults = [];
+    this.nextPageToken = "";
+    this.keywords = "";
   }
 
   static getThreeModel(objectData, success, failure) {
@@ -34,39 +34,39 @@ export default class GooglePoly {
     loader.setTexturePath(path);
     loader.load(mtl.url, function(materials) {
 
-        // Load the OBJ...
-        loader = new THREE.OBJLoader();
-        loader.setMaterials(materials);
-        loader.load(obj.url, async function(object) {
+      // Load the OBJ...
+      loader = new THREE.OBJLoader();
+      loader.setMaterials(materials);
+      loader.load(obj.url, async function(object) {
 
-            // If there is a texture, apply it...
-            if (tex !== undefined) {
-                var texUri = await AssetUtils.uriAsync(tex.url);
-                var texture = new THREE.MeshBasicMaterial({ map: await ExpoTHREE.loadAsync(texUri) });
-                object.traverse((child) => {
-                    if (child instanceof THREE.Mesh) {
-                        child.material = texture;
-                    }
-                });
+        // If there is a texture, apply it...
+        if (tex !== undefined) {
+          var texUri = await AssetUtils.uriAsync(tex.url);
+          var texture = new THREE.MeshBasicMaterial({ map: await ExpoTHREE.loadAsync(texUri) });
+          object.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+                child.material = texture;
             }
+          });
+        }
 
-            // Return the object...
-            success(object);
-        });
+        // Return the object...
+        success(object);
+      });
     });
   }
 
   // Returns a query URL based on the given data...
   static getQueryURL(apiKey, keywords, nextPageToken) {
-      var baseURL = "https://poly.googleapis.com/v1/assets?";
+    var baseURL = "https://poly.googleapis.com/v1/assets?";
 
-      var url = baseURL + "key=" + apiKey;
-      url += "&pageSize=10";
-      url += "&maxComplexity=MEDIUM";
-      url += "&format=OBJ";
-      if (keywords) { url += "&keywords=" + encodeURIComponent(keywords); }
-      if (nextPageToken) { url += "&pageToken=" + nextPageToken; }
-      return url;
+    var url = baseURL + "key=" + apiKey;
+    url += "&pageSize=10";
+    url += "&maxComplexity=MEDIUM";
+    url += "&format=OBJ";
+    if (keywords) { url += "&keywords=" + encodeURIComponent(keywords); }
+    if (nextPageToken) { url += "&pageToken=" + nextPageToken; }
+    return url;
   }
 
   // Sets current search parameters and resets member variables...
@@ -78,15 +78,15 @@ export default class GooglePoly {
 
   // Returns the results of the current query...
   getSearchResults() {
-      var url = GooglePoly.getQueryURL(this.apiKey, this.keywords, this.nextPageToken);
+    var url = GooglePoly.getQueryURL(this.apiKey, this.keywords, this.nextPageToken);
 
-      return fetch(url)
-          .then(function(response) { return response.json(); })
-          .then(function(data) {
-              this.currentResults = this.currentResults.concat(data.assets);
-              this.nextPageToken = data.nextPageToken;
+    return fetch(url)
+      .then(function(response) { return response.json(); })
+      .then(function(data) {
+        this.currentResults = this.currentResults.concat(data.assets);
+        this.nextPageToken = data.nextPageToken;
 
-              return Promise.resolve(data.assets);
-          }.bind(this));
+        return Promise.resolve(data.assets);
+      }.bind(this));
   }
 }
