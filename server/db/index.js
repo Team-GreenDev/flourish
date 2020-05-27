@@ -90,6 +90,11 @@ const likePost = (req) => {
     });
 };
 
+// Gets all postIds from likes
+const getAllLikedPosts = (req) => {
+  const { id } = req.params;
+  return pool.query(`select post_id from likes where user_id = '${id}'`);
+};
 
 // COMMENTS QUERIES //
 
@@ -241,4 +246,5 @@ module.exports = {
   unFollowUser,
   deleteComment,
   getFollowingById,
+  getAllLikedPosts,
 };
