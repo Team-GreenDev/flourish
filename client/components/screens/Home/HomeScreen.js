@@ -3,25 +3,26 @@ import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Dimensions
 import { useSelector, useDispatch } from 'react-redux';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
-import { loadPosts, likePost } from '../../../store/slices/posts';
+import { loadPosts, likePost, loadLikedPosts } from '../../../store/slices/posts';
 import { clickedUserAssigned } from '../../../store/slices/users';
 import { loadFollowers, loadFollowing } from '../../../store/slices/follow';
 
-export default function HomeScreen({ likedPosts, history }) {
+export default function HomeScreen({ history }) {
   const dispatch = useDispatch();
   const users = useSelector(state => state.users)
   const posts = useSelector(state => state.posts)
   const currentUser = useSelector(state => state.auth.currentUser);
   const usersImFollowing = useSelector(state => state.follow.following.map(user => user.id));
+  const likedPostsIds = useSelector(state => state.posts.likedPosts.map(post => post.id));
 
   const allPostsFromFollowing = posts.list.filter(post => usersImFollowing.includes(post.user_id))
-  const [ feed, setFeed ] = useState(posts.list)
-  const [ clicked, setClicked ] = useState(true)
+  const [ feed, setFeed ] = useState(true)
 
   const getUserById = (id) => users.list.filter((user) => user.id == id);
 
   useEffect(()=>{
     dispatch(loadPosts());
+    dispatch(loadLikedPosts(currentUser.id))
   }, [posts.postAdded])
 
   useEffect(() => {
@@ -29,8 +30,8 @@ export default function HomeScreen({ likedPosts, history }) {
     dispatch(loadFollowing(currentUser.id));
   }, [])
 
-  const addLike = (post) => {
-    dispatch(likePost(post));
+  const addLike = (ids) => {
+    dispatch(likePost(ids));
   }
 
   const handlePress = (user) => {
@@ -39,13 +40,11 @@ export default function HomeScreen({ likedPosts, history }) {
   }
 
   const handleDiscover = () => {
-    setFeed(posts.list);
-    setClicked(true);
+    setFeed(true);
   }
 
   const handleYourFeed = () => {
-    setFeed(allPostsFromFollowing);
-    setClicked(false);
+    setFeed(false);
   }
 
 
@@ -55,20 +54,20 @@ export default function HomeScreen({ likedPosts, history }) {
         <View style={{flexDirection: "row", width: "50%", justifyContent: "space-between"}}>
         <TouchableOpacity
           onPress={handleDiscover}
-          style={{borderRadius: 10, padding: 4, margin: 4, backgroundColor: clicked ? "#697A44" : null, width: 100, alignItems: "center"}}
+          style={{borderRadius: 10, padding: 4, margin: 4, backgroundColor: feed ? "#697A44" : null, width: 100, alignItems: "center"}}
         >
           <Text style={{color: "white", fontSize: 18}}>Discover</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={handleYourFeed}
-          style={{borderRadius: 10, padding: 4, margin: 4, backgroundColor: clicked ? null : "#697A44", width: 100, alignItems: "center"}}>
+          style={{borderRadius: 10, padding: 4, margin: 4, backgroundColor: feed ? null : "#697A44", width: 100, alignItems: "center"}}>
           <Text style={{color: "white", fontSize: 18}}>Following</Text>
         </TouchableOpacity>
         </View>
       </View>
       <ScrollView styles={styles.container}>
-        {posts.list
-          ? (feed.slice(0).reverse().map(post => {
+        {feed
+          ? (posts.list.slice(0).reverse().map(post => {
             const user = getUserById(post.user_id)[0];
             return (
             <View key={post.id}>
@@ -84,8 +83,8 @@ export default function HomeScreen({ likedPosts, history }) {
                       name={"flower-tulip"}
                       size={24}
                       raised
-                      style={styles.icon}
-                      onPress={() => addLike(post)}
+                      style={{color: likedPostsIds.includes(post.id) ? "green" : "white"}}
+                      onPress={() => addLike({id: post.id, user_id: currentUser.id})}
                       />
                       <Text>{post.like_count}</Text>
                 </TouchableOpacity>
@@ -98,7 +97,36 @@ export default function HomeScreen({ likedPosts, history }) {
               <Text> </Text>
             </View>
             )}))
-            : (<View><Text>loading</Text></View>)}
+            : (allPostsFromFollowing.slice(0).reverse().map(post => {
+              const user = getUserById(post.user_id)[0];
+              return (
+              <View key={post.id}>
+                <Text> </Text>
+                <View style={styles.post} onPress={() => console.log("apple")} >
+                  <TouchableOpacity onPress={() => history.push("/comments")}>
+                  <Image style={styles.image} source={{ uri: post.url }}/>
+                  </TouchableOpacity>
+                  <View style={styles.likesContainer}>
+                  <Text style={styles.username} onPress={() => handlePress(user)}>{user.username}</Text>
+                  <TouchableOpacity style={{flexDirection: 'row'}}>
+                        <MaterialCommunityIcons
+                        name={"flower-tulip"}
+                        size={24}
+                        raised
+                        style={{color: likedPostsIds.includes(post.id) ? "green" : "white"}}
+                        onPress={() => addLike({id: post.id, user_id: currentUser.id})}
+                        />
+                        <Text>{post.like_count}</Text>
+                  </TouchableOpacity>
+                  </View>
+                  <View style={styles.body}>
+                  <Text style={styles.message} numberOfLines={2}>{post.text}</Text>
+                  <Text style={styles.tags}>{post.tag}</Text>
+                  </View>
+                </View>
+                <Text> </Text>
+              </View>
+              )}))}
       </ScrollView>
     </View>
   );
