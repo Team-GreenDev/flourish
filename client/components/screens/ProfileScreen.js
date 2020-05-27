@@ -23,12 +23,6 @@ export default function ProfileScreen() {
   // Boolean to view current users posts or current users liked posts (could move to the store eventually)
   const [boolean, setBoolean] = useState(true);
 
-
-  // Dummy data that needs to be replaced with backend data
-  let userInfo = {
-    seedCount: 343
-  };
-
   // Dummy data of 'liked' posts
   const likeDummy = [
     {
@@ -85,8 +79,7 @@ export default function ProfileScreen() {
           <View style={styles.followCount}>
             <Text style={styles.followText}>{following.length} Following</Text>
             <Text style={styles.followText}>{followers.length} Followers</Text>
-            {/* Static info for seeds - update when like join table is done */}
-            <Text style={styles.followText}>{userInfo.seedCount} Seeds</Text>
+            <Text style={styles.followText}>{currentUser.total_like} Seeds</Text>
           </View>
         </TouchableOpacity>
           <View style={styles.iconView}>
