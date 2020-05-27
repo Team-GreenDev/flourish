@@ -1,15 +1,26 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
+import { loadFollowers, loadFollowing, followUser, unfollowUser } from '../../../store/slices/follow';
 
   // MISSING FUNCTIONALITY: Dynamically render Followers, Following, and all posts current user has liked
 
 export default function HomeProfileScreen({ history }) {
+  const dispatch = useDispatch();
   const posts = useSelector(state => state.posts);
+  const currentUser = useSelector(state => state.auth.currentUser);
   const clickedUser = useSelector(state => state.users.clickedUser);
+  const followers = useSelector(state => state.follow.followers.map(user => user.id));
+  const following = useSelector(state => state.follow.following.map(user => user.id));
+  const [ followStatus, setFollowStatus ] = useState(followers.includes(true))
+
+  useEffect(() => {
+    dispatch(loadFollowers(clickedUser.id));
+    dispatch(loadFollowing(clickedUser.id));
+  }, [followStatus])
 
   // Used to get the current users posts
   const getPostById = (id) => posts.list.filter((post) => post.user_id === id);
@@ -17,6 +28,15 @@ export default function HomeProfileScreen({ history }) {
   // Boolean to view current users posts or current users liked posts (could move to the store eventually)
   const [boolean, setBoolean] = useState(true);
 
+  const handleFollow = () => {
+    dispatch(followUser({user_id: clickedUser.id, follower_id: currentUser.id }));
+    setFollowStatus(!followStatus);
+  }
+
+  const handleUnfollow = () => {
+    dispatch(unfollowUser({user_id: clickedUser.id, follower_id: currentUser.id }));
+    setFollowStatus(!followStatus);
+  }
 
   // Dummy data that needs to be replaced with backend data
   let userInfo = {
@@ -26,7 +46,7 @@ export default function HomeProfileScreen({ history }) {
   };
 
   // Mapping over fake static posts that the user has 'liked'
-  const likeData = 
+  const likeData =
     <View key='Barry Allen'>
       <View style={styles.post}>
         <Image style={styles.image} source={{ uri: 'https://smoenergy.com/wp-content/uploads/2019/05/House-Plants-Blog-Image.jpg' }}/>
@@ -44,7 +64,7 @@ export default function HomeProfileScreen({ history }) {
         <Image style={styles.image} source={{ uri: post.url }}/>
         <Text style={styles.postUsername}>{clickedUser.username}</Text>
         <Text style={styles.message}>{post.text}</Text>
-        <Text style={styles.tags}>#favplants #new2flourish</Text>
+        <Text style={styles.tags}>{post.tag}</Text>
       </View>
     </View>
   ));
@@ -59,12 +79,24 @@ export default function HomeProfileScreen({ history }) {
         <TouchableOpacity style={styles.infoContainer}>
           <Text style={styles.username}>{clickedUser.username}</Text>
           <Text style={styles.bio}>{clickedUser.bio}</Text>
-            {/* All static "following/follower" dummy data */}
           <View style={styles.followCount}>
-            <Text style={styles.followText}>{userInfo.followingCount} Following</Text>
-            <Text style={styles.followText}>{userInfo.followerCount} Followers</Text>
+            <Text style={styles.followText}>{following.length} Following</Text>
+            <Text style={styles.followText}>{followers.length} Followers</Text>
+            {/* Static info for seeds - update when like join table is done */}
             <Text style={styles.followText}>{userInfo.seedCount} Seeds</Text>
           </View>
+          {currentUser.id !== clickedUser.id ?
+          <View style={{justifyContent: "center", alignItems: "center"}}>
+            {followers.includes(currentUser.id) ?
+            <TouchableOpacity onPress={handleUnfollow}>
+              <Text
+              style={{borderWidth: 1, borderRadius: 10, padding: 3, marginBottom: 12}}>Unfollow</Text>
+            </TouchableOpacity>
+            :
+            <TouchableOpacity onPress={handleFollow}>
+              <Text style={{borderWidth: 1, borderRadius: 10, padding: 3, marginBottom: 12}}>Follow</Text>
+            </TouchableOpacity>}
+          </View> : null}
         </TouchableOpacity>
           <View style={styles.iconView}>
             <TouchableOpacity>

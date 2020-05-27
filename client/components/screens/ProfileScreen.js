@@ -4,12 +4,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadPosts } from '../../store/slices/posts';
 
-  // MISSING FUNCTIONALITY: Dynamically render Followers, Following, and all posts current user has liked
+  // MISSING FUNCTIONALITY: Dynamically render all posts current user has liked
 
 export default function ProfileScreen() {
   const dispatch = useDispatch();
   const posts = useSelector(state => state.posts);
   const currentUser = useSelector(state => state.auth.currentUser);
+  const followers = useSelector(state => state.follow.followers);
+  const following = useSelector(state => state.follow.following);
 
   useEffect(()=>{
     dispatch(loadPosts());
@@ -24,8 +26,6 @@ export default function ProfileScreen() {
 
   // Dummy data that needs to be replaced with backend data
   let userInfo = {
-    followingCount: 10,
-    followerCount: 50,
     seedCount: 343
   };
 
@@ -35,19 +35,19 @@ export default function ProfileScreen() {
       url: 'https://media.architecturaldigest.com/photos/5a94846e4692126e06f34f67/master/w_1600%2Cc_limit/popular-houseplants-pilea-peperomioides.jpg',
       username: 'Rachel Davis',
       message: 'Army of five, might even go pick up some more!',
-      tags: '#favplants #new2flourish',
+      tag: '#favplants #new2flourish',
     },
     {
       url: 'https://secure.img1-fg.wfcdn.com/im/42349074/resize-h600%5Ecompr-r85/8506/85069027/Tejeda+5+Tier+Self-Watering+Wood+Vertical+Garden.jpg',
       username: 'Jaime Vazquez',
       message: 'Five tier wall garden is looking healthy this month',
-      tags: '#favplants #new2flourish',
+      tag: '#favplants #new2flourish',
     },
     {
       url: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/high-angle-view-of-potted-cactus-royalty-free-image-1568039795.jpg?crop=0.752xw:1.00xh;0.139xw,0&resize=480:*',
       username: 'Brenden Malone',
       message: 'Check out this succulent collection',
-      tags: '#favplants #new2flourish',
+      tag: '#favplants #new2flourish',
     },
   ]
 
@@ -58,7 +58,7 @@ export default function ProfileScreen() {
         <Image style={styles.image} source={{ uri: post.url }}/>
         <Text style={styles.postUsername}>{post.username}</Text>
         <Text style={styles.message}>{post.message}</Text>
-        <Text style={styles.tags}>{post.tags}</Text>
+        <Text style={styles.tags}>{post.tag}</Text>
       </View>
     </View>
   ));
@@ -70,7 +70,7 @@ export default function ProfileScreen() {
         <Image style={styles.image} source={{ uri: post.url }}/>
         <Text style={styles.postUsername}>{currentUser.username}</Text>
         <Text style={styles.message}>{post.text}</Text>
-        <Text style={styles.tags}>#favplants #new2flourish</Text>
+        <Text style={styles.tags}>{post.tag}</Text>
       </View>
     </View>
   ));
@@ -82,10 +82,10 @@ export default function ProfileScreen() {
         <TouchableOpacity style={styles.infoContainer}>
           <Text style={styles.username}>{currentUser.username}</Text>
           <Text style={styles.bio}>{currentUser.bio}</Text>
-            {/* All static "following/follower" dummy data */}
           <View style={styles.followCount}>
-            <Text style={styles.followText}>{userInfo.followingCount} Following</Text>
-            <Text style={styles.followText}>{userInfo.followerCount} Followers</Text>
+            <Text style={styles.followText}>{following.length} Following</Text>
+            <Text style={styles.followText}>{followers.length} Followers</Text>
+            {/* Static info for seeds - update when like join table is done */}
             <Text style={styles.followText}>{userInfo.seedCount} Seeds</Text>
           </View>
         </TouchableOpacity>
