@@ -6,6 +6,7 @@ const slice = createSlice({
   name: 'posts',
   initialState: {
     list: [],
+    likedPosts: [],
     loading: false,
     postAdded: 0,
   },
@@ -23,6 +24,13 @@ const slice = createSlice({
     // loading set to false, ending the loading spinner because request succeeded
     postsReceived: (posts, action) => {
       posts.list = action.payload;
+      posts.loading = false;
+    },
+    // Reassigns the post list to the payload received from the axios request
+    // loading set to false, ending the loading spinner because request succeeded
+    likedPostsReceived: (posts, action) => {
+      const ids = action.payload.map((obj) => obj.post_id);
+      posts.likedPosts = posts.list.filter(post => ids.includes(post.id));
       posts.loading = false;
     },
     // adds a post from the payload by pushing it to the current list in state
@@ -43,6 +51,7 @@ const {
   postsRequested,
   postsRequestFailed,
   postLiked,
+  likedPostsReceived,
 } = slice.actions;
 
 export default slice.reducer;
@@ -61,6 +70,13 @@ export const loadPosts = () => apiCallBegan({
   onError: postsRequestFailed.type,
 });
 
+export const loadLikedPosts = (id) => apiCallBegan({
+  url: `api/likes/user/${id}`,
+  onStart: postsRequested.type,
+  onSuccess: likedPostsReceived.type,
+  onError: postsRequestFailed.type,
+});
+
 export const addPost = (post) => apiCallBegan({
   url,
   method: 'POST',
@@ -70,9 +86,10 @@ export const addPost = (post) => apiCallBegan({
   onSuccess: postAdded.type,
 });
 
-export const likePost = (post) => apiCallBegan({
-  url: `/api/posts/${post.id}`,
-  method: 'PATCH',
+export const likePost = (ids) => apiCallBegan({
+  url: '/api/likes',
+  method: 'POST',
+  data: ids,
   onStart: postsRequested.type,
   onError: postsRequestFailed.type,
   onSuccess: postLiked.type,
