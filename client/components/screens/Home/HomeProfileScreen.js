@@ -38,13 +38,6 @@ export default function HomeProfileScreen({ history }) {
     setFollowStatus(!followStatus);
   }
 
-  // Dummy data that needs to be replaced with backend data
-  let userInfo = {
-    followingCount: 10,
-    followerCount: 50,
-    seedCount: 343
-  };
-
   // Mapping over fake static posts that the user has 'liked'
   const likeData =
     <View key='Barry Allen'>
@@ -82,8 +75,7 @@ export default function HomeProfileScreen({ history }) {
           <View style={styles.followCount}>
             <Text style={styles.followText}>{following.length} Following</Text>
             <Text style={styles.followText}>{followers.length} Followers</Text>
-            {/* Static info for seeds - update when like join table is done */}
-            <Text style={styles.followText}>{userInfo.seedCount} Seeds</Text>
+            <Text style={styles.followText}>{clickedUser.total_like} Seeds</Text>
           </View>
           {currentUser.id !== clickedUser.id ?
           <View style={{justifyContent: "center", alignItems: "center"}}>
