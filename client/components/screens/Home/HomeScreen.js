@@ -13,7 +13,6 @@ export default function HomeScreen({ likedPosts, history }) {
   const posts = useSelector(state => state.posts)
   const currentUser = useSelector(state => state.auth.currentUser);
   const usersImFollowing = useSelector(state => state.follow.following.map(user => user.id));
-  const followStatus = useSelector(state => state.follow.status);
 
   const allPostsFromFollowing = posts.list.filter(post => usersImFollowing.includes(post.user_id))
   const [ feed, setFeed ] = useState(posts.list)
