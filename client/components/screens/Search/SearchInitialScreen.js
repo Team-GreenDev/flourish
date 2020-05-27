@@ -1,34 +1,120 @@
-import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, Button } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import { SearchBar } from 'react-native-elements';
+import { useSelector } from 'react-redux';
 
 export default function SearchScreen({history}) {
+  const allPosts = useSelector(state => state.posts.list);
+  const users = useSelector(state => state.users)
+
+  const getUserById = (id) => users.list.filter((user) => user.id == id);
+
   const [ searchQuery, setSearchQuery ] = useState('');
-  // const [ searchedBool, setSearchedBool ] = useState(false);
+  const [ select, setSelect ] = useState(false);
+  const [ loading, setLoading ] = useState(false);
+  const [ searchedPosts, setSearchedPosts ] = useState(null);
 
   const handleSearch = (e) => {
-    console.log(searchQuery);
+    if(select){
+      const searchedUsersIds = users.list.filter(user => (
+        user.name_first.toLowerCase() === searchQuery.toLowerCase()
+        || user.name_last.toLowerCase() === searchQuery.toLowerCase()))
+        .map(user => user.id)
+
+      setSearchedPosts(allPosts.filter(post => searchedUsersIds.includes(post.user_id)));
+    } else {
+      const newPosts = allPosts.filter(post => post.tag.toLowerCase().search(searchQuery.toLowerCase()) !== -1)
+      setSearchedPosts(newPosts);
+    }
     setSearchQuery('');
-    history.push("/results")
   };
 
+  const handleTagPress = () => {
+    setSelect(false);
+  }
+
+  const handleUserPress = () => {
+    setSelect(true);
+  }
+
   return (
-    // <ScrollView>
-    <View>
+    <View style={{height: "100%", width: "100%"}}>
+      <View style={{justifyContent: "center", alignItems: "center", backgroundColor: "white"}}>
+        <View style={{flexDirection: "row", width: "50%", justifyContent: "center", backgroundColor: "white"}}>
+        <TouchableOpacity onPress={handleTagPress}>
+          <Text
+            style={{
+              padding: 4,
+              paddingHorizontal: 45,
+              borderRadius: 3,
+              borderWidth: 1,
+              borderColor: "#697A44",
+              color: select ? "#697A44" : "white",
+              fontSize: 18,
+              marginVertical: 15,
+              backgroundColor: select ? "white" : "#697A44"
+            }}>
+              Tags
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleUserPress}>
+          <Text style={{
+            padding: 4,
+            paddingHorizontal: 45,
+            borderRadius: 3,
+            borderWidth: 1,
+            borderColor: "#697A44",
+            color: select ? "white" : "#697A44",
+            fontSize: 18,
+            marginVertical: 15,
+            backgroundColor: select ?  "#697A44" : "white"
+          }}>
+            Users
+          </Text>
+        </TouchableOpacity>
+        </View>
+      </View>
       <SearchBar
         placeholder="Search..."
         onChangeText={(e) => setSearchQuery(e)}
         value={searchQuery}
         onSubmitEditing={handleSearch}
         lightTheme={true}
-        inputStyle={{backgroundColor: 'white'}}
-        containerStyle={{backgroundColor: '#ccd1c5', borderRadius: 1, }}
+        inputStyle={{backgroundColor: '#F8F2D8', color: "#000"}}
+        inputContainerStyle={{backgroundColor: "#F8F2D8", marginHorizontal: 20}}
+        containerStyle={{backgroundColor: "white", borderBottomColor: 'transparent', borderTopColor: 'transparent'}}
+        searchIcon={{color: "#9C4C33", size: 30}}
+        placeholderTextColor="#9C4C33"
+        round={true}
+        showLoading={loading}
       />
-      <View style={styles.container}>
-        <Text style={styles.text}>Search for tags and plants</Text>
-        <Image style={styles.image} source={{uri: 'https://lh3.googleusercontent.com/proxy/S6sI1k-0-QTyKelaSKldpykzH_Y_OUFhfg_3soiZKrWh_Yh0V_s67_k8DELstyOuDidxqkVAIUwYuy_GSCFV87VY'}}/> 
-      </View>
+      <SafeAreaView
+        style={{
+          position: 'absolute',
+          top: 130,
+          left: 0,
+          right: 0,
+          bottom: 0,
+        }}>
+        <ScrollView>
+        {searchedPosts
+          ? (searchedPosts.slice(0).reverse().map(post => {
+            const name = getUserById(post.user_id)[0].username;
+            return (
+            <View key={post.id}>
+              <Text> </Text>
+              <View style={styles.post}>
+                <Image style={styles.image} source={{ uri: post.url }}/>
+                <Text style={styles.username}>{name}</Text>
+                <Text style={styles.message}>{post.text}</Text>
+                <Text style={styles.tags}>{post.tag}</Text>
+              </View>
+              <Text> </Text>
+            </View>
+            )}))
+            : null}
+        </ScrollView>
+      </SafeAreaView>
     </View>
   );
 }
@@ -39,15 +125,60 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    height: 320,
-    width: 225,
-    top: 300,
+    height: 350,
+    width: 325,
+    alignSelf: 'center',
+    borderRadius: 10,
+    marginBottom: 5,
   },
-  text: {
-    fontSize: 25,
-    top: 150,
-    textAlignVertical: 'center',
-    color: '#94a57e'
-  }
+  username: {
+    fontSize: 18,
+    color: '#697A44',
+    fontWeight: "600",
+    fontFamily: "Thonburi"
+  },
+  message: {
+    fontSize: 16,
+    marginHorizontal:10,
+    fontFamily: "Trebuchet MS",
+  },
+  tags: {
+    color: '#69747C',
+    fontWeight: "600",
+    fontSize: 16,
+    marginHorizontal:10,
+    marginTop: 5,
+    marginBottom: 10,
+    fontFamily: "Trebuchet MS"
+  },
+  body: {
+    justifyContent: 'space-around',
+  },
+  post: {
+    // Setting up image width.
+    width: 325,
+    height: 450,
+    // Set border width.
+    borderWidth: 1,
 
+    // Set border Hex Color code here.
+    borderColor: '#C0CDC6',
+
+    // Set border Radius.
+    borderRadius: 10,
+    alignSelf: 'center',
+    backgroundColor: '#C0CDC6',
+    justifyContent: "space-evenly",
+    flex: 1,
+  },
+  likesContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+    marginTop: 5,
+    marginHorizontal:10,
+  },
+  icon: {
+    color: "white",
+  }
 });
