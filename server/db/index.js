@@ -64,7 +64,8 @@ const addPost = (req) => {
   const {
     text, url, user_id, tag,
   } = req.body;
-  return pool.query(`INSERT INTO posts set user_id = '${user_id}', like_count = ${0}, url = '${url}', text = '${text}', created_at = NOW(), tag = '${tag}'`);
+  return pool.query(`INSERT INTO posts set user_id = '${user_id}', like_count = ${0}, url = '${url}', text = '${text}', created_at = NOW(), tag = '${tag}'`)
+    .then(() => pool.query(`insert into tags set text = '${text}'`));
 };
 
 // Updating post by id
