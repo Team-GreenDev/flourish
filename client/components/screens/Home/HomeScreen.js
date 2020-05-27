@@ -48,6 +48,7 @@ export default function HomeScreen({ likedPosts, history }) {
     setClicked(false);
   }
 
+
   return (
     <View>
       <View style={{justifyContent: "center", alignItems: "center", backgroundColor: "#C0CDC6"}}>
@@ -72,8 +73,10 @@ export default function HomeScreen({ likedPosts, history }) {
             return (
             <View key={post.id}>
               <Text> </Text>
-              <View style={styles.post}>
+              <View style={styles.post} onPress={() => console.log("apple")} >
+                <TouchableOpacity onPress={() => history.push("/comments")}>
                 <Image style={styles.image} source={{ uri: post.url }}/>
+                </TouchableOpacity>
                 <View style={styles.likesContainer}>
                 <Text style={styles.username} onPress={() => handlePress(user)}>{user.username}</Text>
                 <TouchableOpacity style={{flexDirection: 'row'}}>
