@@ -164,8 +164,9 @@ export default function UploadScreen({ history }) {
             autoCapitalize="none"
             autoCorrect={false}
             onChangeText={handleChange("description")}
-            placeholder="Write a description..."
+            placeholder="Write a description...."
             textContentType="none"
+            multiline={true}
           />
           <AppTextInput
             value={values.tag || ''}
@@ -205,12 +206,15 @@ export default function UploadScreen({ history }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#f8f4f4",
-    borderRadius: 25,
+    backgroundColor: "#F8F2D8",
+    borderRadius: 20,
+    borderColor: '#94A480',
+    borderWidth: 2,
     flexDirection: "row",
-    width: "100%",
+    width: "95%",
     padding: 15,
     marginVertical: 10,
+    marginLeft: 10
   },
   icon: {
     marginHorizontal: 10,
