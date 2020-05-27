@@ -27,7 +27,7 @@ followersRouter.get('/user/:id', (req, res) => {
     });
 });
 
-// Get all followers_ids from user_id
+// Get all following ids from user_id
 followersRouter.get('/following/:id', (req, res) => {
   db.getFollowingById(req, res)
     .then((followers) => res.status(200).send(followers))
