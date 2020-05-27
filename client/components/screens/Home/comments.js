@@ -21,13 +21,18 @@ export default function Comments({ history }) {
 
 
   return (
-    <View style={styles.container}>
-        <ScrollView>
+    <View>
+        <ScrollView >
+        <View style={styles.container}>
         <Image style={styles.postImg} source={{uri: 'https://www.kindpng.com/picc/m/191-1915065_sword-fern-fern-plant-png-transparent-png.png'}}></Image>
-        </ScrollView>
+        </View>
         <View style={styles.userInfo}>
+        <View style={styles.imgAndUsername}>
         <Image style={styles.profileImg }source={{uri: "https://www.vhv.rs/dpng/d/233-2335904_weekend-palm-tree-hair-hd-png-download.png"}}></Image>
-        <Text>xoweekday</Text>
+        <View style={styles.usernameContainer}>
+        <Text style={styles.username}>xoweekday</Text>
+        </View>
+        </View>
         <MaterialCommunityIcons
         name={"flower-tulip"}
         size={24}
@@ -40,6 +45,7 @@ export default function Comments({ history }) {
         <View>
 
         </View>
+        </ScrollView>
     </View>
   );
 }
@@ -59,10 +65,23 @@ const styles = StyleSheet.create({
         borderRadius: 400/ 2,
         overflow: "hidden",
         borderWidth: 3,
-        borderColor: "black"
+        borderColor: "black",
+        marginTop: 5,
+        marginLeft: 10
     },
     userInfo: {
+        flex: 1,
         flexDirection: "row",
         justifyContent: "space-between"
+    },
+    imgAndUsername: {
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "baseline"
+    },
+    username: {
+        margin: 10,
+        marginBottom: 10,
+        fontSize: 30
     }
 });

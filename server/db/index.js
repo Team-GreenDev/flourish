@@ -68,39 +68,28 @@ const addPost = (req) => {
     .then(() => pool.query(`insert into tags set text = '${text}'`));
 };
 
-// Updating post by id
-const updatePostById = (req) => {
-  // Getting post id
-  const { id } = req.params;
-  return pool.query(`UPDATE posts SET like_count = like_count + 1 WHERE id = ${id}`);
-};
 
 // LIKES QUERIES //
 
 // add to likes count on post
 const likePost = (req) => {
   const { id, user_id } = req.body;
-  return pool.query(`UPDATE posts set like_count = like_count + 1 WHERE user_id = '${user_id}' AND id = ${id}`)
-    .then(() => pool.query(`select total_like from users where id = '${user_id}'`))
-    .then((totalLikeArray) => pool.query(`update users set total_like = ${totalLikeArray[0].total_like} + 1 where id = '${user_id}'`))
-    .then(() => pool.query(`insert into likes set post_id = ${id}, user_id = '${user_id}'`));
+  return pool.query(`select * from likes where post_id = ${id} and user_id = '${user_id}'`)
+    .then((likesResult) => {
+      if (likesResult.length) {
+        pool.query(`delete from likes where post_id = ${id} and user_id = '${user_id}'`)
+          .then(() => pool.query(`UPDATE posts set like_count = like_count - 1 WHERE id = ${id}`))
+          .then(() => pool.query(`select user_id from posts where id = ${id}`))
+          .then((result) => pool.query(`update users set total_like = total_like - 1 where id = '${result[0].user_id}'`));
+      } else {
+        pool.query(`insert into likes set post_id = ${id}, user_id = '${user_id}'`)
+          .then(() => pool.query(`UPDATE posts set like_count = like_count + 1 WHERE id = ${id}`))
+          .then(() => pool.query(`select user_id from posts where id = ${id}`))
+          .then((result) => pool.query(`update users set total_like = total_like + 1 where id = '${result[0].user_id}'`));
+      }
+    });
 };
 
-// subtract from likes count on post
-const unLikePost = (req) => {
-  const { id, user_id } = req.body;
-  return pool.query(`UPDATE posts set like_count = like_count - 1 WHERE user_id = '${user_id}' AND id = ${id}`)
-    .then(() => pool.query(`select total_like from users where id = '${user_id}'`))
-    .then((totalLikeArray) => pool.query(`update users set total_like = ${totalLikeArray[0].total_like} - 1 where id = '${user_id}'`))
-    .then(() => pool.query(`delete from likes where post_id = ${id} and user_id = '${user_id}'`));
-};
-
-
-// Get user total likes
-const getUserTotalLikes = (req) => {
-  const { id } = req.params;
-  return pool.query(`select total_like from users where id = ${id}`);
-};
 
 // COMMENTS QUERIES //
 
@@ -248,11 +237,8 @@ module.exports = {
   getTagsFromPostId,
   getUserMessages,
   likePost,
-  updatePostById,
   followNewUser,
   unFollowUser,
   deleteComment,
-  getUserTotalLikes,
   getFollowingById,
-  unLikePost,
 };
