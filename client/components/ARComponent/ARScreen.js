@@ -82,9 +82,9 @@ export default class HomeScreen extends React.Component {
     // Add the current object...
     GooglePoly.getThreeModel(this.state.currentAsset, function(object) {
       this.threeModel = object;
-      ExpoTHREE.utils.scaleLongestSideToSize(object, 0.75);
-      object.position.z = -0.4;
-      object.position.y = -0.4;
+      ExpoTHREE.utils.scaleLongestSideToSize(object, 1);
+      object.position.z = -0.5;
+      object.position.y = -1.2;
       this.scene.add(object);
     }.bind(this), function(error) {
       console.log(error);
@@ -139,18 +139,18 @@ export default class HomeScreen extends React.Component {
           onRender={this.onRender}
           onResize={this.onResize}
           isArEnabled
-          isArRunningStateEnabled
+          // isArRunningStateEnabled
           isArCameraStateEnabled
           arTrackingConfiguration={'ARWorldTrackingConfiguration'}
           />
 
         <View style={{position:"absolute", bottom: 25, flex: 1, flexDirection: "row"}}>
           <View style={{flex: 1, flexDirection: "row", justifyContent: "space-between"}}>
+            {/* <View></View>
             <View></View>
             <View></View>
             <View></View>
-            <View></View>
-            <View></View>
+            <View></View> */}
             <View></View>
             <Icon.Button size={40} name="plus" backgroundColor="transparent" onPress={this.onAddObjectPress} />
             <Icon.Button size={40} name="magnify" backgroundColor="transparent" onPress={this.onSearchModalPress} />
