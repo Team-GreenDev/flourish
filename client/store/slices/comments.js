@@ -5,9 +5,9 @@ import { apiCallBegan } from '../api';
 const slice = createSlice({
   name: 'comments',
   initialState: {
+    list: [],
     currentPost: {},
     currentUser: {},
-    currentComments: [],
     commentsAdded: 0,
     loading: true,
   },
@@ -22,21 +22,21 @@ const slice = createSlice({
       comments.loading = false;
     },
     // loading set to false, ending the loading spinner because request failed
-    commentScreenRequestSucceeded: (comments, action) => {
+    commentsReceived: (comments, action) => {
+      comments.list = action.payload;
       comments.loading = false;
     },
     commentsAdded: (comments, action) => {
       // get messages when this number changes
-      comments.commentsgeAdded += 1;
+      comments.commentsAdded += 1;
     },
     // sets current user
     setCommentInfo: (comments, action) => {
-      const { post, user, postComments } = action.payload;
+      const { post, user } = action.payload;
       comments.currentPost = post;
       comments.currentUser = user;
-      comments.currentComments = postComments;
-      comments.loading = false;
 
+      comments.loading = false;
     },
   },
 });
@@ -44,22 +44,34 @@ const slice = createSlice({
 export const {
   setCommentInfo,
   commentScreenRequestFailed,
-  commentScreenRequestSucceeded,
+  commentsReceived,
   commentScreenRequested,
+  commentsAdded,
 } = slice.actions;
 
 export default slice.reducer;
 
 // ACTION CREATORS
+const url = '/api/comments';
 
 // In the case of onStart, onSuccess, and onError:
 // use strings for the value of the next action, do not use the actual func as callbacks
 // The action object should be serializable (should be able to store it)
 // so we must pass the action.type which is a string
-export const getPostComments = (id) => apiCallBegan({
-  url: `/api/comments/post/${id}`,
+export const loadCommentsByPostId = (postId) => apiCallBegan({
+  url: `/api/comments/post/${postId}`,
   onStart: commentScreenRequested.type,
-  onSuccess: commentScreenRequestSucceeded.type,
+  onSuccess: commentsReceived.type,
+  onError: commentScreenRequestFailed.type,
+});
+
+// Add comment to database => { user_id , post_id, comment_text }
+export const addComment = (comment) => apiCallBegan({
+  url,
+  method: 'POST',
+  data: comment,
+  onStart: commentScreenRequested.type,
+  onSuccess: commentsAdded.type,
   onError: commentScreenRequestFailed.type,
 });
 
