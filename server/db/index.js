@@ -156,6 +156,12 @@ const addMessage = (req) => {
   return pool.query(`insert into messages set user_id = ${user_id}, recipient_id = ${recipient_id}, created_at = NOW(), text = '${text}'`);
 };
 
+const deleteMessageThread = (req) => {
+  const { user_id, recipient_id } = req.body;
+  return pool.query(`delete from messages where user_id = '${user_id}' and recipient_id = '${recipient_id}'`)
+    .then(() => pool.query(`delete from messages where user_id = '${recipient_id}' and recipient_id = '${user_id}'`));
+};
+
 
 // FOLLOWERS QUERIES //
 
@@ -249,4 +255,5 @@ module.exports = {
   getFollowingById,
   getAllLikedPosts,
   getSeedCount,
+  deleteMessageThread,
 };
