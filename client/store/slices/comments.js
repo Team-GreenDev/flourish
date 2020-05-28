@@ -6,6 +6,7 @@ const slice = createSlice({
   name: 'comments',
   initialState: {
     list: [],
+    allComments: [],
     currentPost: {},
     currentUser: {},
     commentsAdded: 0,
@@ -19,6 +20,11 @@ const slice = createSlice({
     },
     // loading set to false, ending the loading spinner because request failed
     commentScreenRequestFailed: (comments, action) => {
+      comments.loading = false;
+    },
+    // loading set to false, ending the loading spinner because request failed
+    allCommentsReceived: (comments, action) => {
+      comments.allComments = action.payload;
       comments.loading = false;
     },
     // loading set to false, ending the loading spinner because request failed
@@ -47,6 +53,7 @@ export const {
   commentsReceived,
   commentScreenRequested,
   commentsAdded,
+  allCommentsReceived,
 } = slice.actions;
 
 export default slice.reducer;
@@ -58,6 +65,13 @@ const url = '/api/comments';
 // use strings for the value of the next action, do not use the actual func as callbacks
 // The action object should be serializable (should be able to store it)
 // so we must pass the action.type which is a string
+export const loadAllComments = () => apiCallBegan({
+  url,
+  onStart: commentScreenRequested.type,
+  onSuccess: allCommentsReceived.type,
+  onError: commentScreenRequestFailed.type,
+});
+
 export const loadCommentsByPostId = (postId) => apiCallBegan({
   url: `/api/comments/post/${postId}`,
   onStart: commentScreenRequested.type,
