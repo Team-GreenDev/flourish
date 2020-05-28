@@ -7,9 +7,11 @@ import ProfileScreen from '../screens/ProfileScreen';
 import MessageRouteScreen from '../screens/Messages/MessageRouteScreen';
 import SearchRouteScreen from '../screens/Search/SearchRouteScreen';
 import HomeRouteScreen from '../screens/Home/HomeRouteScreen';
+import { useDispatch, useSelector } from 'react-redux';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
+
 
 export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -60,6 +62,7 @@ export default function BottomTabNavigator({ navigation, route }) {
 
 function getHeaderTitle(route) {
   const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
+  const currentUser = useSelector(state => state.auth.currentUser);
 
   switch (routeName) {
     case ' ':
@@ -71,7 +74,7 @@ function getHeaderTitle(route) {
     case 'Notification':
       return 'What\'s happening!';
     case '    ':
-      return '';
+      return `${currentUser.username}`;
     case '     ':
       return 'Messages';
   }
