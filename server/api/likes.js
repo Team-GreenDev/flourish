@@ -16,7 +16,6 @@ likesRouter.post('/', (req, res) => {
   db.likePost(req, res)
     .then((like) => {
       res.status(201).send(like);
-      console.log(like);
     })
     .catch((error) => {
       console.error(error);
