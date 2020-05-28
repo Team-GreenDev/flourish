@@ -34,6 +34,11 @@ const slice = createSlice({
     setRecipientId: (messages, action) => {
       messages.recipientId = action.payload;
     },
+    // trigger a reload of messages when message thread is deleted
+    messageThreadDeleted: (messages, action) => {
+      // get messages when this number changes
+      messages.messageAdded += 1;
+    },
   },
 });
 
@@ -42,6 +47,7 @@ const {
   messageAdded,
   messagesRequested,
   messagesRequestFailed,
+  messageThreadDeleted,
 } = slice.actions;
 
 export const { setRecipientId } = slice.actions;
@@ -69,6 +75,15 @@ export const addMessage = (message) => apiCallBegan({
   // on success this action will update (add to) the store
   // so that it reflects the correct data in the database
   onSuccess: messageAdded.type,
+});
+
+export const deleteMessageThread = (ids) => apiCallBegan({
+  url,
+  method: 'PATCH',
+  data: ids,
+  onStart: messagesRequested.type,
+  onSuccess: messageThreadDeleted.type,
+  onError: messagesRequestFailed.type,
 });
 
 // SELECTOR FUNCTIONS - takes the state and returns the computed state
