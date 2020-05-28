@@ -13,11 +13,7 @@ const guidelineBaseHeight = 680;
 const scale = size => width / guidelineBaseWidth * size;
 const verticalScale = size => height / guidelineBaseHeight * size;
 const moderateScale = (size, factor = 0.5) => size + (scale(size) - size) * factor;
-{/* <View style={{justifyContent: "center", alignItems: "center"}}>
-</View>
-{/* <TouchableOpacity onPress={() => history.push("/")} style={{ flex: 1, paddingLeft: 10 }}>
-<MaterialCommunityIcons name="keyboard-backspace" color="black" size={35}/>
-</TouchableOpacity> */}
+
 
 export default function Comments({ history }) {
 
@@ -34,7 +30,9 @@ export default function Comments({ history }) {
   return (
     <View>
         <KeyboardAwareScrollView >
-        <Button title="back" onPress={() => history.push('/')}></Button>
+         <TouchableOpacity onPress={() => history.push("/")} style={{ flex: 1, paddingLeft: 10 }}>
+          <MaterialCommunityIcons name="keyboard-backspace" color="black" size={35}/>
+        </TouchableOpacity>
         <View style={styles.container}>
         <Image style={styles.postImg} source={{uri: currentPost.url}}></Image>
         </View>
