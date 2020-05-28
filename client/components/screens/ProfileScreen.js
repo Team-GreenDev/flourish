@@ -2,9 +2,9 @@ import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadPosts, loadLikedPosts } from '../../store/slices/posts';
 
-  // MISSING FUNCTIONALITY: Dynamically render all posts current user has liked
+import { loadPosts, loadLikedPosts } from '../../store/slices/posts';
+import { loadSeeds } from '../../store/slices/seeds';
 
 export default function ProfileScreen() {
   const dispatch = useDispatch();
@@ -12,6 +12,7 @@ export default function ProfileScreen() {
   const currentUser = useSelector(state => state.auth.currentUser);
   const followers = useSelector(state => state.follow.followers);
   const following = useSelector(state => state.follow.following);
+  const seedCount = useSelector(state => state.seeds.count);
   const likedPosts = useSelector(state => state.posts.likedPosts);
   const users = useSelector(state => state.users)
 
@@ -21,6 +22,7 @@ export default function ProfileScreen() {
   const getUserById = (id) => users.list.filter((user) => user.id == id);
 
   useEffect(()=>{
+    dispatch(loadSeeds(currentUser.id));
     dispatch(loadPosts());
     dispatch(loadLikedPosts(currentUser.id));
   }, [posts.postAdded])
@@ -64,7 +66,7 @@ export default function ProfileScreen() {
           <View style={styles.followCount}>
             <Text style={styles.followText}>{following.length} Following</Text>
             <Text style={styles.followText}>{followers.length} Followers</Text>
-            <Text style={styles.followText}>{getUserById(currentUser.id)[0].total_like} Seeds</Text>
+            <Text style={styles.followText}>{seedCount} Seeds</Text>
           </View>
         </TouchableOpacity>
           <View style={styles.iconView}>

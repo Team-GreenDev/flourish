@@ -41,6 +41,12 @@ const getUsersById = (req) => {
   return pool.query(`SELECT * FROM users WHERE id = ${id}`);
 };
 
+// Get seed count (all likes for a user)
+const getSeedCount = (req) => {
+  const { id } = req.params;
+  return pool.query(`select total_like from users where id = '${id}'`);
+};
+
 
 // POSTS QUERIES //
 
@@ -95,6 +101,7 @@ const getAllLikedPosts = (req) => {
   const { id } = req.params;
   return pool.query(`select post_id from likes where user_id = '${id}'`);
 };
+
 
 // COMMENTS QUERIES //
 
@@ -247,4 +254,5 @@ module.exports = {
   deleteComment,
   getFollowingById,
   getAllLikedPosts,
+  getSeedCount,
 };

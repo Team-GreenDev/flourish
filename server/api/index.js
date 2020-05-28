@@ -8,6 +8,7 @@ const { postTagsRouter } = require('./postTags');
 const { tagsRouter } = require('./tags');
 const { usersRouter } = require('./users');
 const { likesRouter } = require('./likes');
+const { seedsRouter } = require('./seeds');
 
 const apiRouter = express.Router();
 
@@ -20,6 +21,7 @@ apiRouter.use('/postTags', postTagsRouter);
 apiRouter.use('/tags', tagsRouter);
 apiRouter.use('/users', usersRouter);
 apiRouter.use('/likes', likesRouter);
+apiRouter.use('/seeds', seedsRouter);
 
 module.exports = {
   apiRouter,

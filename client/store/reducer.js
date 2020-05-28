@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import seedsReducer from './slices/seeds';
 import plantsReducer from './slices/plants';
 import usersReducer from './slices/users';
 import postsReducer from './slices/posts';
@@ -12,6 +13,7 @@ import followReducer from './slices/follow';
 // combineReducers is then passed into the creation of the store in configureStore
 export default combineReducers({
   auth: authReducer,
+  seeds: seedsReducer,
   follow: followReducer,
   messages: messagesReducer,
   photo: photoReducer,

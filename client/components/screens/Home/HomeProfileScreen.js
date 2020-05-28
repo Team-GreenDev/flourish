@@ -5,19 +5,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 import { loadFollowers, loadFollowing, followUser, unfollowUser } from '../../../store/slices/follow';
-
-  // MISSING FUNCTIONALITY: Dynamically render Followers, Following, and all posts current user has liked
+import { loadSeeds } from '../../../store/slices/seeds';
 
 export default function HomeProfileScreen({ history }) {
   const dispatch = useDispatch();
   const posts = useSelector(state => state.posts);
   const currentUser = useSelector(state => state.auth.currentUser);
   const clickedUser = useSelector(state => state.users.clickedUser);
+  const seedCount = useSelector(state => state.seeds.count);
   const followers = useSelector(state => state.follow.followers.map(user => user.id));
   const following = useSelector(state => state.follow.following.map(user => user.id));
   const [ followStatus, setFollowStatus ] = useState(followers.includes(true))
 
   useEffect(() => {
+    dispatch(loadSeeds(clickedUser.id));
     dispatch(loadFollowers(clickedUser.id));
     dispatch(loadFollowing(clickedUser.id));
   }, [followStatus])
@@ -75,7 +76,7 @@ export default function HomeProfileScreen({ history }) {
           <View style={styles.followCount}>
             <Text style={styles.followText}>{following.length} Following</Text>
             <Text style={styles.followText}>{followers.length} Followers</Text>
-            <Text style={styles.followText}>{clickedUser.total_like} Seeds</Text>
+            <Text style={styles.followText}>{seedCount} Seeds</Text>
           </View>
           {currentUser.id !== clickedUser.id ?
           <View style={{justifyContent: "center", alignItems: "center"}}>
