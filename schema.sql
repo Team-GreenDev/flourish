@@ -151,3 +151,6 @@ insert into followers set user_id = '3', follower_id = '108191618273119179607';
 insert into followers set user_id = '4', follower_id = '108191618273119179607';
 insert into followers set user_id = '5', follower_id = '108191618273119179607';
 insert into followers set user_id = '6', follower_id = '108191618273119179607';
+
+/* Add new comments to posts */
+ insert into comments set user_id = 4, post_id = 10, comment_text = 'sweetpost', created_at = NOW();

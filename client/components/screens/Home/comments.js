@@ -1,7 +1,9 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { StyleSheet, Text, View, ScrollView, Image, Button, TouchableOpacity, Dimensions, TextInput } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPostComments } from '../../../store/slices/comments';
 
 
 // get dimensions for any phone screen to fit image
@@ -19,18 +21,28 @@ const moderateScale = (size, factor = 0.5) => size + (scale(size) - size) * fact
 
 export default function Comments({ history }) {
 
+    const dispatch = useDispatch();
+    const currentUser = useSelector(state => state.comments.currentUser);
+    const currentPost = useSelector(state => state.comments.currentPost);
+    const currentPostComments = useSelector(state => state.comments);
+
+    useEffect(() => {
+        dispatch(getPostComments(currentPost.id));
+    }, []);
+
 
   return (
     <View>
         <KeyboardAwareScrollView >
+        <Button title="back" onPress={() => history.push('/')}></Button>
         <View style={styles.container}>
-        <Image style={styles.postImg} source={{uri: 'https://www.kindpng.com/picc/m/191-1915065_sword-fern-fern-plant-png-transparent-png.png'}}></Image>
+        <Image style={styles.postImg} source={{uri: currentPost.url}}></Image>
         </View>
         <View style={styles.userInfo}>
         <View>
-        <Image style={styles.profileImg }source={{uri: "https://www.vhv.rs/dpng/d/233-2335904_weekend-palm-tree-hair-hd-png-download.png"}}></Image>
+        <Image style={styles.profileImg }source={{uri: currentUser.image_url}}></Image>
         <View style={styles.usernameContainer}>
-        <Text style={styles.username}>xoweekday</Text>
+        <Text style={styles.username}>{currentUser.username}</Text>
         </View>
         {/* <MaterialCommunityIcons
         name={"flower-tulip"}
@@ -42,10 +54,10 @@ export default function Comments({ history }) {
         </View>
         </View>
         <View style={styles.postDescription}>
-        <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Text>
+        <Text>{currentPost.text}</Text>
         </View>
         <View style={styles.tagView}>
-        <Text>#fern #firstpost</Text>
+        <Text>{currentPost.tag}</Text>
         </View>
         <View style={styles.commentContainer}>
         <Text>Comments (12)</Text>
