@@ -153,4 +153,8 @@ insert into followers set user_id = '5', follower_id = '108191618273119179607';
 insert into followers set user_id = '6', follower_id = '108191618273119179607';
 
 /* Add new comments to posts */
- insert into comments set user_id = 4, post_id = 10, comment_text = 'sweetpost', created_at = NOW();
+insert into comments set user_id = '4', post_id = 10, comment_text = 'Sweet post!', created_at = NOW();
+insert into comments set user_id = '2', post_id = 9, comment_text = 'Those look great! I love the arrangement', created_at = NOW();
+insert into comments set user_id = '3', post_id = 9, comment_text = 'Love the colors', created_at = NOW();
+insert into comments set user_id = '4', post_id = 9, comment_text = 'I need some of those plants', created_at = NOW();
+insert into comments set user_id = '5', post_id = 9, comment_text = 'You do have an army!', created_at = NOW();
