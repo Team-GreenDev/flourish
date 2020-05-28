@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { loadPosts, likePost, loadLikedPosts } from '../../../store/slices/posts';
 import { clickedUserAssigned } from '../../../store/slices/users';
 import { loadFollowers, loadFollowing } from '../../../store/slices/follow';
-import { setCommentInfo } from '../../../store/slices/comments';
+import { setCommentInfo, loadAllComments } from '../../../store/slices/comments';
 
 export default function HomeScreen({ history }) {
   const dispatch = useDispatch();
@@ -15,6 +15,7 @@ export default function HomeScreen({ history }) {
   const currentUser = useSelector(state => state.auth.currentUser);
   const usersImFollowing = useSelector(state => state.follow.following.map(user => user.id));
   const likedPostsIds = useSelector(state => state.posts.likedPosts.map(post => post.id));
+  const allComments = useSelector(state => state.comments.allComments)
 
   const allPostsFromFollowing = posts.list.filter(post => usersImFollowing.includes(post.user_id))
   const [ feed, setFeed ] = useState(true)
@@ -29,6 +30,7 @@ export default function HomeScreen({ history }) {
   useEffect(() => {
     dispatch(loadFollowers(currentUser.id));
     dispatch(loadFollowing(currentUser.id));
+    dispatch(loadAllComments());
   }, [])
 
   const addLike = (ids) => {
@@ -52,7 +54,6 @@ export default function HomeScreen({ history }) {
     dispatch(setCommentInfo({post, user }));
     history.push("/comments");
   }
-
 
   return (
     <View>
@@ -84,21 +85,33 @@ export default function HomeScreen({ history }) {
                 </TouchableOpacity>
                 <View style={styles.likesContainer}>
                 <Text style={styles.username} onPress={() => handlePress(user)}>{user.username}</Text>
-                <TouchableOpacity style={{flexDirection: 'row'}}>
-                      <MaterialCommunityIcons
-                      name={"flower-tulip"}
-                      size={24}
-                      raised
-                      style={{color: likedPostsIds.includes(post.id) ? "green" : "white"}}
-                      onPress={() => addLike({id: post.id, user_id: currentUser.id})}
-                      />
-                      <Text>{post.like_count}</Text>
-                </TouchableOpacity>
+                <View style={{flexDirection: "row"}}>
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: "center", marginRight: 5}}>
+                        <MaterialCommunityIcons
+                        name={"flower-tulip"}
+                        size={24}
+                        raised
+                        style={{color: likedPostsIds.includes(post.id) ? "green" : "white"}}
+                        onPress={() => addLike({id: post.id, user_id: currentUser.id})}
+                        />
+                        <Text>{post.like_count}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: "center"}}>
+                        <MaterialCommunityIcons
+                        name={"comment-text-outline"}
+                        size={24}
+                        raised
+                        style={{color: likedPostsIds.includes(post.id) ? "green" : "white", marginRight: 1}}
+                        onPress={() => addLike({id: post.id, user_id: currentUser.id})}
+                        />
+                        <Text>{allComments.filter(comment => comment.post_id === post.id).length}</Text>
+                  </TouchableOpacity>
                 </View>
-                <View style={styles.body}>
+              </View>
+              <View style={styles.body}>
                 <Text style={styles.message} numberOfLines={2}>{post.text}</Text>
                 <Text style={styles.tags}>{post.tag}</Text>
-                </View>
+              </View>
               </View>
               <Text> </Text>
             </View>
@@ -109,12 +122,13 @@ export default function HomeScreen({ history }) {
               <View key={post.id}>
                 <Text> </Text>
                 <View style={styles.post} onPress={() => console.log("apple")} >
-                  <TouchableOpacity onPress={() => history.push("/comments")}>
-                  <Image style={styles.image} source={{ uri: post.url }}/>
+                  <TouchableOpacity onPress={() => handleComments(post, user)}>
+                    <Image style={styles.image} source={{ uri: post.url }}/>
                   </TouchableOpacity>
                   <View style={styles.likesContainer}>
-                  <Text style={styles.username} onPress={() => handlePress(user)}>{user.username}</Text>
-                  <TouchableOpacity style={{flexDirection: 'row'}}>
+                    <Text style={styles.username} onPress={() => handlePress(user)}>{user.username}</Text>
+                    <View style={{flexDirection: "row"}}>
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: "center", marginRight: 5}}>
                         <MaterialCommunityIcons
                         name={"flower-tulip"}
                         size={24}
@@ -124,10 +138,21 @@ export default function HomeScreen({ history }) {
                         />
                         <Text>{post.like_count}</Text>
                   </TouchableOpacity>
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: "center"}}>
+                        <MaterialCommunityIcons
+                        name={"comment-text-outline"}
+                        size={24}
+                        raised
+                        style={{color: likedPostsIds.includes(post.id) ? "green" : "white", marginRight: 1}}
+                        onPress={() => addLike({id: post.id, user_id: currentUser.id})}
+                        />
+                        <Text>{allComments.filter(comment => comment.post_id === post.id).length}</Text>
+                  </TouchableOpacity>
+                </View>
                   </View>
                   <View style={styles.body}>
-                  <Text style={styles.message} numberOfLines={2}>{post.text}</Text>
-                  <Text style={styles.tags}>{post.tag}</Text>
+                    <Text style={styles.message} numberOfLines={2}>{post.text}</Text>
+                    <Text style={styles.tags}>{post.tag}</Text>
                   </View>
                 </View>
                 <Text> </Text>
