@@ -1,7 +1,9 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, Button, TouchableOpacity, Dimensions } from 'react-native';
-import { SearchBar } from 'react-native-elements';
+import React, { useState, useEffect } from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { StyleSheet, Text, View, ScrollView, Image, Button, TouchableOpacity, Dimensions, TextInput } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPostComments } from '../../../store/slices/comments';
 
 
 // get dimensions for any phone screen to fit image
@@ -11,47 +13,123 @@ const guidelineBaseHeight = 680;
 const scale = size => width / guidelineBaseWidth * size;
 const verticalScale = size => height / guidelineBaseHeight * size;
 const moderateScale = (size, factor = 0.5) => size + (scale(size) - size) * factor;
-{/* <View style={{justifyContent: "center", alignItems: "center"}}>
-</View>
-{/* <TouchableOpacity onPress={() => history.push("/")} style={{ flex: 1, paddingLeft: 10 }}>
-<MaterialCommunityIcons name="keyboard-backspace" color="black" size={35}/>
-</TouchableOpacity> */}
+
 
 export default function Comments({ history }) {
+
+    const dispatch = useDispatch();
+    const currentUser = useSelector(state => state.comments.currentUser);
+    const currentPost = useSelector(state => state.comments.currentPost);
+    const currentPostComments = useSelector(state => state.comments);
+
+    useEffect(() => {
+        dispatch(getPostComments(currentPost.id));
+    }, []);
 
 
   return (
     <View>
-        <ScrollView >
+        <KeyboardAwareScrollView >
+         <TouchableOpacity onPress={() => history.push("/")} style={{ flex: 1, paddingLeft: 10 }}>
+          <MaterialCommunityIcons name="keyboard-backspace" color="black" size={35}/>
+        </TouchableOpacity>
         <View style={styles.container}>
-        <Image style={styles.postImg} source={{uri: 'https://www.kindpng.com/picc/m/191-1915065_sword-fern-fern-plant-png-transparent-png.png'}}></Image>
+        <Image style={styles.postImg} source={{uri: currentPost.url}}></Image>
         </View>
         <View style={styles.userInfo}>
-        <View style={styles.imgAndUsername}>
-        <Image style={styles.profileImg }source={{uri: "https://www.vhv.rs/dpng/d/233-2335904_weekend-palm-tree-hair-hd-png-download.png"}}></Image>
+        <View>
+        <Image style={styles.profileImg }source={{uri: currentUser.image_url}}></Image>
         <View style={styles.usernameContainer}>
-        <Text style={styles.username}>xoweekday</Text>
+        <Text style={styles.username}>{currentUser.username}</Text>
         </View>
-        </View>
-        <MaterialCommunityIcons
+        {/* <MaterialCommunityIcons
         name={"flower-tulip"}
         size={24}
         raised
         style={styles.icon}
         onPress={() => console.log('hey')}
+        /> */}
+        </View>
+        </View>
+        <View style={styles.postDescription}>
+        <Text>{currentPost.text}</Text>
+        </View>
+        <View style={styles.tagView}>
+        <Text>{currentPost.tag}</Text>
+        </View>
+        <View style={styles.commentContainer}>
+        <Text>Comments (12)</Text>
+        </View>
+        <View styles={styles.inputContainer}>
+        <TextInput
+        multiline={true}
+        numberOfLines={10}
+        placeholder="type"
+        style={styles.input}
         />
-
+        <View style={styles.submitContainer}>
+        <TouchableOpacity style={styles.submitButton} underlayColor="#9C4C33">
+        <Text style={styles.submitText}>Sumbit</Text>
+        </TouchableOpacity>
         </View>
-        <View>
-
         </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
     </View>
   );
 }
 
 
 const styles = StyleSheet.create({
+    postDescription: {
+        flexDirection: "row",
+        marginLeft: 20,
+        marginRight: 20
+
+    },
+    submitContainer: {
+        flexDirection: "row-reverse"
+    },
+    submitText:{
+        color:'#fff',
+        textAlign:'center',
+        paddingLeft : 10,
+        paddingRight : 10
+    },
+    submitButton:{
+        marginRight:40,
+        marginLeft:40,
+        marginTop:10,
+        paddingTop:10,
+        paddingBottom:10,
+        backgroundColor:'#9C4C33',
+        borderRadius:10,
+        borderWidth: 1,
+        borderColor: '#fff'
+      },
+    input: {
+        height: 100,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 10,
+        marginTop: 10,
+        marginRight: 30,
+        marginLeft: 30
+    },
+    inputContainer: {
+        flex: 1,
+        marginTop: 20,
+        flexDirection: "row",
+        alignItems: "center"
+
+    },
+    commentContainer: {
+        marginTop: 20,
+        marginLeft: 20
+    },
+    tagView: {
+        marginTop: 20,
+        marginLeft: 20
+    },
     postImg: {
         height: verticalScale(350),
         width: moderateScale(350),
@@ -82,6 +160,6 @@ const styles = StyleSheet.create({
     username: {
         margin: 10,
         marginBottom: 10,
-        fontSize: 30
+        fontSize: 25
     }
 });

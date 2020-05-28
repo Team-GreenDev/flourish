@@ -6,6 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { loadPosts, likePost, loadLikedPosts } from '../../../store/slices/posts';
 import { clickedUserAssigned } from '../../../store/slices/users';
 import { loadFollowers, loadFollowing } from '../../../store/slices/follow';
+import { setCommentInfo } from '../../../store/slices/comments';
 
 export default function HomeScreen({ history }) {
   const dispatch = useDispatch();
@@ -47,6 +48,11 @@ export default function HomeScreen({ history }) {
     setFeed(false);
   }
 
+  const handleComments = (post, user) => {
+    dispatch(setCommentInfo({post, user }));
+    history.push("/comments");
+  }
+
 
   return (
     <View>
@@ -73,7 +79,7 @@ export default function HomeScreen({ history }) {
             <View key={post.id}>
               <Text> </Text>
               <View style={styles.post} onPress={() => console.log("apple")} >
-                <TouchableOpacity onPress={() => history.push("/comments")}>
+                <TouchableOpacity onPress={() => handleComments(post, user)}>
                 <Image style={styles.image} source={{ uri: post.url }}/>
                 </TouchableOpacity>
                 <View style={styles.likesContainer}>

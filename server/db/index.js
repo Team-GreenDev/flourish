@@ -123,13 +123,13 @@ const getCommentsFromUserId = (req) => {
 // Add new comment to database
 const addComment = (req) => {
   const { comment_text, user_id, post_id } = req.body;
-  return pool.query(`insert into comments set user_id = ${user_id}, post_id = ${post_id}, comment_text = '${comment_text}', created_at = NOW()`);
+  return pool.query(`insert into comments set user_id = '${user_id}', post_id = ${post_id}, comment_text = '${comment_text}', created_at = NOW()`);
 };
 
 // Delete comment from post
 const deleteComment = (req) => {
   const { id, user_id } = req.body;
-  return pool.query(`delete from comments where user_id = ${user_id} and id = ${id}`);
+  return pool.query(`delete from comments where user_id = '${user_id}' and id = ${id}`);
 };
 
 
@@ -217,12 +217,6 @@ const getUserMessages = (req) => {
   const user_id = parseInt(id, 10);
 
   return pool.query(`select text, created_at, recipient_id from messages where user_id = ${user_id} order by created_at desc`);
-  //     .then((message) => {
-  //       const allRecipients = message.map((m) => m.recipient_id);
-  //       console.log(allRecipients);
-
-//       // pool.query(`select username from users where id = ${}`)
-//     });
 };
 
 
