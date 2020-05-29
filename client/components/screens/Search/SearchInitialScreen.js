@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { useSelector } from 'react-redux';
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 export default function SearchScreen({history}) {
   const allPosts = useSelector(state => state.posts.list);
@@ -13,6 +14,9 @@ export default function SearchScreen({history}) {
   const [ select, setSelect ] = useState(false);
   const [ loading, setLoading ] = useState(false);
   const [ searchedPosts, setSearchedPosts ] = useState(null);
+
+  const likedPostsIds = useSelector(state => state.posts.likedPosts.map(post => post.id));
+  const allComments = useSelector(state => state.comments.allComments)
 
   const handleSearch = (e) => {
     if(select){
@@ -105,7 +109,31 @@ export default function SearchScreen({history}) {
               <Text> </Text>
               <View style={styles.post}>
                 <Image style={styles.image} source={{ uri: post.url }}/>
-                <Text style={styles.username}>{name}</Text>
+                <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+                  <Text style={styles.username}>{name}</Text>
+                    <View style={{flexDirection: "row"}}>
+                    <TouchableOpacity style={{flexDirection: 'row', alignItems: "center", marginRight: 5}}>
+                      <MaterialCommunityIcons
+                        name={"flower-tulip"}
+                        size={24}
+                        raised
+                        style={{color: likedPostsIds.includes(post.id) ? "#697A44" : "white"}}
+                        onPress={() => console.log('like')}
+                      />
+                      <Text>{post.like_count}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{flexDirection: 'row', alignItems: "center", marginRight: 8}}>
+                      <MaterialCommunityIcons
+                        name={"comment-text-outline"}
+                        size={24}
+                        raised
+                        style={{color: "#697A44", marginRight: 1}}
+                        onPress={() => console.log('comments')}
+                      />
+                      <Text>{allComments.filter(comment => comment.post_id === post.id).length}</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
                 <Text style={styles.message}>{post.text}</Text>
                 <Text style={styles.tags}>{post.tag}</Text>
               </View>
@@ -132,6 +160,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   username: {
+    marginHorizontal: 10,
     fontSize: 18,
     color: '#697A44',
     fontWeight: "600",
