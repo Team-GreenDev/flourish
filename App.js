@@ -34,7 +34,7 @@ export default function App() {
         {loggedIn ?
         <NavigationContainer>
           <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
+            <Stack.Screen name="Flourish" component={BottomTabNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
         : <LoginScreen logInSuccessful={logInSuccessful} />}
