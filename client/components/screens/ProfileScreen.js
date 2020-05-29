@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -57,18 +57,17 @@ export default function ProfileScreen() {
   ));
 
   return (
-    <ScrollView styles={styles.container}>
-      <View>
+    <ScrollView>
+      <View style={styles.container}>
+        <TouchableOpacity elevation={5} style={styles.infoContainer}>
         <Image style={styles.profilePic} source={{uri: currentUser.image_url}}/>
-        <TouchableOpacity style={styles.infoContainer}>
-          <Text style={styles.username}>{currentUser.username}</Text>
+          {/* <Text style={styles.username}>{currentUser.username}</Text> */}
           <Text style={styles.bio}>{currentUser.bio}</Text>
           <View style={styles.followCount}>
             <Text style={styles.followText}>{following.length} Following</Text>
             <Text style={styles.followText}>{followers.length} Followers</Text>
             <Text style={styles.followText}>{seedCount} Seeds</Text>
           </View>
-        </TouchableOpacity>
           <View style={styles.iconView}>
             <TouchableOpacity>
               <Ionicons style={styles.icon} name="md-grid" size={30} onPress={() => setFeedView(true)}/>
@@ -77,6 +76,7 @@ export default function ProfileScreen() {
               <Ionicons style={styles.icon} name="md-thumbs-up" size={30} onPress={() => setFeedView(false)}/>
             </TouchableOpacity>
           </View>
+        </TouchableOpacity>
           <View>
           {feedView ? (postData) : (likeData)}
           </View>
@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: '#F8F2D8',
   },
   profilePic: {
     alignSelf: 'center',
@@ -99,7 +100,15 @@ const styles = StyleSheet.create({
     borderRadius: 100 / 2,
   },
   infoContainer: {
-    backgroundColor: '#f0efeb',
+    marginBottom: 25,
+    backgroundColor: 'white',
+    shadowColor: "#000000",
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    shadowOffset: {
+      height: 1,
+      width: 1
+    }
   },
   username: {
     marginTop: 10,
@@ -125,26 +134,39 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   icon: {
-    color: 'forestgreen',
+    color: '#697A44',
     marginBottom: 5,
     marginHorizontal: 75,
+    marginVertical: 5,
     },
   image: {
     height: 300,
     width: 300,
     alignSelf: 'center',
     borderRadius: 10,
-    borderWidth: 1,
+    marginBottom: 5,
     },
   postUsername: {
-    fontSize: 25,
-    color: 'forestgreen',
+    fontSize: 18,
+    color: '#697A44',
+    fontWeight: "600",
+    fontFamily: "Thonburi",
+    marginHorizontal: 10,
+    marginBottom: 10,
     },
   message: {
-
+    fontSize: 16,
+    marginHorizontal:10,
+    fontFamily: "Trebuchet MS",
     },
   tags: {
-    color: 'blue',
+    color: '#69747C',
+    fontWeight: "600",
+    fontSize: 16,
+    marginHorizontal:10,
+    marginTop: 5,
+    marginBottom: 10,
+    fontFamily: "Trebuchet MS"
     },
   post: {
     // adding space between posts
@@ -163,5 +185,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignSelf: 'center',
     backgroundColor: '#C0CDC6',
+    justifyContent: "space-evenly",
+    flex: 1,
     },
+
 });
