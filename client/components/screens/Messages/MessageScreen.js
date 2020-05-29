@@ -23,7 +23,7 @@ export default function ProfileScreen({ history }) {
     .filter((e, i, c) => c.indexOf(e) === i);
 
   // changes to searched ids to map over for messages
-  const [ messageUserIds, setMessageUserIds ] = useState(otherUsers);
+  const [ messageUserIds, setMessageUserIds ] = useState(otherUsers.reverse());
   const [ loading, setLoading ] = useState(false);
   const [ searchQuery, setSearchQuery ] = useState('');
   const [ showAll, setShowAll ] = useState(false);
@@ -120,8 +120,8 @@ export default function ProfileScreen({ history }) {
                     <Text style={styles.messagesUsername}>{user.username}</Text>
                     <Text style={styles.messagesText}>
                       {mostRecentMessage.user_id === userId ? "" : "You : "}
-                      {mostRecentMessage.text.length > 30
-                        ? (`${mostRecentMessage.text.slice(0, 30)}...`)
+                      {mostRecentMessage.text.length > 25
+                        ? (`${mostRecentMessage.text.slice(0, 25)}...`)
                         : (mostRecentMessage.text)}
                     </Text>
                   </View>
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
   timeStamp: {
     color: '#94a57e',
     position: 'absolute',
-    left: 340,
+    left: 310,
     top: 17,
   }
 });
