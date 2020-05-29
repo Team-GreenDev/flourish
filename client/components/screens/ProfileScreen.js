@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 import { loadPosts, loadLikedPosts } from '../../store/slices/posts';
 import { loadSeeds } from '../../store/slices/seeds';
@@ -15,6 +16,10 @@ export default function ProfileScreen() {
   const seedCount = useSelector(state => state.seeds.count);
   const likedPosts = useSelector(state => state.posts.likedPosts);
   const users = useSelector(state => state.users)
+
+  const likedPostsIds = useSelector(state => state.posts.likedPosts.map(post => post.id));
+  const allComments = useSelector(state => state.comments.allComments)
+
 
   // Switch views between user's posts and liked posts
   const [feedView, setFeedView] = useState(true);
@@ -37,7 +42,31 @@ export default function ProfileScreen() {
       <View key={post.id}>
         <View style={styles.post}>
           <Image style={styles.image} source={{ uri: post.url }}/>
-          <Text style={styles.postUsername}>{user.username}</Text>
+          <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+            <Text style={styles.postUsername}>{user.username}</Text>
+            <View style={{flexDirection: "row"}}>
+              <TouchableOpacity style={{flexDirection: 'row', alignItems: "center", marginRight: 5}}>
+                <MaterialCommunityIcons
+                  name={"flower-tulip"}
+                  size={24}
+                  raised
+                  style={{color: likedPostsIds.includes(post.id) ? "#697A44" : "white"}}
+                  onPress={() => console.log('like')}
+                />
+                <Text>{post.like_count}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={{flexDirection: 'row', alignItems: "center", marginRight: 8}}>
+                <MaterialCommunityIcons
+                  name={"comment-text-outline"}
+                  size={24}
+                  raised
+                  style={{color: "#697A44", marginRight: 1}}
+                  onPress={() => console.log('comments')}
+                />
+                <Text>{allComments.filter(comment => comment.post_id === post.id).length}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
           <Text style={styles.message}>{post.text}</Text>
           <Text style={styles.tags}>{post.tag}</Text>
         </View>
@@ -49,7 +78,31 @@ export default function ProfileScreen() {
     <View key={post.id}>
       <View style={styles.post}>
         <Image style={styles.image} source={{ uri: post.url }}/>
-        <Text style={styles.postUsername}>{currentUser.username}</Text>
+        <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+          <Text style={styles.postUsername}>{currentUser.username}</Text>
+          <View style={{flexDirection: "row"}}>
+            <TouchableOpacity style={{flexDirection: 'row', alignItems: "center", marginRight: 5}}>
+                  <MaterialCommunityIcons
+                  name={"flower-tulip"}
+                  size={24}
+                  raised
+                  style={{color: likedPostsIds.includes(post.id) ? "#697A44" : "white"}}
+                  onPress={() => console.log('like')}
+                  />
+                  <Text>{post.like_count}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{flexDirection: 'row', alignItems: "center", marginRight: 8}}>
+                  <MaterialCommunityIcons
+                  name={"comment-text-outline"}
+                  size={24}
+                  raised
+                  style={{color: "#697A44", marginRight: 1}}
+                  onPress={() => console.log('comments')}
+                  />
+                  <Text>{allComments.filter(comment => comment.post_id === post.id).length}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
         <Text style={styles.message}>{post.text}</Text>
         <Text style={styles.tags}>{post.tag}</Text>
       </View>
@@ -58,6 +111,13 @@ export default function ProfileScreen() {
 
   return (
     <ScrollView>
+      <View style={{backgroundColor: "white", flexDirection: "row-reverse"}}>
+        <TouchableOpacity
+          onPress={() => console.log('logout')}
+          style={{marginHorizontal: 15, marginVertical: 5, color: "#697A44"}}>
+          <Text>Logout</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.container}>
         <TouchableOpacity elevation={5} style={styles.infoContainer}>
         <Image style={styles.profilePic} source={{uri: currentUser.image_url}}/>
@@ -91,13 +151,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     backgroundColor: '#F8F2D8',
+    overflow: 'hidden',
+    paddingBottom: 5
   },
   profilePic: {
     alignSelf: 'center',
     marginTop: 30,
     width: 125,
     height: 125,
-    borderRadius: 100 / 2,
+    borderRadius: 125 / 2,
   },
   infoContainer: {
     marginBottom: 25,
@@ -140,8 +202,8 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     },
   image: {
-    height: 300,
-    width: 300,
+    height: 350,
+    width: 325,
     alignSelf: 'center',
     borderRadius: 10,
     marginBottom: 5,
@@ -152,7 +214,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontFamily: "Thonburi",
     marginHorizontal: 10,
-    marginBottom: 10,
+    marginBottom: 5,
     },
   message: {
     fontSize: 16,
@@ -173,7 +235,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
 
     // Setting up image width.
-    width: 300,
+    width: 325,
 
     // Set border width.
     borderWidth: 1,
