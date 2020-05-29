@@ -91,7 +91,7 @@ export default function HomeScreen({ history }) {
                         name={"flower-tulip"}
                         size={24}
                         raised
-                        style={{color: likedPostsIds.includes(post.id) ? "green" : "white"}}
+                        style={{color: likedPostsIds.includes(post.id) ? "#697A44" : "white"}}
                         onPress={() => addLike({id: post.id, user_id: currentUser.id})}
                         />
                         <Text>{post.like_count}</Text>
@@ -101,7 +101,7 @@ export default function HomeScreen({ history }) {
                         name={"comment-text-outline"}
                         size={24}
                         raised
-                        style={{color: likedPostsIds.includes(post.id) ? "green" : "white", marginRight: 1}}
+                        style={{color: "#697A44", marginRight: 1}}
                         onPress={() => addLike({id: post.id, user_id: currentUser.id})}
                         />
                         <Text>{allComments.filter(comment => comment.post_id === post.id).length}</Text>
