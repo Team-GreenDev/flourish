@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, TouchableWithoutFeedback } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import moment from "moment";
+import Swipeable from 'react-native-gesture-handler/Swipeable'
 
 import { getUserById } from '../../../store/slices/users';
-import { loadMessages, setRecipientId } from '../../../store/slices/messages';
+import { loadMessages, setRecipientId, deleteMessageThread } from '../../../store/slices/messages';
 
 export default function ProfileScreen({ history }) {
   const dispatch = useDispatch();
@@ -53,6 +54,11 @@ export default function ProfileScreen({ history }) {
     setSearchQuery('');
   }
 
+  const handleDelete = (data) => {
+    setMessageUserIds(messageUserIds.filter(id => id !== data.recipient_id))
+    dispatch(deleteMessageThread(data));
+  }
+
   return (
     <View style={styles.screenContainer}>
       <View style={styles.headerContainer}>
@@ -84,23 +90,45 @@ export default function ProfileScreen({ history }) {
           const mostRecentMessage = mesThreads[index][mesThreads[index].length - 1];
           const time = moment(mostRecentMessage.created_at).format("MMM-DD");
           return (
-            <TouchableOpacity
+            <Swipeable
               key={user.id}
-              style={styles.messagesContainer}
-              onPress={() => handleClick(user.id)}
+              renderRightActions={() => {
+              return (
+                <TouchableWithoutFeedback onPress={() => handleDelete({user_id: currentUser.id, recipient_id: userId})}>
+                  <View style={{
+                    backgroundColor: "#ff5252",
+                    width: 70,
+                    justifyContent: "center",
+                    alignItems: "center"
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name="trash-can"
+                      size={35}
+                      color="white"
+                    />
+                  </View>
+                </TouchableWithoutFeedback>
+              )}}
             >
-              <Image style={styles.messagesImage} source={{uri: user.image_url}}/>
-              <View style={styles.vertText}>
-                <Text style={styles.messagesUsername}>{user.username}</Text>
-                <Text style={styles.messagesText}>
-                  {mostRecentMessage.user_id === userId ? "" : "You : "}
-                  {mostRecentMessage.text.length > 30
-                    ? (`${mostRecentMessage.text.slice(0, 30)}...`)
-                    : (mostRecentMessage.text)}
-                </Text>
-              </View>
-              <Text style={styles.timeStamp}>{time}</Text>
-            </TouchableOpacity>
+              <TouchableWithoutFeedback
+                onPress={() => handleClick(user.id)}
+              >
+                <View style={styles.messagesContainer}>
+                  <Image style={styles.messagesImage} source={{uri: user.image_url}}/>
+                  <View style={styles.vertText}>
+                    <Text style={styles.messagesUsername}>{user.username}</Text>
+                    <Text style={styles.messagesText}>
+                      {mostRecentMessage.user_id === userId ? "" : "You : "}
+                      {mostRecentMessage.text.length > 30
+                        ? (`${mostRecentMessage.text.slice(0, 30)}...`)
+                        : (mostRecentMessage.text)}
+                    </Text>
+                  </View>
+                  <Text style={styles.timeStamp}>{time}</Text>
+                </View>
+              </TouchableWithoutFeedback>
+            </Swipeable>
           )})) : <Text>Loading...</Text>}
         </ScrollView>
         {showAll &&
@@ -121,12 +149,12 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
     backgroundColor: "white",
   },
   messagesContainer: {
     flexDirection: 'row',
     padding: 8,
+    backgroundColor: "#F2F2F2",
   },
   messagesImage: {
     height: 60,

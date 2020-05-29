@@ -32,6 +32,13 @@ messagesRouter.post('/', (req, res) => {
     .catch((error) => res.status(500).send(error));
 });
 
+// un-follow user by id
+messagesRouter.patch('/', (req, res) => {
+  db.deleteMessageThread(req, res)
+    .then(() => res.sendStatus(204))
+    .catch((error) => res.status(500).send(error));
+});
+
 module.exports = {
   messagesRouter,
 };
