@@ -1,9 +1,8 @@
 import 'react-native-gesture-handler';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, Image, StatusBar } from 'react-native';
 import * as Google from 'expo-google-app-auth';
-import * as Facebook from 'expo-facebook';
-import { IOS_CLIENT_ID, FACEBOOK_ID, AND_CLIENT_ID, JAMES_ID, JAMES_URL } from 'react-native-dotenv';
+import { IOS_CLIENT_ID } from 'react-native-dotenv';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, setCurrentUser } from '.././store/slices/auth';
 
@@ -16,7 +15,6 @@ export default function LoginScreen ({logInSuccessful}) {
       const result = await Google.logInAsync({
         behavior: 'web',
         iosClientId: IOS_CLIENT_ID,
-        androidClientId: AND_CLIENT_ID,
         scopes: ['profile', 'email'],
       });
 
@@ -51,35 +49,10 @@ export default function LoginScreen ({logInSuccessful}) {
     }
   }
 
-  async function signInWithFacebookAsync() {
-    try {
-      await Facebook.initializeAsync(FACEBOOK_ID);
-      const {
-        type,
-        token,
-        expires,
-        permissions,
-        declinedPermissions,
-      } = await Facebook.logInWithReadPermissionsAsync({
-        permissions: ['public_profile'],
-      });
-      if (type === 'success') {
-        // Get the user's name using Facebook's Graph API
-        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-        Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
-      } else {
-        console.log('cancelled');
-      }
-    } catch ({ err }) {
-      alert(`Facebook Login Error: ${err}`);
-    }
-  }
     const signInWithGoogle = () => {
     signInWithGoogleAsync()
     }
-    const signInWithFacebook = () => {
-      signInWithFacebookAsync()
-    }
+
     return (
       <View style={styles.container}>
         <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#00BCD4" translucent = {true}/>
@@ -93,23 +66,7 @@ export default function LoginScreen ({logInSuccessful}) {
           <TouchableOpacity onPress={() => signInWithGoogle()}>
             <Text style={styles.button}>Sign in with Google</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-            dispatch(setCurrentUser({
-              pk: 6,
-              id: JAMES_ID,
-              username: "James Easter",
-              name_first: "James",
-              name_last: "Easter",
-              total_like: 0,
-              image_url: JAMES_URL,
-              bio:"Love my family, writing code, & posting about plants!",
-            }));
-            logInSuccessful();
-          }}>
-          <Text style={styles.button}>login as james</Text>
-          </TouchableOpacity>
           </View>
-        {/* <Button onPress={() => signInWithFacebook()} title="Sign in with Facebook" /> */}
       </View>
     )
 }
