@@ -1,6 +1,5 @@
 import axios from 'axios';
 import * as actions from '../api';
-import { NGROK_URL } from 'react-native-dotenv';
 
 // This middleware handles all api calls
 
@@ -41,7 +40,7 @@ const api = (store) => (next) => (action) => {
   // method is get by default but can be set to another type
   // data is the object that the request is sending to the server
   axios.request({
-    baseURL: plantIdUrl || "http://733c6d04.ngrok.io",
+    baseURL: plantIdUrl || 'http://9b558c0f3c51.ngrok.io',
     url,
     method,
     data,
