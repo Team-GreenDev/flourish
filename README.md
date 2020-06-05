@@ -1,2 +1,0 @@
-# flourish
-thesis project 
