@@ -1,6 +1,6 @@
 # Project Name
 
-> Florish
+> Flourish
 
 ## Team
 
