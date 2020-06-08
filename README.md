@@ -1,6 +1,4 @@
-# Project Name
-
-> Flourish
+# Flourish
 
 ## Team
 
