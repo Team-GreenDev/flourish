@@ -23,7 +23,7 @@ export default function Comments({ history }) {
   const currentUser = useSelector(state => state.auth.currentUser);
   const postsUser = useSelector(state => state.comments.currentUser);
   const post = useSelector(state => state.comments.currentPost);
-  const postComments = useSelector(state => state.comments.list);
+  const postComments = useSelector(state => [].concat(state.comments.list).reverse());
   const commentsAdded = useSelector(state => state.comments.commentsAdded);
 
   // local state for comment
