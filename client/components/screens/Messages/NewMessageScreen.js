@@ -40,7 +40,7 @@ const NewMessageScreen = ({ history }) => {
           <MaterialCommunityIcons name="keyboard-backspace" color="black" size={35}/>
         </TouchableOpacity>
         <View style={{flex: 1, paddingLeft: 3 }}>
-          <Text style={{fontSize: 20}}>New Message</Text>
+          <Text style={{fontSize: 18}}>New Message</Text>
         </View>
       <View
         style={{flex: 1}}>
